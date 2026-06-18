@@ -1,0 +1,23 @@
+{
+  "id": "conv-1781448653251-1t5iha6qx",
+  "providerId": "claude",
+  "title": "整理大模型面试问答到Excel",
+  "titleGenerationStatus": "success",
+  "createdAt": 1781448653252,
+  "updatedAt": 1781680709407,
+  "lastResponseAt": 1781604267273,
+  "sessionId": "ef1c5e8b-42c5-4460-88bd-d165e07195d4",
+  "providerState": {
+    "providerSessionId": "ef1c5e8b-42c5-4460-88bd-d165e07195d4"
+  },
+  "usage": {
+    "model": "haiku",
+    "inputTokens": 152,
+    "cacheCreationInputTokens": 0,
+    "cacheReadInputTokens": 459904,
+    "contextWindow": 200000,
+    "contextTokens": 460056,
+    "percentage": 100,
+    "contextWindowIsAuthoritative": true
+  }
+}

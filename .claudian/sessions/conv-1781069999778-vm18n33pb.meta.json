@@ -1,0 +1,22 @@
+{
+  "id": "conv-1781069999778-vm18n33pb",
+  "providerId": "claude",
+  "title": "解答用户关于AI模型的疑问",
+  "titleGenerationStatus": "success",
+  "createdAt": 1781069999779,
+  "updatedAt": 1781070412445,
+  "lastResponseAt": 1781070311721,
+  "sessionId": "828d95cd-5b4a-4f14-ab19-2aeeb2d34996",
+  "providerState": {
+    "providerSessionId": "828d95cd-5b4a-4f14-ab19-2aeeb2d34996"
+  },
+  "usage": {
+    "model": "sonnet[1m]",
+    "inputTokens": 0,
+    "cacheCreationInputTokens": 0,
+    "cacheReadInputTokens": 0,
+    "contextWindow": 1000000,
+    "contextTokens": 0,
+    "percentage": 0
+  }
+}

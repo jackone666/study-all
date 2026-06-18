@@ -1,0 +1,14 @@
+flowchart TD
+    A["skills/public/ + skills/custom/"] --> B["_iter_skill_files()"]
+    B --> C["parse_skill_file()<br/>YAML Frontmatter 解析"]
+    C --> D{"验证通过?"}
+    D -->|是| E["Skill 对象创建"]
+    D -->|否| SKIP["跳过(记录警告)"]
+    E --> F["合并 extensions_config.json<br/>启用/禁用状态"]
+    F --> G["按名称排序<br/>按类别分组"]
+    G --> H["filter_tools_by_skill_allowed_tools()<br/>工具白名单过滤"]
+    H --> I["prompt.py: 渲染为 XML 块<br/>注入 Agent 系统提示"]
+
+    style E fill:#50C878,color:#fff
+    style H fill:#E8A317,color:#fff
+    style SKIP fill:#E74C3C,color:#fff

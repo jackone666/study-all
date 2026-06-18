@@ -1,0 +1,24 @@
+flowchart LR
+    subgraph "Agent 视角"
+        VP["/mnt/user-data/workspace/script.py<br/>/mnt/user-data/outputs/chart.png<br/>/mnt/skills/deep-research/SKILL.md"]
+    end
+
+    subgraph "路径映射层"
+        MAP["PathMapping<br/>virtual → host<br/>最长前缀匹配"]
+    end
+
+    subgraph "主机文件系统"
+        HP["~/.deer-flow/users/default/threads/abc/workspace/script.py<br/>~/.deer-flow/users/default/threads/abc/outputs/chart.png<br/>/opt/deer-flow/skills/public/deep-research/SKILL.md"]
+    end
+
+    subgraph "安全防护"
+        AUDIT["SandboxAuditMiddleware<br/>16 高风险模式 → 阻止<br/>5 中风险模式 → 警告<br/>路径遍历检测<br/>file:// URL 拒绝"]
+    end
+
+    VP -->|"replace_virtual_paths_in_command()"| MAP
+    MAP -->|"出站转换"| HP
+    HP -->|"执行结果"| AUDIT
+    AUDIT -->|"mask_local_paths_in_output()"| VP
+
+    style AUDIT fill:#E74C3C,color:#fff
+    style MAP fill:#4A90D9,color:#fff

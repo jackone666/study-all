@@ -1,0 +1,19 @@
+flowchart LR
+    subgraph "Agent 执行流程"
+        BA[before_agent<br/>状态初始化] --> BM[before_model<br/>模型调用前]
+        BM --> LLM[模型调用<br/>LLM API]
+        LLM --> AM[after_model<br/>模型返回后]
+        AM --> WTC[wrap_tool_call<br/>工具执行]
+        WTC --> BM
+    end
+
+    BA --> BA_D["<b>before_agent</b><br/>ThreadDataMiddleware: 目录创建<br/>SandboxMiddleware: 沙箱获取"]
+    BM --> BM_D["<b>before_model</b><br/>UploadsMiddleware: 文件注入<br/>DynamicContext: 日期+记忆<br/>DanglingToolCall: 悬空修复<br/>DeferredFilter: 延迟工具过滤<br/>LLMErrorHandling: 熔断器+重试<br/>Summarization: 上下文压缩"]
+    AM --> AM_D["<b>after_model</b><br/>SafetyFinishReason: 安全终止<br/>SubagentLimit: 并发限制<br/>LoopDetection: 循环检测<br/>TokenUsage: 用量追踪<br/>TodoMiddleware: 计划管理<br/>TitleMiddleware: 标题生成"]
+    WTC --> WTC_D["<b>wrap_tool_call</b><br/>GuardrailMiddleware: 授权检查<br/>ToolErrorHandling: 错误包装<br/>SandboxAudit: 安全审计<br/>ToolOutputBudget: 输出控制<br/>ClarificationMiddleware: 澄清拦截"]
+
+    style BA fill:#4A90D9,color:#fff
+    style BM fill:#50C878,color:#fff
+    style LLM fill:#E8A317,color:#fff
+    style AM fill:#9B59B6,color:#fff
+    style WTC fill:#E74C3C,color:#fff

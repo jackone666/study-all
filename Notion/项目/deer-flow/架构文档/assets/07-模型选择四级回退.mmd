@@ -1,0 +1,26 @@
+flowchart TD
+    A["用户请求: model_name='claude-opus-4-8'"] --> B{运行时指定?}
+    B -->|"是"| R1["✅ 使用 claude-opus-4-8"]
+    B -->|"否"| C{"Agent 配置指定?"}
+    C -->|"是"| R2["✅ 使用 Agent 配置模型"]
+    C -->|"否"| D{"全局默认配置?"}
+    D -->|"是"| R3["✅ 使用 config.yaml default_model"]
+    D -->|"否"| E["❌ ValueError<br/>No model configured"]
+
+    R1 --> FACTORY[create_chat_model]
+    R2 --> FACTORY
+    R3 --> FACTORY
+
+    FACTORY --> CONFIG["读取 ModelConfig<br/>use: langchain_anthropic:ChatAnthropic<br/>model: claude-opus-4-8<br/>supports_thinking: true<br/>supports_vision: true"]
+    CONFIG --> REFLECT["反射解析 provider 类<br/>resolve_class(config.use)"]
+    REFLECT --> PATCH{"需要 Provider 补丁?"}
+    PATCH -->|DeepSeek| DS["patched_deepseek<br/>reasoning字段保留"]
+    PATCH -->|MiMo| MIMO["patched_mimo<br/>max_tokens修复"]
+    PATCH -->|MiniMax| MM["patched_minimax<br/>tool_call_id修复"]
+    PATCH -->|OpenAI| OAI["patched_openai<br/>stream_usage默认启用"]
+    PATCH -->|标准| STD["标准 LangChain ChatModel"]
+    DS --> RESULT[返回配置完成的 ChatModel]
+    MIMO --> RESULT
+    MM --> RESULT
+    OAI --> RESULT
+    STD --> RESULT

@@ -1,0 +1,141 @@
+{
+  "userName": "",
+  "permissionMode": "yolo",
+  "model": "haiku",
+  "thinkingBudget": "off",
+  "effortLevel": "high",
+  "serviceTier": "default",
+  "enableAutoTitleGeneration": true,
+  "titleGenerationModel": "",
+  "excludedTags": [],
+  "mediaFolder": "",
+  "systemPrompt": "这是我辛苦整理的知识点，按照以下策略：\n1、严令禁止删除简化，仅仅需要合并的时候做优化\n2、对于不对的也可以修改，但是需要和我报告\n3、修改后的文件放到面试准备文件夹。\n4、检查知识点是否存在错误，修复后，向我报告\n5、每个知识点后面增加便于记忆的描述\n6、将文件名重命名为目前的顺序，比如目前里面有序号的文件不存在，就可以前面加上序号1，如果有1，本次命名就为2",
+  "persistentExternalContextPaths": [],
+  "sharedEnvironmentVariables": "",
+  "envSnippets": [],
+  "customContextLimits": {},
+  "keyboardNavigation": {
+    "scrollUpKey": "w",
+    "scrollDownKey": "s",
+    "focusInputKey": "i"
+  },
+  "requireCommandOrControlEnterToSend": false,
+  "locale": "zh-CN",
+  "providerConfigs": {
+    "claude": {
+      "safeMode": "acceptEdits",
+      "cliPath": "",
+      "cliPathsByHost": {},
+      "loadUserSettings": true,
+      "enableChrome": false,
+      "enableBangBash": false,
+      "enableOpus1M": true,
+      "enableSonnet1M": true,
+      "customModels": "",
+      "lastModel": "haiku",
+      "environmentVariables": "",
+      "environmentHash": ""
+    },
+    "codex": {
+      "enabled": false,
+      "safeMode": "workspace-write",
+      "cliPath": "",
+      "cliPathsByHost": {},
+      "customModels": "",
+      "reasoningSummary": "detailed",
+      "environmentVariables": "",
+      "environmentHash": "",
+      "installationMethodsByHost": {
+        "device:3313f2e9-2620-48a8-876b-e14b6acea86f": "native-windows"
+      },
+      "wslDistroOverridesByHost": {}
+    },
+    "opencode": {
+      "cliPath": "",
+      "cliPathsByHost": {},
+      "enabled": false,
+      "environmentHash": "",
+      "environmentVariables": "OPENCODE_ENABLE_EXA=1",
+      "modelAliases": {},
+      "preferredThinkingByModel": {
+        "deepseek/deepseek-v4-flash": "low",
+        "deepseek/deepseek-v4-pro": "low"
+      },
+      "selectedMode": "claudian-yolo",
+      "thinkingOptionsByModel": {
+        "deepseek/deepseek-v4-flash": [
+          {
+            "label": "Low",
+            "value": "low"
+          },
+          {
+            "label": "Medium",
+            "value": "medium"
+          },
+          {
+            "label": "High",
+            "value": "high"
+          },
+          {
+            "label": "Max",
+            "value": "max"
+          }
+        ],
+        "deepseek/deepseek-v4-pro": [
+          {
+            "label": "Low",
+            "value": "low"
+          },
+          {
+            "label": "Medium",
+            "value": "medium"
+          },
+          {
+            "label": "High",
+            "value": "high"
+          },
+          {
+            "label": "Max",
+            "value": "max"
+          }
+        ]
+      },
+      "visibleModels": [
+        "deepseek/deepseek-v4-flash",
+        "deepseek/deepseek-v4-pro",
+        "deepseek/deepseek-reasoner"
+      ]
+    }
+  },
+  "settingsProvider": "claude",
+  "savedProviderModel": {
+    "claude": "haiku",
+    "opencode": "opencode:deepseek/deepseek-v4-flash",
+    "codex": "gpt-5.5"
+  },
+  "savedProviderEffort": {
+    "claude": "high",
+    "opencode": "low",
+    "codex": "medium"
+  },
+  "savedProviderServiceTier": {
+    "codex": "default"
+  },
+  "savedProviderThinkingBudget": {
+    "claude": "off",
+    "opencode": "default",
+    "codex": "off"
+  },
+  "savedProviderPermissionMode": {
+    "claude": "yolo",
+    "opencode": "yolo",
+    "codex": "yolo"
+  },
+  "lastCustomModel": "",
+  "maxTabs": 3,
+  "tabBarPosition": "input",
+  "enableAutoScroll": true,
+  "deferMathRenderingDuringStreaming": true,
+  "chatViewPlacement": "right-sidebar",
+  "hiddenProviderCommands": {}
+}

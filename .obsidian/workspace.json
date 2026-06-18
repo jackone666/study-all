@@ -1,0 +1,249 @@
+{
+  "main": {
+    "id": "73a6e65bce47a478",
+    "type": "split",
+    "children": [
+      {
+        "id": "269c6ac26f44a322",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "acdd72415a8b8fe0",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Notion/ALL IN AI/how-claude-code-works/docs/03-context-engineering.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "03-context-engineering"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "7474c602899ee3bd",
+    "type": "split",
+    "children": [
+      {
+        "id": "c4c66926e41b129a",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "264ac39dc0920bc9",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical",
+                "autoReveal": false
+              },
+              "icon": "lucide-folder-closed",
+              "title": "文件列表"
+            }
+          },
+          {
+            "id": "52862c678e5f2b9b",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "搜索"
+            }
+          },
+          {
+            "id": "4a59724d6c72760e",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "书签"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 266.5024719238281
+  },
+  "right": {
+    "id": "69d9816c3c00c3b8",
+    "type": "split",
+    "children": [
+      {
+        "id": "c517d2cfc085533e",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "dcb23b5b907a1f0c",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "00-面试准备/00大模型基础/01_RAG核心链路.md",
+                "collapseAll": true,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "01_RAG核心链路 的反向链接列表"
+            }
+          },
+          {
+            "id": "9df30aa48bd8807b",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "wiki/entities/阿里巴巴.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "阿里巴巴 的出链列表"
+            }
+          },
+          {
+            "id": "4e3920231d932837",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-tags",
+              "title": "标签"
+            }
+          },
+          {
+            "id": "de08f39ff6d47e8e",
+            "type": "leaf",
+            "state": {
+              "type": "all-properties",
+              "state": {
+                "sortOrder": "frequency",
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-archive",
+              "title": "添加笔记属性"
+            }
+          },
+          {
+            "id": "6fa9c2ffdf78413e",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "Notion/ALL IN AI/how-claude-code-works/docs/03-context-engineering.md",
+                "followCursor": false,
+                "showSearch": false,
+                "searchQuery": ""
+              },
+              "icon": "lucide-list",
+              "title": "03-context-engineering 的大纲"
+            }
+          },
+          {
+            "id": "b442ec2e166572c8",
+            "type": "leaf",
+            "state": {
+              "type": "claudian-view",
+              "state": {},
+              "icon": "bot",
+              "title": "Claudian"
+            }
+          }
+        ],
+        "currentTab": 5
+      }
+    ],
+    "direction": "horizontal",
+    "width": 324.5
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:打开快速切换": false,
+      "graph:查看关系图谱": false,
+      "canvas:新建白板": false,
+      "daily-notes:打开/创建今天的日记": false,
+      "templates:插入模板": false,
+      "command-palette:打开命令面板": false,
+      "bases:新建数据库": false,
+      "nutstore-sync:Start sync": false,
+      "nutstore-sync:Stop sync": false,
+      "nutstore-sync:Open chatbox": true,
+      "realclaudian:Open Claudian": false
+    }
+  },
+  "active": "b442ec2e166572c8",
+  "lastOpenFiles": [
+    "Notion/ALL IN AI/how-claude-code-works/docs/08-memory-system.md",
+    "Notion/ALL IN AI/how-claude-code-works/docs/07-multi-agent.md",
+    "Notion/ALL IN AI/how-claude-code-works/docs/06-hooks-extensibility.md",
+    "Notion/ALL IN AI/how-claude-code-works/docs/02-agent-loop.md",
+    "Notion/软件基础/算法.md",
+    "00-面试准备/AI Coding.md",
+    "Notion/ALL IN AI/cc 学习/s20_comprehensive/README.md",
+    "Notion/ALL IN AI/cc 学习/s19_mcp_plugin/README.md",
+    "Notion/ALL IN AI/cc 学习/s18_worktree_isolation/README.md",
+    "Notion/ALL IN AI/cc 学习/s17_autonomous_agents/README.md",
+    "Notion/ALL IN AI/cc 学习/s16_team_protocols/README.md",
+    "Notion/ALL IN AI/cc 学习/s15_agent_teams/README.md",
+    "Notion/ALL IN AI/cc 学习/s14_cron_scheduler/README.md",
+    "Notion/ALL IN AI/cc 学习/s13_background_tasks/README.md",
+    "Notion/ALL IN AI/cc 学习/s12_task_system/README.md",
+    "Notion/ALL IN AI/cc 学习/s11_error_recovery/README.md",
+    "Notion/ALL IN AI/cc 学习/s10_system_prompt/README.md",
+    "Notion/ALL IN AI/cc 学习/s09_memory/README.md",
+    "Notion/ALL IN AI/cc 学习/s08_context_compact/README.md",
+    "Notion/ALL IN AI/cc 学习/s07_skill_loading/README.md",
+    "Notion/ALL IN AI/cc 学习/s06_subagent/README.md",
+    "Notion/ALL IN AI/cc 学习/s05_todo_write/README.md",
+    "Notion/ALL IN AI/cc 学习/s04_hooks/README.md",
+    "Notion/ALL IN AI/cc 学习/s03_permission/README.md",
+    "Notion/ALL IN AI/cc 学习/s02_tool_use/README.md",
+    "Notion/ALL IN AI/cc 学习/s01_agent_loop/README.md",
+    "Notion/ALL IN AI/cc 学习/s11_error_recovery/images/error-recovery-overview.svg",
+    "Notion/ALL IN AI/cc 学习/s11_error_recovery/images",
+    "Notion/ALL IN AI/cc 学习/s11_error_recovery/code.py",
+    "Notion/ALL IN AI/cc 学习/s11_error_recovery",
+    "Notion/ALL IN AI/cc 学习/s03_permission/images/permission-pipeline.svg",
+    "Notion/ALL IN AI/cc 学习/s03_permission/images/permission-overview.svg",
+    "Notion/ALL IN AI/cc 学习/s03_permission/images",
+    "Notion/ALL IN AI/cc 学习/s03_permission/code.py",
+    "Notion/ALL IN AI/cc 学习/s03_permission",
+    "Notion/ALL IN AI/cc 学习/skills/agent-builder/scripts/init_agent.py",
+    "Notion/ALL IN AI/cc 学习/skills/agent-builder/references/tool-templates.py",
+    "Notion/ALL IN AI/cc 学习/skills/agent-builder/references/subagent-pattern.py",
+    "Notion/ALL IN AI/cc 学习/skills/agent-builder/references/minimal-agent.py",
+    "Notion/ALL IN AI/cc 学习/s02_tool_use/images/tool-dispatch.svg",
+    "Notion/ALL IN AI/cc 学习/s02_tool_use/images/concurrency-comparison.svg",
+    "Notion/ALL IN AI/cc 学习/s20_comprehensive/images/system-architecture.svg",
+    "Notion/ALL IN AI/cc 学习/s12_task_system/images/task-system-overview.svg",
+    "Notion/ALL IN AI/cc 学习/s12_task_system/images/task-dag.svg",
+    "Notion/ALL IN AI/cc 学习/s08_context_compact/images/layer1-budget.svg",
+    "Notion/ALL IN AI/cc 学习/s08_context_compact/images/micro-compact.svg"
+  ]
+}

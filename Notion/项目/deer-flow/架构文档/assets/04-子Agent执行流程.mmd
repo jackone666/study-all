@@ -1,0 +1,20 @@
+sequenceDiagram
+    participant M as 主 Agent
+    participant TT as task_tool
+    participant SE as SubagentExecutor
+    participant SA as 子 Agent(隔离线程)
+    participant SS as StreamBridge
+
+    M->>TT: task(description, subagent_type, prompt)
+    TT->>TT: 解析配置<br/>模型/skills/timeout
+    TT->>SE: submit_async(task)
+    SE->>SE: 调度线程池分配
+    SE->>SA: 在隔离事件循环中启动
+    SA->>SS: 流式进度更新
+    TT->>SS: 轮询进度(每5秒)
+    SS-->>TT: 增量文本
+    TT-->>M: Command(update)
+    SA-->>SE: 完成/失败/超时
+    SE->>SE: try_set_terminal()
+    TT->>SE: 获取最终结果
+    TT-->>M: 结果 + token_usage

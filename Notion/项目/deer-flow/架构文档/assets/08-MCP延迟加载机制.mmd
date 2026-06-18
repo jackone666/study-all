@@ -1,0 +1,31 @@
+flowchart TB
+    subgraph "Agent 可见工具"
+        ACTIVE["<b>活跃工具</b><br/>bash, read_file, write_file<br/>web_search, web_fetch<br/>present_file, ask_clarification"]
+        TS["<b>tool_search</b><br/>按需发现 MCP 工具"]
+    end
+
+    subgraph "延迟工具池"
+        DEFERRED["<b>DeferredToolSetup</b><br/>github_search_code<br/>github_create_issue<br/>github_get_file<br/>filesystem_read<br/>filesystem_write<br/>postgres_query<br/>..."]
+    end
+
+    subgraph "DeferredToolFilterMiddleware"
+        FILTER["拦截 before_model<br/>检查 tool_calls"]
+        BLOCK["阻止未提升工具调用<br/>注入提示: 先用 tool_search"]
+    end
+
+    subgraph "提升机制"
+        PROMOTE["调用 tool_search →<br/>匹配的工具 schema<br/>提升到活跃集合"]
+        CATALOG["catalog_hash 版本控制<br/>MCP 工具目录变化时<br/>全量替换提升状态"]
+    end
+
+    ACTIVE --> FILTER
+    TS -->|"1. Agent 调用 tool_search"| PROMOTE
+    PROMOTE -->|"2. 找到匹配工具"| DEFERRED
+    DEFERRED -->|"3. 工具 schema 提升"| ACTIVE
+    FILTER -->|"未提升直接调用"| BLOCK
+    CATALOG -.-> PROMOTE
+
+    style ACTIVE fill:#50C878,color:#fff
+    style DEFERRED fill:#E8A317,color:#fff
+    style BLOCK fill:#E74C3C,color:#fff
+    style PROMOTE fill:#4A90D9,color:#fff

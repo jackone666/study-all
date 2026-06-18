@@ -1,0 +1,24 @@
+{
+  "id": "conv-1777607255161-i43f07i4d",
+  "providerId": "claude",
+  "title": "Hello! I'll generate a title for our conversati...",
+  "titleGenerationStatus": "success",
+  "createdAt": 1777607255174,
+  "updatedAt": 1777607288745,
+  "lastResponseAt": 1777607267749,
+  "sessionId": "11d0deae-7f98-4e34-a0b3-09070a151f2c",
+  "providerState": {
+    "providerSessionId": "11d0deae-7f98-4e34-a0b3-09070a151f2c"
+  },
+  "currentNote": "Notion/ALL IN AI/Agent/LlamaIndex框架.md",
+  "usage": {
+    "model": "haiku",
+    "inputTokens": 6,
+    "cacheCreationInputTokens": 0,
+    "cacheReadInputTokens": 34260,
+    "contextWindow": 200000,
+    "contextTokens": 34266,
+    "percentage": 17,
+    "contextWindowIsAuthoritative": true
+  }
+}

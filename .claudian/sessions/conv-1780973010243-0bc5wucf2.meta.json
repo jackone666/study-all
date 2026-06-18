@@ -1,0 +1,23 @@
+{
+  "id": "conv-1780973010243-0bc5wucf2",
+  "providerId": "opencode",
+  "title": "标注Java语言特性知识点面试优先级并按指定格式处理",
+  "titleGenerationStatus": "success",
+  "createdAt": 1780973010243,
+  "updatedAt": 1781070070313,
+  "lastResponseAt": 1781069953914,
+  "sessionId": "ses_155bc7f07ffegsBqPdfBXf9FHg",
+  "providerState": {
+    "databasePath": "/Users/zing/.local/share/opencode/opencode.db"
+  },
+  "usage": {
+    "cacheCreationInputTokens": 0,
+    "cacheReadInputTokens": 145664,
+    "contextTokens": 145794,
+    "contextWindow": 200000,
+    "contextWindowIsAuthoritative": false,
+    "inputTokens": 130,
+    "model": "opencode:deepseek/deepseek-v4-flash",
+    "percentage": 73
+  }
+}

@@ -1,0 +1,25 @@
+stateDiagram-v2
+    [*] --> PENDING: create()
+    PENDING --> RUNNING: worker 启动
+    RUNNING --> COMPLETED: 正常完成
+    RUNNING --> FAILED: 异常退出
+    RUNNING --> INTERRUPTED: cancel(action=interrupt)
+    RUNNING --> CANCELLED: cancel(action=rollback)
+
+    INTERRUPTED --> RUNNING: 用户恢复
+    INTERRUPTED --> [*]: 超时清理
+
+    COMPLETED --> [*]
+    FAILED --> [*]
+    CANCELLED --> [*]
+
+    note right of RUNNING
+        worker: run_agent()
+        stream: SSE 实时推送
+        journal: RunJournal 事件收集
+    end note
+
+    note right of CANCELLED
+        rollback: 恢复 pre-run checkpoint
+        cleanup: 释放沙箱资源
+    end note

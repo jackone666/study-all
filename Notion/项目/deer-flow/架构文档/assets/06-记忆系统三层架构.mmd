@@ -1,0 +1,50 @@
+flowchart TB
+    subgraph "触发层"
+        MM[MemoryMiddleware<br/>after_agent 触发]
+        SH[SummarizationHook<br/>压缩前紧急触发]
+    end
+
+    subgraph "队列层"
+        MQ[MemoryUpdateQueue<br/>全局单例]
+        DEBOUNCE["add() 去抖<br/>30秒 Timer"]
+        IMMEDIATE["add_nowait() 紧急<br/>立即 Thread"]
+    end
+
+    subgraph "更新层"
+        MU[MemoryUpdater]
+        LLM[轻量 LLM 模型<br/>事实提取 + 纠偏检测]
+        PARSE[JSON 容错解析<br/>re.finditer + raw_decode]
+        DEDUP[去重 content-casefold<br/>按置信度排序截断]
+    end
+
+    subgraph "存储层"
+        FMS[FileMemoryStorage]
+        CACHE["mtime 缓存<br/>减少文件IO"]
+        ATOMIC["原子写入<br/>tmp → os.replace"]
+        JSON["memory.json<br/>每用户一个文件"]
+    end
+
+    subgraph "注入层"
+        DCM[DynamicContextMiddleware]
+        FORMAT[format_memory_for_injection]
+        TRUNCATE["tiktoken 截断<br/>max 500 tokens"]
+    end
+
+    MM -->|add| DEBOUNCE
+    SH -->|add_nowait| IMMEDIATE
+    DEBOUNCE -->|30s后| MU
+    IMMEDIATE -->|立即| MU
+    MU --> LLM
+    LLM --> PARSE
+    PARSE --> DEDUP
+    DEDUP -->|原子写入| ATOMIC
+    ATOMIC --> JSON
+    CACHE -.->|读取缓存| JSON
+    JSON -->|读取| FORMAT
+    FORMAT --> TRUNCATE
+    TRUNCATE -->|system-reminder| DCM
+
+    style DEBOUNCE fill:#4A90D9,color:#fff
+    style IMMEDIATE fill:#E74C3C,color:#fff
+    style LLM fill:#E8A317,color:#fff
+    style ATOMIC fill:#50C878,color:#fff

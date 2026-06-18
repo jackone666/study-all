@@ -1,0 +1,85 @@
+flowchart TB
+    subgraph "用户接入层"
+        WEB[Web UI<br/>Next.js 14]
+        FEISHU[飞书]
+        DINGTALK[钉钉]
+        WECHAT[微信/企微]
+        DISCORD[Discord]
+        SLACK[Slack]
+        TELEGRAM[Telegram]
+        SDK[Python SDK<br/>DeerFlowClient]
+    end
+
+    subgraph "Gateway 层 (FastAPI :8001)"
+        AUTH[认证鉴权<br/>JWT + CSRF + AuthMiddleware]
+        REST[REST API<br/>15个路由模块]
+        SSE[SSE 流式端点]
+    end
+
+    subgraph "Agent 核心运行时"
+        MLA[make_lead_agent<br/>Agent 工厂]
+        MW[19 层中间件链]
+        LANGGRAPH[LangGraph<br/>StateGraph + Checkpoint]
+    end
+
+    subgraph "核心子系统"
+        SANDBOX[沙箱系统<br/>Local / Docker]
+        SUBAGENT[子Agent委托<br/>后台线程池]
+        SKILLS[技能插件<br/>文件系统注册]
+        MEMORY[记忆系统<br/>LLM提取 + 去抖]
+        MCP[MCP集成<br/>stdio/SSE/HTTP]
+    end
+
+    subgraph "模型层"
+        CLAUDE[Claude]
+        GPT[GPT]
+        DS[DeepSeek]
+        VLLM[vLLM]
+        MINDIE[MindIE]
+        CODEX[Codex]
+    end
+
+    subgraph "基础设施"
+        SQLITE[(SQLite/Postgres<br/>持久化)]
+        STREAM[StreamBridge<br/>生产者-消费者]
+        TRACE[Langfuse/LangSmith<br/>追踪]
+        CONFIG[AppConfig<br/>热加载]
+    end
+
+    WEB --> AUTH
+    FEISHU --> AUTH
+    DINGTALK --> AUTH
+    WECHAT --> AUTH
+    DISCORD --> AUTH
+    SLACK --> AUTH
+    TELEGRAM --> AUTH
+    SDK --> MLA
+
+    AUTH --> REST
+    AUTH --> SSE
+    REST --> MLA
+    SSE --> STREAM
+
+    MLA --> MW
+    MW --> LANGGRAPH
+
+    LANGGRAPH --> SANDBOX
+    LANGGRAPH --> SUBAGENT
+    LANGGRAPH --> SKILLS
+    LANGGRAPH --> MEMORY
+    LANGGRAPH --> MCP
+
+    MLA --> CLAUDE
+    MLA --> GPT
+    MLA --> DS
+    MLA --> VLLM
+    MLA --> MINDIE
+    MLA --> CODEX
+
+    LANGGRAPH --> SQLITE
+    LANGGRAPH --> STREAM
+    LANGGRAPH --> TRACE
+    MLA --> CONFIG
+
+    STREAM -.->|SSE| SSE
+    STREAM -.->|SSE| WEB

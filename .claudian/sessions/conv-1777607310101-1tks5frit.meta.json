@@ -1,0 +1,23 @@
+{
+  "id": "conv-1777607310101-1tks5frit",
+  "providerId": "claude",
+  "title": "I'll read the current directory to understand w...",
+  "titleGenerationStatus": "success",
+  "createdAt": 1777607310102,
+  "updatedAt": 1778664464138,
+  "lastResponseAt": 1778664464138,
+  "sessionId": "03701d92-118a-40fd-be6e-0c17a85d286f",
+  "providerState": {
+    "providerSessionId": "03701d92-118a-40fd-be6e-0c17a85d286f"
+  },
+  "usage": {
+    "model": "haiku",
+    "inputTokens": 127,
+    "cacheCreationInputTokens": 0,
+    "cacheReadInputTokens": 159872,
+    "contextWindow": 200000,
+    "contextTokens": 159999,
+    "percentage": 80,
+    "contextWindowIsAuthoritative": true
+  }
+}

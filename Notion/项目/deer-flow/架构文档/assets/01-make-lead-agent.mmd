@@ -1,0 +1,14 @@
+flowchart TD
+    A[make_lead_agent 入口] --> B[1. 提取运行时参数<br/>model_name, thinking, plan_mode, agent_name]
+    B --> C[2. 加载 Agent 配置<br/>config.yaml + 技能白名单]
+    C --> D[3. 四级模型回退<br/>运行时 > Agent配置 > 全局默认 > Error]
+    D --> E[4. 注入追踪回调<br/>Langfuse/LangSmith]
+    E --> F[5. 加载技能<br/>用于工具策略过滤]
+    F --> G{6. 分支判断}
+    G -->|Bootstrap| H[6a. 精简 prompt<br/>仅 setup_agent]
+    G -->|常规| I[6b. 完整配置<br/>+ update_agent]
+    H --> J[7. allowed-tools 白名单过滤]
+    I --> J
+    J --> K[8. MCP 延迟分离<br/>活跃工具 + deferred_setup]
+    K --> L[9. 19层中间件装配<br/>+ prompt 渲染 + create_agent]
+    L --> M[返回编译后 StateGraph]

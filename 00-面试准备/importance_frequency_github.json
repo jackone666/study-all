@@ -1,0 +1,177 @@
+[
+  {
+    "topic": "RAG 全流程/检索增强生成",
+    "query": "RAG LLM interview questions retrieval augmented generation",
+    "github_repo_count": 10
+  },
+  {
+    "topic": "Chunk 切分/文档解析",
+    "query": "RAG chunking document parsing interview",
+    "github_repo_count": 0
+  },
+  {
+    "topic": "Embedding/向量召回",
+    "query": "embedding model vector search interview RAG",
+    "github_repo_count": 0
+  },
+  {
+    "topic": "向量数据库/索引调优",
+    "query": "vector database Milvus Qdrant FAISS HNSW IVF interview",
+    "github_repo_count": 0
+  },
+  {
+    "topic": "Hybrid Search/BM25/RRF",
+    "query": "hybrid search BM25 RRF rerank interview RAG",
+    "github_repo_count": 0
+  },
+  {
+    "topic": "Rerank/Cross-Encoder",
+    "query": "reranker cross encoder RAG interview",
+    "github_repo_count": 0
+  },
+  {
+    "topic": "Query Rewrite/HyDE",
+    "query": "query rewrite HyDE multi query RAG interview",
+    "github_repo_count": 0
+  },
+  {
+    "topic": "上下文工程/Context",
+    "query": "context engineering long context RAG interview",
+    "github_repo_count": 0
+  },
+  {
+    "topic": "幻觉/评测/RAGAS",
+    "query": "LLM hallucination evaluation RAGAS interview",
+    "github_repo_count": 0
+  },
+  {
+    "topic": "GraphRAG",
+    "query": "GraphRAG interview LLM RAG",
+    "github_repo_count": 3
+  },
+  {
+    "topic": "多模态RAG",
+    "query": "multimodal RAG interview vision language model",
+    "github_repo_count": null
+  },
+  {
+    "topic": "Agent/ReAct/Planning",
+    "query": "LLM agent ReAct planning interview questions",
+    "github_repo_count": null
+  },
+  {
+    "topic": "Tool Calling/Function Calling",
+    "query": "LLM tool calling function calling interview",
+    "github_repo_count": null
+  },
+  {
+    "topic": "Agent Memory",
+    "query": "LLM agent memory interview",
+    "github_repo_count": null
+  },
+  {
+    "topic": "Multi-Agent",
+    "query": "multi agent LLM interview",
+    "github_repo_count": null
+  },
+  {
+    "topic": "MCP",
+    "query": "model context protocol MCP interview LLM",
+    "github_repo_count": null
+  },
+  {
+    "topic": "结构化输出",
+    "query": "structured outputs JSON schema LLM interview",
+    "github_repo_count": null
+  },
+  {
+    "topic": "LangGraph/Agent框架",
+    "query": "LangGraph CrewAI AutoGen interview agent framework",
+    "github_repo_count": null
+  },
+  {
+    "topic": "Prompt Engineering",
+    "query": "prompt engineering interview questions LLM",
+    "github_repo_count": null
+  },
+  {
+    "topic": "Prompt注入/安全",
+    "query": "prompt injection LLM security guardrails interview",
+    "github_repo_count": null
+  },
+  {
+    "topic": "LLM-as-Judge/A-B测试",
+    "query": "LLM as judge A/B testing evaluation interview",
+    "github_repo_count": null
+  },
+  {
+    "topic": "LoRA/QLoRA",
+    "query": "LoRA QLoRA fine tuning interview questions",
+    "github_repo_count": null
+  },
+  {
+    "topic": "SFT/微调数据",
+    "query": "SFT instruction tuning data interview LLM",
+    "github_repo_count": null
+  },
+  {
+    "topic": "RLHF/DPO/GRPO",
+    "query": "RLHF DPO GRPO interview LLM",
+    "github_repo_count": null
+  },
+  {
+    "topic": "模型部署/vLLM/KV Cache",
+    "query": "vLLM KV cache inference deployment interview LLM",
+    "github_repo_count": null
+  },
+  {
+    "topic": "量化/剪枝",
+    "query": "LLM quantization pruning interview",
+    "github_repo_count": null
+  },
+  {
+    "topic": "MoE",
+    "query": "Mixture of Experts MoE LLM interview",
+    "github_repo_count": null
+  },
+  {
+    "topic": "Transformer/Attention/QKV",
+    "query": "Transformer attention QKV interview questions",
+    "github_repo_count": null
+  },
+  {
+    "topic": "Normalization/SwiGLU/RoPE",
+    "query": "RMSNorm SwiGLU RoPE interview LLM",
+    "github_repo_count": null
+  },
+  {
+    "topic": "CUDA/算子优化",
+    "query": "CUDA kernel optimization LLM inference interview",
+    "github_repo_count": null
+  },
+  {
+    "topic": "操作系统",
+    "query": "operating system interview questions process thread memory IO",
+    "github_repo_count": null
+  },
+  {
+    "topic": "网络/数据库/工程基础",
+    "query": "backend system design interview database network cache",
+    "github_repo_count": null
+  },
+  {
+    "topic": "Text2SQL",
+    "query": "Text2SQL LLM interview",
+    "github_repo_count": null
+  },
+  {
+    "topic": "成本优化/缓存/路由",
+    "query": "LLM cost optimization prompt caching model routing interview",
+    "github_repo_count": null
+  },
+  {
+    "topic": "流式输出/SSE/WebSocket",
+    "query": "LLM streaming SSE WebSocket interview",
+    "github_repo_count": null
+  }
+]

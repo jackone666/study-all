@@ -1,0 +1,39 @@
+- Table of Contents
+    - Chapter 1: Unlocking RAG
+        - [Section 1: RAG Introduction](Notion/ALL%20IN%20AI/RAG/All%20IN%20RAG_github/en/chapter1/01_RAG_intro.md)
+        - [Section 2: Preparation](Notion/ALL%20IN%20AI/RAG/All%20IN%20RAG_github/en/chapter1/02_preparation.md)
+        - [Section 3: Four Steps to Build RAG](Notion/ALL%20IN%20AI/RAG/All%20IN%20RAG_github/en/chapter1/03_get_start_rag.md)
+        - [Appendix: Python Virtual Environment Deployment](en/chapter1/04_virtualenv.md)
+    - Chapter 2: Data Preparation
+        - [Section 1: Data Loading](en/chapter2/04_data_load.md)
+        - [Section 2: Text Chunking](en/chapter2/05_text_chunking.md)
+    - Chapter 3: Index Construction
+        - [Section 1: Vector Embedding](en/chapter3/06_vector_embedding.md)
+        - [Section 2: Multimodal Embedding](en/chapter3/07_multimodal_embedding.md)
+        - [Section 3: Vector Database](en/chapter3/08_vector_db.md)
+        - [Section 4: Milvus Practice](en/chapter3/09_milvus.md)
+        - [Section 5: Index Optimization](en/chapter3/10_index_optimization.md)
+    - Chapter 4: Retrieval Optimization
+        - [Section 1: Hybrid Search](en/chapter4/11_hybrid_search.md)
+        - [Section 2: Query Construction](en/chapter4/12_query_construction.md)
+        - [Section 3: Text2SQL](en/chapter4/13_text2sql.md)
+        - [Section 4: Query Rewriting and Routing](en/chapter4/14_query_rewriting.md)
+        - [Section 5: Advanced Retrieval Techniques](en/chapter4/15_advanced_retrieval_techniques.md)
+    - Chapter 5: Generation Integration
+        - [Section 1: Formatted Generation](en/chapter5/16_formatted_generation.md)
+    - Chapter 6: RAG System Evaluation
+        - [Section 1: Evaluation Introduction](en/chapter6/18_system_evaluation.md)
+        - [Section 2: Evaluation Tools](en/chapter6/19_common_tools.md)
+    - Chapter 7: Advanced RAG Architecture (Extended Elective)
+        - [Section 1: Knowledge Graph-based RAG](en/chapter7/20_kg_rag.md)
+    - Chapter 8: Practical Project I (Basic)
+        - [Environment Configuration and Project Architecture](en/chapter8/01_env_architecture.md)
+        - [Data Preparation Module Implementation](en/chapter8/02_data_preparation.md)
+        - [Index Construction and Retrieval Optimization](en/chapter8/03_index_retrieval.md)
+        - [Generation Integration and System Integration](en/chapter8/04_generation_sys.md)
+    - Chapter 9: Practical Project I Optimization (Elective)
+        - [Graph RAG Architecture Design](en/chapter9/01_graph_rag_architecture.md)
+        - [Graph Data Modeling and Preparation](en/chapter9/02_graph_data_modeling.md)
+        - [Milvus Index Construction](en/chapter9/03_index_construction.md)
+        - [Intelligent Query Routing and Retrieval Strategies](en/chapter9/04_intelligent_query_routing.md)
+    - Chapter 10: Practical Project II (Elective)

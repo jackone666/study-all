@@ -1,0 +1,23 @@
+{
+  "id": "conv-1781448435845-vw0bgn4gm",
+  "providerId": "claude",
+  "title": "Greet and open conversation",
+  "titleGenerationStatus": "success",
+  "createdAt": 1781448435848,
+  "updatedAt": 1781448544246,
+  "lastResponseAt": 1781448470362,
+  "sessionId": "9c21a025-6e52-4026-92ab-71495c34c63b",
+  "providerState": {
+    "providerSessionId": "9c21a025-6e52-4026-92ab-71495c34c63b"
+  },
+  "usage": {
+    "model": "opus[1m]",
+    "inputTokens": 282,
+    "cacheCreationInputTokens": 0,
+    "cacheReadInputTokens": 31616,
+    "contextWindow": 1000000,
+    "contextTokens": 31898,
+    "percentage": 3,
+    "contextWindowIsAuthoritative": false
+  }
+}

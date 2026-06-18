@@ -1,0 +1,23 @@
+{
+  "id": "conv-1781070325852-e791rbjjh",
+  "providerId": "claude",
+  "title": "1",
+  "titleGenerationStatus": "failed",
+  "createdAt": 1781070325852,
+  "updatedAt": 1781070491713,
+  "lastResponseAt": 1781070447569,
+  "sessionId": "8e683740-c629-4844-8384-76298ac752a5",
+  "providerState": {
+    "providerSessionId": "8e683740-c629-4844-8384-76298ac752a5"
+  },
+  "usage": {
+    "model": "haiku",
+    "inputTokens": 0,
+    "cacheCreationInputTokens": 0,
+    "cacheReadInputTokens": 0,
+    "contextWindow": 200000,
+    "contextTokens": 0,
+    "percentage": 0,
+    "contextWindowIsAuthoritative": false
+  }
+}
