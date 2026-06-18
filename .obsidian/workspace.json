@@ -174,9 +174,19 @@
               "icon": "bot",
               "title": "Claudian"
             }
+          },
+          {
+            "id": "d36063cf12dcf266",
+            "type": "leaf",
+            "state": {
+              "type": "git-view",
+              "state": {},
+              "icon": "git-pull-request",
+              "title": "Source Control"
+            }
           }
         ],
-        "currentTab": 5
+        "currentTab": 6
       }
     ],
     "direction": "horizontal",
@@ -194,10 +204,11 @@
       "nutstore-sync:Start sync": false,
       "nutstore-sync:Stop sync": false,
       "nutstore-sync:Open chatbox": true,
-      "realclaudian:Open Claudian": false
+      "realclaudian:Open Claudian": false,
+      "obsidian-git:Open Git source control": false
     }
   },
-  "active": "b442ec2e166572c8",
+  "active": "d36063cf12dcf266",
   "lastOpenFiles": [
     "Notion/ALL IN AI/how-claude-code-works/docs/08-memory-system.md",
     "Notion/ALL IN AI/how-claude-code-works/docs/07-multi-agent.md",
