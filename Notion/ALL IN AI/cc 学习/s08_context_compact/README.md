@@ -22,7 +22,7 @@ Agent 跑着跑着，不动了。
 
 ## 解决方案
 
-![Compact Overview](images/compact-overview.svg)
+![Compact Overview|697](images/compact-overview.svg)
 
 保留 s07 的 hook 结构、技能加载、子 Agent 等骨架，省略部分工具细节以聚焦压缩。核心变动：每轮 LLM 调用前插入三层预处理器（0 API），token 仍超阈值时触发 LLM 摘要（1 API），API 报错时应急裁剪。
 
@@ -32,7 +32,7 @@ Agent 跑着跑着，不动了。
 
 ## 工作原理
 
-![四层压缩管线](images/compaction-layers.svg)
+![四层压缩管线|697](images/compaction-layers.svg)
 
 ### L1: snip_compact — 裁掉无关的旧对话
 
@@ -59,7 +59,7 @@ def snip_compact(messages, max_messages=50):
 
 ### L2: micro_compact — 旧工具结果占位
 
-![旧结果占位](images/micro-compact.svg)
+![旧结果占位|697](images/micro-compact.svg)
 
 Agent 连续读了 10 个文件。第 1-7 次的完整内容还躺在上下文里，早就不需要了，但占着大量空间。
 
@@ -82,7 +82,7 @@ def micro_compact(messages):
 
 ### L3: tool_result_budget — 大结果落盘
 
-![大结果落盘](images/layer1-budget.svg)
+![大结果落盘|697](images/layer1-budget.svg)
 
 模型一次读了 5 个大文件，单条 user 消息里所有 `tool_result` 加起来 500KB。
 
@@ -109,7 +109,7 @@ def tool_result_budget(messages, max_bytes=200_000):
 
 ### L4: compact_history — LLM 全量摘要
 
-![LLM 全量摘要](images/auto-compact.svg)
+![LLM 全量摘要|697](images/auto-compact.svg)
 
 前三层全跑完了，但在超大项目中连续工作 30 分钟后，token 仍然超过阈值。
 

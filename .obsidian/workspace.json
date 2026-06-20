@@ -78,7 +78,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 266.5024719238281
+    "width": 325.5024719238281
   },
   "right": {
     "id": "69d9816c3c00c3b8",
@@ -208,14 +208,19 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "d36063cf12dcf266",
+  "active": "acdd72415a8b8fe0",
   "lastOpenFiles": [
+    "Notion/ALL IN AI/cc 学习/s08_context_compact/README.md",
+    "Notion/ALL IN AI/Agent/learn-claude-code/s06-context-compact.md",
+    "Notion/ALL IN AI/Agent/learn-claude-code/s05-skill-loading.md",
+    "00-面试准备/02_JAVA语言特性/5、JVM调优.md",
+    "00-面试准备/AI Coding.md",
+    "Notion/ALL IN AI/how-claude-code-works/docs/03-context-engineering.md",
     "Notion/ALL IN AI/how-claude-code-works/docs/08-memory-system.md",
     "Notion/ALL IN AI/how-claude-code-works/docs/07-multi-agent.md",
     "Notion/ALL IN AI/how-claude-code-works/docs/06-hooks-extensibility.md",
     "Notion/ALL IN AI/how-claude-code-works/docs/02-agent-loop.md",
     "Notion/软件基础/算法.md",
-    "00-面试准备/AI Coding.md",
     "Notion/ALL IN AI/cc 学习/s20_comprehensive/README.md",
     "Notion/ALL IN AI/cc 学习/s19_mcp_plugin/README.md",
     "Notion/ALL IN AI/cc 学习/s18_worktree_isolation/README.md",
@@ -228,14 +233,9 @@
     "Notion/ALL IN AI/cc 学习/s11_error_recovery/README.md",
     "Notion/ALL IN AI/cc 学习/s10_system_prompt/README.md",
     "Notion/ALL IN AI/cc 学习/s09_memory/README.md",
-    "Notion/ALL IN AI/cc 学习/s08_context_compact/README.md",
     "Notion/ALL IN AI/cc 学习/s07_skill_loading/README.md",
     "Notion/ALL IN AI/cc 学习/s06_subagent/README.md",
     "Notion/ALL IN AI/cc 学习/s05_todo_write/README.md",
-    "Notion/ALL IN AI/cc 学习/s04_hooks/README.md",
-    "Notion/ALL IN AI/cc 学习/s03_permission/README.md",
-    "Notion/ALL IN AI/cc 学习/s02_tool_use/README.md",
-    "Notion/ALL IN AI/cc 学习/s01_agent_loop/README.md",
     "Notion/ALL IN AI/cc 学习/s11_error_recovery/images/error-recovery-overview.svg",
     "Notion/ALL IN AI/cc 学习/s11_error_recovery/images",
     "Notion/ALL IN AI/cc 学习/s11_error_recovery/code.py",
