@@ -234,7 +234,122 @@ uv run pytest tests/test_tool_search.py -q
 - 哪个测试最接近 worker 的终态处理？
 - 哪个测试最接近 deferred tool 行为？
 
-## 练习 10：讲给别人听
+## 练习 10：从前端触发一次完整 Debug
+
+目标：用浏览器操作触发真实后端流程，而不是只看测试。
+
+前端操作：
+
+1. 启动前端和后端。
+2. 打开 `/workspace/chats/new`。
+3. 打开浏览器 DevTools -> Network。
+4. 输入：
+
+```text
+你好，请用一句话介绍 DeerFlow
+```
+
+5. 点击发送，或按 Enter。
+6. 在 Network 中找到 `runs/stream` 请求。
+
+后端断点：
+
+```text
+backend/app/gateway/routers/thread_runs.py::stream_run
+backend/app/gateway/services.py::start_run
+backend/packages/harness/deerflow/runtime/runs/manager.py::RunManager.create_or_reject
+backend/packages/harness/deerflow/runtime/runs/worker.py::run_agent
+backend/packages/harness/deerflow/agents/lead_agent/agent.py::_make_lead_agent
+backend/packages/harness/deerflow/runtime/stream_bridge/memory.py::MemoryStreamBridge.publish
+backend/app/gateway/services.py::sse_consumer
+```
+
+记录表：
+
+| 观察点 | 记录内容 |
+| --- | --- |
+| Network URL |  |
+| `thread_id` |  |
+| `run_id` |  |
+| request `context.model_name` |  |
+| request `context.mode` |  |
+| `is_plan_mode` |  |
+| `subagent_enabled` |  |
+| 第一条 SSE event |  |
+| 最后一条 SSE event |  |
+
+检查问题：
+
+- 前端 `threadId` 是从 URL 读取的，还是新生成的？
+- `thread.submit()` 传给后端的 `context` 有哪些字段？
+- 后端什么时候创建 `RunRecord`？
+- `run_agent()` 中的 `runtime_ctx` 是否包含 `thread_id/run_id/user_id`？
+- `MemoryStreamBridge.publish()` 发布的事件如何被 `sse_consumer()` 消费？
+
+## 练习 11：前端切换模式后观察后端差异
+
+目标：理解前端模式如何影响 agent 构造。
+
+步骤：
+
+1. 在前端分别用普通模式、pro 模式、ultra 模式发送同一句消息。
+2. 在 Network 中对比 request payload 的 `context`。
+3. 在后端 `_get_runtime_config()` 观察扁平化后的配置。
+4. 在 `_build_middlewares()` 和 `get_available_tools()` 观察差异。
+
+重点观察：
+
+| 前端模式 | 后端字段 | 预期影响 |
+| --- | --- | --- |
+| flash | `thinking_enabled=false` | 关闭 thinking |
+| pro | `is_plan_mode=true` | plan/todo 相关 middleware 生效 |
+| ultra | `subagent_enabled=true` | 可能加入 `task_tool` |
+
+检查问题：
+
+- 模式差异是在前端决定的，还是后端重新推导的？
+- 为什么后端仍然要通过 allowlist 校验 `model_name`？
+- 如果 `subagent_enabled=true`，工具列表会发生什么变化？
+
+## 练习 12：上传文件后触发 Debug
+
+目标：理解上传文件如何进入 agent 上下文。
+
+前端操作：
+
+1. 在聊天输入框选择或拖入一个小文本文件。
+2. 等待上传完成。
+3. 输入：
+
+```text
+请总结我刚上传的文件
+```
+
+4. 发送消息。
+
+后端断点：
+
+```text
+uploads router
+services.normalize_input()
+UploadsMiddleware
+ThreadDataMiddleware
+run_agent()
+```
+
+重点观察：
+
+- 前端是否先触发 upload API。
+- `thread.submit()` 的 message `additional_kwargs.files` 是否包含文件元数据。
+- `normalize_input()` 是否保留 `additional_kwargs`。
+- `UploadsMiddleware` 是否把上传文件注入 agent 可见上下文。
+
+检查问题：
+
+- 文件路径为什么通常是虚拟路径，而不是本机绝对路径？
+- 上传文件属于 HTTP 请求、thread 状态，还是工具运行上下文？
+
+## 练习 13：讲给别人听
 
 目标：检验你是否真的理解。
 

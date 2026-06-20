@@ -36,6 +36,40 @@ uv run pytest tests/test_sandbox_tools_security.py -q
 
 ## 调试一次聊天请求
 
+### 从前端触发
+
+前端最常用的触发方式：
+
+```text
+打开工作区聊天页
+  -> 进入一个 thread，或打开 /workspace/chats/new
+  -> 在底部输入框输入一条消息
+  -> 点击发送按钮，或按 Enter
+  -> 前端开始 streaming
+```
+
+这会经过前端链路：
+
+```text
+frontend/src/components/workspace/chats/use-thread-chat.ts
+  -> 生成或读取 threadId
+
+frontend/src/core/threads/hooks.ts
+  -> thread.submit(...)
+  -> context 中写入 mode/model_name/thinking_enabled/is_plan_mode/subagent_enabled/thread_id
+
+frontend/src/core/api/api-client.ts
+  -> getAPIClient()
+  -> client.runs.stream(...)
+  -> sanitizeRunStreamOptions(...)
+  -> LangGraph SDK 发起 stream 请求
+
+Gateway
+  -> POST /api/threads/{thread_id}/runs/stream
+```
+
+本质解释：前端不是手写 `fetch("/api/threads/.../runs/stream")`，而是通过 LangGraph SDK 的 `client.runs.stream()` 触发。`api-client.ts` 做了一层兼容包装，负责 CSRF、stream mode 清洗、断线重连错误处理。
+
 建议断点顺序：
 
 1. `backend/app/gateway/routers/thread_runs.py::stream_run`
@@ -47,6 +81,75 @@ uv run pytest tests/test_sandbox_tools_security.py -q
 7. `backend/packages/harness/deerflow/tools/tools.py::get_available_tools`
 8. `backend/packages/harness/deerflow/runtime/stream_bridge/memory.py::MemoryStreamBridge.publish`
 9. `backend/app/gateway/services.py::sse_consumer`
+
+前端同时可以观察：
+
+- 浏览器 DevTools -> Network：找 `/api/threads/{thread_id}/runs/stream` 或 `/api/langgraph/threads/{thread_id}/runs/stream`。
+- Request Payload：看 `input.messages`、`config`、`context`。
+- Response/EventStream：看 `metadata`、`messages`、`values`、`updates`、`end` 等事件。
+- Console：`api-client.ts` 会输出 `Creating API client with base URL: ...`。
+
+重点对照字段：
+
+| 前端字段 | 来源 | 后端观察点 |
+| --- | --- | --- |
+| `threadId` | `use-thread-chat.ts` | `stream_run(thread_id=...)` |
+| `messages` | `hooks.ts::thread.submit()` | `services.normalize_input()` |
+| `context.model_name` | 聊天上下文/模型选择 | `start_run()` 模型校验、`_resolve_model_name()` |
+| `context.mode` | 前端聊天模式 | `merge_run_context_overrides()` |
+| `thinking_enabled` | `mode !== "flash"` | `_get_runtime_config()` |
+| `is_plan_mode` | `mode === "pro" || mode === "ultra"` | `_build_middlewares()` / `TodoMiddleware` |
+| `subagent_enabled` | `mode === "ultra"` | `get_available_tools()` 是否加入 `task_tool` |
+| `streamSubgraphs` | `thread.submit()` options | `RunCreateRequest.stream_subgraphs` |
+| `streamResumable` | `thread.submit()` options | SSE 断点续传相关行为 |
+
+### 前端操作和后端流程对应表
+
+| 前端操作 | 会触发的后端流程 | 推荐断点 |
+| --- | --- | --- |
+| 新聊天页发送普通消息 | 创建 thread id、创建 run、启动 Lead Agent、SSE 返回 | `stream_run()`、`start_run()`、`run_agent()`、`_make_lead_agent()` |
+| 在已有 thread 里继续发送 | 同一个 `thread_id` 下创建新的 run，读取旧 checkpoint | `start_run()`、`checkpointer.aget_tuple()`、`agent.astream()` |
+| 选择 flash/pro/ultra 等模式后发送 | 写入 `context.mode`，影响 thinking、plan mode、subagent | `merge_run_context_overrides()`、`_get_runtime_config()`、`_build_middlewares()` |
+| 选择具体模型后发送 | 写入 `context.model_name`，后端先校验再解析模型 | `start_run()` 的 `get_model_config()`、`_resolve_model_name()` |
+| 上传文件后发送 | 先走 upload API，再把 files 放入 message `additional_kwargs` | uploads router、`normalize_input()`、`UploadsMiddleware` |
+| 等待回复完成 | SSE 收到 end，前端状态从 streaming 结束 | `MemoryStreamBridge.publish_end()`、`sse_consumer()` |
+| 回复完成后出现追问建议 | 前端额外请求 suggestions 接口 | `POST /api/threads/{thread_id}/suggestions` |
+| 刷新页面后回到同一 thread | 前端加载历史消息/状态，必要时尝试 join stream | runs messages/history、`joinStream()`、`stream_existing_run()` |
+
+### 推荐 Debug 流程
+
+1. 前端打开 DevTools Network，清空请求列表。
+2. 后端在 `stream_run()`、`start_run()`、`run_agent()`、`_make_lead_agent()` 打断点。
+3. 前端发送一句简单消息，例如：
+
+```text
+你好，简单介绍一下你能做什么
+```
+
+4. 命中 `stream_run()` 时，先记录 `thread_id` 和 request body。
+5. 命中 `start_run()` 时，观察 `body.context`、`model_name`、`stream_mode`。
+6. 命中 `run_agent()` 时，观察 `run_id`、`runtime_ctx`、`config["context"]`。
+7. 命中 `_make_lead_agent()` 时，观察 `model_name`、`is_plan_mode`、`subagent_enabled`、`final_tools`、`middleware`。
+8. 回到浏览器 Network，看 EventStream 是否持续收到事件。
+
+判断链路跑通的最小证据：
+
+```text
+前端 status=streaming
+  -> Network 出现 runs/stream
+  -> 后端 stream_run 命中
+  -> RunManager 创建 RunRecord
+  -> run_agent 发布 metadata
+  -> EventStream 收到 metadata/message/end
+```
+
+### 调试时常见前端误判
+
+- 看到 URL 是 `/api/langgraph/...` 不代表有单独 LangGraph 服务；前端 SDK 路径会被 Gateway 兼容处理。
+- 新聊天页路径里的 `new` 不是真正 thread id，`use-thread-chat.ts` 会生成 UUID。
+- 前端传了 `context.thread_id`，但后端真正的线程归属仍以 URL path 的 `thread_id` 为准。
+- 前端显示 streaming 不等于模型已经开始输出；可能只是 run 已创建、SSE 已连接。
+- 工具没有显示在 UI，不代表工具没加载；可能是 deferred tool，被 `tool_search` 按需提升。
 
 ## 调试工具不可用
 
@@ -156,4 +259,3 @@ uv run pytest tests/test_wait_disconnect_handling.py -q
 - run event store backend
 
 这些变更通常需要重启 Gateway。
-

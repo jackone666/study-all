@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Notion/ALL IN AI/how-claude-code-works/docs/03-context-engineering.md",
-                "mode": "source",
+                "file": "Notion/ALL IN AI/backend-learning-path/02-run-call-chain.md",
+                "mode": "preview",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "03-context-engineering"
+              "title": "02-run-call-chain"
             }
           }
         ]
@@ -208,8 +208,12 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "264ac39dc0920bc9",
+  "active": "acdd72415a8b8fe0",
   "lastOpenFiles": [
+    "Notion/ALL IN AI/backend-learning-path/01-backend-architecture-map.md",
+    "Notion/ALL IN AI/backend-learning-path/02-run-call-chain.md",
+    "Notion/ALL IN AI/backend-learning-path/00-learning-plan.md",
+    "Notion/ALL IN AI/how-claude-code-works/docs/03-context-engineering.md",
     "Notion/ALL IN AI/backend-learning-path/10-learning-exercises.md",
     "Notion/ALL IN AI/backend-learning-path/09-source-reading-checklists.md",
     "Notion/ALL IN AI/backend-learning-path/README.md",
@@ -219,16 +223,12 @@
     "Notion/ALL IN AI/backend-learning-path/05-state-persistence-auth.md",
     "Notion/ALL IN AI/backend-learning-path/04-tools-sandbox-mcp.md",
     "Notion/ALL IN AI/backend-learning-path/03-lead-agent-call-chain.md",
-    "Notion/ALL IN AI/backend-learning-path/02-run-call-chain.md",
-    "Notion/ALL IN AI/backend-learning-path/01-backend-architecture-map.md",
-    "Notion/ALL IN AI/backend-learning-path/00-learning-plan.md",
     "Notion/ALL IN AI/backend-learning-path",
     "Notion/ALL IN AI/cc 学习/s08_context_compact/README.md",
     "Notion/ALL IN AI/Agent/learn-claude-code/s06-context-compact.md",
     "Notion/ALL IN AI/Agent/learn-claude-code/s05-skill-loading.md",
     "00-面试准备/02_JAVA语言特性/5、JVM调优.md",
     "00-面试准备/AI Coding.md",
-    "Notion/ALL IN AI/how-claude-code-works/docs/03-context-engineering.md",
     "Notion/ALL IN AI/how-claude-code-works/docs/08-memory-system.md",
     "Notion/ALL IN AI/how-claude-code-works/docs/07-multi-agent.md",
     "Notion/ALL IN AI/how-claude-code-works/docs/06-hooks-extensibility.md",
