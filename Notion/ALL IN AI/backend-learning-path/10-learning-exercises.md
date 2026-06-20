@@ -299,11 +299,29 @@ backend/app/gateway/services.py::sse_consumer
 
 重点观察：
 
-| 前端模式 | 后端字段 | 预期影响 |
-| --- | --- | --- |
-| flash | `thinking_enabled=false` | 关闭 thinking |
-| pro | `is_plan_mode=true` | plan/todo 相关 middleware 生效 |
-| ultra | `subagent_enabled=true` | 可能加入 `task_tool` |
+| 前端模式 | `thinking_enabled` | `is_plan_mode` | `subagent_enabled` | 默认 `reasoning_effort` | 预期影响 |
+| --- | --- | --- | --- | --- | --- |
+| `flash` | `false` | `false` | `false` | 未设置 | 关闭 thinking、plan、subagent |
+| `thinking` | `true` | `false` | `false` | `low` | 只开 thinking |
+| `pro` | `true` | `true` | `false` | `medium` | thinking + plan/todo |
+| `ultra` | `true` | `true` | `true` | `high` | thinking + plan/todo + 子代理 |
+
+源码依据：
+
+```ts
+thinking_enabled: context.mode !== "flash",
+is_plan_mode: context.mode === "pro" || context.mode === "ultra",
+subagent_enabled: context.mode === "ultra",
+reasoning_effort:
+  context.reasoning_effort ??
+  (context.mode === "ultra"
+    ? "high"
+    : context.mode === "pro"
+      ? "medium"
+      : context.mode === "thinking"
+        ? "low"
+        : undefined)
+```
 
 检查问题：
 

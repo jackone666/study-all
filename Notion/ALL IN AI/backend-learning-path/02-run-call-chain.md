@@ -111,6 +111,84 @@ start_run(body, thread_id, request)
 
 本质解释：`configurable` 更像 LangGraph/LangChain 的传统配置通道，`context` 更像 DeerFlow 自己给工具和 middleware 的运行上下文。两边同时写，是为了让旧代码和新运行时都能读到同一份事实。
 
+### 前端模式到后端字段的映射
+
+`thinking_enabled`、`is_plan_mode`、`subagent_enabled` 不是后端凭空出现的。它们由前端在 `frontend/src/core/threads/hooks.ts::thread.submit()` 中根据 `context.mode` 算好：
+
+```ts
+thinking_enabled: context.mode !== "flash",
+is_plan_mode: context.mode === "pro" || context.mode === "ultra",
+subagent_enabled: context.mode === "ultra",
+reasoning_effort:
+  context.reasoning_effort ??
+  (context.mode === "ultra"
+    ? "high"
+    : context.mode === "pro"
+      ? "medium"
+      : context.mode === "thinking"
+        ? "low"
+        : undefined)
+```
+
+对应关系：
+
+| 前端 mode | thinking | plan mode | subagent | reasoning effort |
+| --- | --- | --- | --- | --- |
+| `flash` | 否 | 否 | 否 | 未设置 |
+| `thinking` | 是 | 否 | 否 | `low` |
+| `pro` | 是 | 是 | 否 | `medium` |
+| `ultra` | 是 | 是 | 是 | `high` |
+
+后端在本函数只做“白名单转发”，把这些字段放入 `RunnableConfig`。真正使用它们的是 `_make_lead_agent()`：
+
+```text
+thinking_enabled -> create_chat_model(...)
+reasoning_effort -> create_chat_model(...)
+is_plan_mode -> _build_middlewares() / TodoMiddleware
+subagent_enabled -> get_available_tools() 是否加入 task_tool
+```
+
+所以调试模式问题时，先看浏览器 Network 的 request payload，再看 `merge_run_context_overrides()` 后的 `config`，最后看 `_get_runtime_config()` 读到的 `cfg`。
+
+### 普通 Chat 与 Agents Chat 在这里分叉
+
+两个前端入口最终都进入本函数，但 `body.context` 不同：
+
+```text
+普通 Chat:
+  /workspace/chats/{thread_id}
+  body.context.agent_name 不存在
+
+Agents Chat:
+  /workspace/agents/{agent_name}/chats/{thread_id}
+  body.context.agent_name = URL 中的 agent_name
+```
+
+后端分叉点不是 router，也不是不同的 `assistant_id`。两者通常都使用：
+
+```text
+assistant_id = "lead_agent"
+resolve_agent_factory("lead_agent") -> make_lead_agent
+```
+
+真正改变 agent 行为的是 `merge_run_context_overrides()` 把 `agent_name` 写入：
+
+```python
+config["configurable"]["agent_name"] = "research-agent"
+config["context"]["agent_name"] = "research-agent"
+```
+
+之后 `_make_lead_agent()` 通过 `_get_runtime_config()` 读到：
+
+```text
+cfg["agent_name"] == "research-agent"
+  -> validate_agent_name(...)
+  -> load_agent_config("research-agent")
+  -> 加载该 agent 的配置和 SOUL.md
+```
+
+所以调试 Agents 入口时，重点看 `body.context.agent_name` 是否从前端传到这里，而不是去找另一个后端路由。
+
 ### 用户注入：`inject_authenticated_user_context()`
 
 从 `request.state.user` 写入：

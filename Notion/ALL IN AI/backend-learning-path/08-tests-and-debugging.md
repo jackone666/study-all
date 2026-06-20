@@ -70,6 +70,265 @@ Gateway
 
 本质解释：前端不是手写 `fetch("/api/threads/.../runs/stream")`，而是通过 LangGraph SDK 的 `client.runs.stream()` 触发。`api-client.ts` 做了一层兼容包装，负责 CSRF、stream mode 清洗、断线重连错误处理。
 
+### 前端 mode 如何变成后端开关
+
+这个映射是在前端决定的，源码位置：
+
+`frontend/src/core/threads/hooks.ts`
+
+关键代码：
+
+```ts
+context: {
+  ...extraContext,
+  ...context,
+  thinking_enabled: context.mode !== "flash",
+  is_plan_mode: context.mode === "pro" || context.mode === "ultra",
+  subagent_enabled: context.mode === "ultra",
+  reasoning_effort:
+    context.reasoning_effort ??
+    (context.mode === "ultra"
+      ? "high"
+      : context.mode === "pro"
+        ? "medium"
+        : context.mode === "thinking"
+          ? "low"
+          : undefined),
+  thread_id: threadId,
+}
+```
+
+所以前端模式和后端字段的关系是：
+
+| 前端 `context.mode` | `thinking_enabled` | `is_plan_mode` | `subagent_enabled` | 默认 `reasoning_effort` | 后端影响 |
+| --- | --- | --- | --- | --- | --- |
+| `flash` | `false` | `false` | `false` | `undefined` | 不开 thinking，不开 plan/todo，不开子代理 |
+| `thinking` | `true` | `false` | `false` | `low` | 开 thinking，但不进入 plan mode，不暴露 `task_tool` |
+| `pro` | `true` | `true` | `false` | `medium` | 开 thinking，启用 plan/todo 相关 middleware，不开子代理 |
+| `ultra` | `true` | `true` | `true` | `high` | 开 thinking，启用 plan/todo，并允许子代理工具 |
+
+注意：后端不是根据字符串 `mode` 重新推导这些布尔值，而是主要读取前端已经算好的：
+
+```text
+body.context.thinking_enabled
+body.context.is_plan_mode
+body.context.subagent_enabled
+body.context.reasoning_effort
+```
+
+后端读取路径：
+
+```text
+hooks.ts context
+  -> thread.submit(...)
+  -> RunCreateRequest.context
+  -> services.merge_run_context_overrides()
+  -> config["context"] / config["configurable"]
+  -> agent.py::_get_runtime_config()
+  -> _make_lead_agent()
+```
+
+对应后端行为：
+
+| 后端字段 | 被谁读取 | 具体影响 |
+| --- | --- | --- |
+| `thinking_enabled` | `_make_lead_agent()` -> `create_chat_model()` | 决定是否请求模型 thinking 能力；若模型不支持会降级为 false |
+| `reasoning_effort` | `_make_lead_agent()` -> `create_chat_model()` | 决定支持该参数的模型使用低/中/高推理强度 |
+| `is_plan_mode` | `_build_middlewares()` | 决定是否启用 plan/todo 相关能力，例如 `TodoMiddleware` |
+| `subagent_enabled` | `_make_lead_agent()` / `get_available_tools()` / prompt | 决定是否加入 `task_tool`，以及 prompt 是否允许子代理委派 |
+
+Debug 时最实用的判断：如果前端选择了 `ultra`，但后端 `get_available_tools()` 没有加入 `task_tool`，先看 Network payload 里 `context.subagent_enabled` 是否为 `true`，再看 `merge_run_context_overrides()` 是否把它写进了 `config["context"]` 和 `config["configurable"]`。
+
+### Chat 入口和 Agents 入口的调用区别
+
+DeerFlow 前端有两个聊天入口：
+
+```text
+普通聊天入口
+  /workspace/chats/[thread_id]
+  -> frontend/src/app/workspace/chats/[thread_id]/page.tsx
+
+Agent 专属聊天入口
+  /workspace/agents/[agent_name]/chats/[thread_id]
+  -> frontend/src/app/workspace/agents/[agent_name]/chats/[thread_id]/page.tsx
+```
+
+它们的共同点：
+
+- 都使用 `useThreadChat()` 读取或生成 `threadId`。
+- 都使用 `useThreadStream()` 创建 LangGraph `useStream`。
+- `useStream` 里的 `assistantId` 都是 `"lead_agent"`。
+- 发送消息时都调用 `sendMessage(threadId, message, ...)`。
+- 最终都会进入后端：
+
+```text
+POST /api/threads/{thread_id}/runs/stream
+  -> stream_run()
+  -> start_run()
+  -> run_agent()
+  -> make_lead_agent()
+```
+
+核心区别：**普通 Chat 入口运行默认 Lead Agent；Agents 入口仍然走 `lead_agent` assistant，但会通过 `context.agent_name` 告诉后端加载哪个自定义 agent。**
+
+#### 普通 Chat 入口
+
+文件：`frontend/src/app/workspace/chats/[thread_id]/page.tsx`
+
+关键调用：
+
+```text
+useThreadStream({
+  threadId: isNewThread ? undefined : threadId,
+  context: settings.context,
+  ...
+})
+
+handleSubmit(message)
+  -> sendMessage(threadId, message)
+```
+
+发送时的后端 context 大致是：
+
+```json
+{
+  "model_name": "deepseek-chat",
+  "mode": "pro",
+  "thinking_enabled": true,
+  "is_plan_mode": true,
+  "subagent_enabled": false,
+  "reasoning_effort": "medium",
+  "thread_id": "thread-123"
+}
+```
+
+后端结果：
+
+```text
+assistant_id = "lead_agent"
+context.agent_name 不存在
+  -> resolve_agent_factory("lead_agent")
+  -> make_lead_agent()
+  -> _make_lead_agent()
+  -> agent_name = None
+  -> load default lead agent prompt/config
+```
+
+#### Agents 入口
+
+文件：`frontend/src/app/workspace/agents/[agent_name]/chats/[thread_id]/page.tsx`
+
+关键调用：
+
+```text
+const { agent_name } = useParams()
+
+useThreadStream({
+  threadId: isNewThread ? undefined : threadId,
+  context: { ...settings.context, agent_name: agent_name },
+  ...
+})
+
+handleSubmit(message)
+  -> sendMessage(threadId, message, { agent_name })
+```
+
+发送时的后端 context 大致是：
+
+```json
+{
+  "model_name": "deepseek-chat",
+  "mode": "pro",
+  "thinking_enabled": true,
+  "is_plan_mode": true,
+  "subagent_enabled": false,
+  "reasoning_effort": "medium",
+  "thread_id": "thread-123",
+  "agent_name": "research-agent"
+}
+```
+
+同时 `useThreadStream()` 在 `onCreated()` 中会把 agent 信息写入线程列表缓存和后端 thread metadata：
+
+```text
+metadata: { agent_name: context.agent_name }
+getAPIClient().threads.update(meta.thread_id, {
+  metadata: { agent_name: context.agent_name }
+})
+```
+
+后端结果：
+
+```text
+assistant_id 仍然是 "lead_agent"
+context.agent_name = "research-agent"
+  -> merge_run_context_overrides()
+  -> config["context"]["agent_name"] = "research-agent"
+  -> config["configurable"]["agent_name"] = "research-agent"
+  -> _get_runtime_config()
+  -> validate_agent_name("research-agent")
+  -> load_agent_config("research-agent")
+  -> 加载 agents/research-agent/SOUL.md 和 agent config
+```
+
+#### 两个入口的对照表
+
+| 项目 | 普通 Chat | Agents Chat |
+| --- | --- | --- |
+| 前端路由 | `/workspace/chats/[thread_id]` | `/workspace/agents/[agent_name]/chats/[thread_id]` |
+| 页面文件 | `app/workspace/chats/[thread_id]/page.tsx` | `app/workspace/agents/[agent_name]/chats/[thread_id]/page.tsx` |
+| 欢迎区 | `Welcome` | `AgentWelcome` |
+| `useThreadStream.context` | `settings.context` | `{ ...settings.context, agent_name }` |
+| `sendMessage` 额外参数 | 无 | `{ agent_name }` |
+| `assistantId` | `"lead_agent"` | `"lead_agent"` |
+| 后端 endpoint | `/api/threads/{thread_id}/runs/stream` | 同左 |
+| 后端 agent factory | `make_lead_agent` | `make_lead_agent` |
+| 后端差异点 | `agent_name=None` | `agent_name=<URL 中的 agent_name>` |
+| 配置加载 | 默认 Lead Agent | 自定义 agent config + `SOUL.md` |
+| 线程 metadata | 通常无 `agent_name` | 写入 `metadata.agent_name` |
+| 历史列表跳转 | `/workspace/chats/{thread_id}` | `/workspace/agents/{agent_name}/chats/{thread_id}` |
+
+#### Debug 时怎么区分
+
+如果你想确认当前请求来自哪个入口：
+
+1. 看浏览器地址栏：
+
+```text
+/workspace/chats/new
+/workspace/chats/{thread_id}
+/workspace/agents/{agent_name}/chats/new
+/workspace/agents/{agent_name}/chats/{thread_id}
+```
+
+2. 看 Network 中 `runs/stream` 的 request payload：
+
+```text
+普通 Chat:
+  context.agent_name 不存在
+
+Agents Chat:
+  context.agent_name = URL 中的 agent_name
+```
+
+3. 后端断点看这些位置：
+
+```text
+services.merge_run_context_overrides()
+  -> context 是否包含 agent_name
+
+services.start_run()
+  -> body.assistant_id 通常仍是 lead_agent
+
+agent.py::_get_runtime_config()
+  -> cfg["agent_name"] 是否存在
+
+agent.py::_make_lead_agent()
+  -> agent_config = load_agent_config(agent_name)
+```
+
+一个容易误解的点：Agents 入口不是调用一个不同的后端 assistant id。它仍然用 `lead_agent` 作为 LangGraph SDK 的 assistantId，只是通过 `context.agent_name` 让同一个 Lead Agent 工厂切换到自定义 agent 配置。
+
 建议断点顺序：
 
 1. `backend/app/gateway/routers/thread_runs.py::stream_run`

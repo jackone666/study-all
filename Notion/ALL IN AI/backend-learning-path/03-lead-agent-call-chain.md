@@ -50,6 +50,7 @@ configurable -> context 覆盖 configurable
 - `thread_id`
 - `run_id`
 - `model_name`
+- `mode`
 - `thinking_enabled`
 - `reasoning_effort`
 - `is_plan_mode`
@@ -57,6 +58,17 @@ configurable -> context 覆盖 configurable
 - `max_concurrent_subagents`
 - `agent_name`
 - `is_bootstrap`
+
+这些运行字段大多来自前端 `frontend/src/core/threads/hooks.ts`。前端先根据 `context.mode` 推导布尔开关，后端再读取这些已经算好的结果：
+
+| 前端 mode | `_get_runtime_config()` 读到的重点字段 |
+| --- | --- |
+| `flash` | `thinking_enabled=false`, `is_plan_mode=false`, `subagent_enabled=false` |
+| `thinking` | `thinking_enabled=true`, `is_plan_mode=false`, `subagent_enabled=false`, `reasoning_effort="low"` |
+| `pro` | `thinking_enabled=true`, `is_plan_mode=true`, `subagent_enabled=false`, `reasoning_effort="medium"` |
+| `ultra` | `thinking_enabled=true`, `is_plan_mode=true`, `subagent_enabled=true`, `reasoning_effort="high"` |
+
+注意：`mode` 字符串本身主要用于前端表达用户选择；后端关键行为看的是 `thinking_enabled`、`is_plan_mode`、`subagent_enabled`、`reasoning_effort` 这些派生字段。
 - `app_config`
 
 ## 2. `_resolve_model_name()`
@@ -309,6 +321,11 @@ Lead Agent 这一章最容易读散，因为模型、技能、工具、middlewar
 | `cfg` | `_get_runtime_config(config)` | 扁平化后的运行配置，供后续决策读取 |
 | `model_name` | request context / agent config / app config | 决定 `create_chat_model()` 使用哪个模型 |
 | `agent_name` | request context | 决定是否加载自定义 agent 配置 |
+| `mode` | 前端聊天设置 | 前端用于推导 thinking/plan/subagent；后端通常不直接靠它决策 |
+| `thinking_enabled` | 前端 `mode !== "flash"` | 决定 `create_chat_model()` 是否启用模型 thinking 能力 |
+| `reasoning_effort` | 前端按 mode 推导，或用户显式设置 | 传给支持该参数的模型，影响推理强度 |
+| `is_plan_mode` | 前端 `mode === "pro" || mode === "ultra"` | 决定 plan/todo 相关 middleware 是否启用 |
+| `subagent_enabled` | 前端 `mode === "ultra"` | 决定是否加入 `task_tool` 并允许子代理委派 |
 | `is_bootstrap` | request context | bootstrap 模式下跳过自定义 agent 配置 |
 | `skills_for_tool_policy` | skill loader | 决定工具是否被 allowed-tools 过滤 |
 | `raw_tools` | `get_available_tools()` | 候选工具全集 |
