@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Notion/ALL IN AI/backend-learning-path/02-run-call-chain.md",
+                "file": "Notion/ALL IN AI/backend-learning-path/04-tools-sandbox-mcp.md",
                 "mode": "preview",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "02-run-call-chain"
+              "title": "04-tools-sandbox-mcp"
             }
           }
         ]
@@ -210,8 +210,9 @@
   },
   "active": "acdd72415a8b8fe0",
   "lastOpenFiles": [
-    "Notion/ALL IN AI/backend-learning-path/01-backend-architecture-map.md",
+    "Notion/ALL IN AI/backend-learning-path/03-lead-agent-call-chain.md",
     "Notion/ALL IN AI/backend-learning-path/02-run-call-chain.md",
+    "Notion/ALL IN AI/backend-learning-path/01-backend-architecture-map.md",
     "Notion/ALL IN AI/backend-learning-path/00-learning-plan.md",
     "Notion/ALL IN AI/how-claude-code-works/docs/03-context-engineering.md",
     "Notion/ALL IN AI/backend-learning-path/10-learning-exercises.md",
@@ -222,7 +223,6 @@
     "Notion/ALL IN AI/backend-learning-path/06-channels-uploads-memory.md",
     "Notion/ALL IN AI/backend-learning-path/05-state-persistence-auth.md",
     "Notion/ALL IN AI/backend-learning-path/04-tools-sandbox-mcp.md",
-    "Notion/ALL IN AI/backend-learning-path/03-lead-agent-call-chain.md",
     "Notion/ALL IN AI/backend-learning-path",
     "Notion/ALL IN AI/cc 学习/s08_context_compact/README.md",
     "Notion/ALL IN AI/Agent/learn-claude-code/s06-context-compact.md",
