@@ -1,7 +1,3 @@
-# SpringBoot 原理与实践
-
-## Spring Boot 与自动装配
-
 #### 1、基础题：Spring Boot 自动装配的原理是什么？@SpringBootApplication 做了什么？
 
 **难度级别**：⭐⭐（@EnableAutoConfiguration、spring.factories/spring/imports、条件注解）

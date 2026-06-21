@@ -1,6 +1,3 @@
-# 多 Agent 可观测性与调试
-
-### 多 Agent 系统的监控与问题排查
 
 ![image.png](09-Agent-部署-观测-多-Agent-可观测性与调试-image-001.png)
 

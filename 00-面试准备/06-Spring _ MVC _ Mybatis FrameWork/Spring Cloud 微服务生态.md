@@ -1,5 +1,3 @@
-# Spring Cloud 微服务生态
-
 #### 1、基础题：Spring Cloud Gateway 的工作原理是什么？
 
 **难度级别**：⭐⭐（Predicate、Filter、Route、WebFlux 响应式）

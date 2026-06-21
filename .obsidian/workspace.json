@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Notion/ALL IN AI/backend-learning-path/03-lead-agent-call-chain.md",
-                "mode": "preview",
+                "file": "00-面试准备/07-Distributed systems and consistency/分布式系统与一致性.md",
+                "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "03-lead-agent-call-chain"
+              "title": "分布式系统与一致性"
             }
           }
         ]
@@ -156,13 +156,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Notion/ALL IN AI/how-claude-code-works/docs/03-context-engineering.md",
+                "file": "00-面试准备/07-Distributed systems and consistency/分布式系统与一致性.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "03-context-engineering 的大纲"
+              "title": "分布式系统与一致性 的大纲"
             }
           },
           {
@@ -186,7 +186,7 @@
             }
           }
         ],
-        "currentTab": 6
+        "currentTab": 4
       }
     ],
     "direction": "horizontal",
@@ -210,33 +210,34 @@
   },
   "active": "acdd72415a8b8fe0",
   "lastOpenFiles": [
-    "Notion/ALL IN AI/backend-learning-path/02-run-call-chain.md",
-    "Notion/ALL IN AI/backend-learning-path/01-backend-architecture-map.md",
-    "Notion/ALL IN AI/backend-learning-path/00-learning-plan.md",
-    "Notion/ALL IN AI/backend-learning-path/09-source-reading-checklists.md",
-    "Notion/ALL IN AI/backend-learning-path/06-channels-uploads-memory.md",
-    "Notion/ALL IN AI/backend-learning-path/05-state-persistence-auth.md",
-    "Notion/ALL IN AI/backend-learning-path/03-lead-agent-call-chain.md",
-    "Notion/ALL IN AI/backend-learning-path/04-tools-sandbox-mcp.md",
-    "Notion/ALL IN AI/how-claude-code-works/docs/03-context-engineering.md",
-    "Notion/ALL IN AI/backend-learning-path/10-learning-exercises.md",
-    "Notion/ALL IN AI/backend-learning-path/README.md",
-    "Notion/ALL IN AI/backend-learning-path/08-tests-and-debugging.md",
-    "Notion/ALL IN AI/backend-learning-path/07-annotated-code-reading.md",
+    "00-面试准备/06-Spring _ MVC _ Mybatis FrameWork/SpringBoot 原理与实践.md",
+    "00-面试准备/07-Distributed systems and consistency/分布式系统与一致性.md",
+    "00-面试准备/06-Spring _ MVC _ Mybatis FrameWork/Spring MVC 与 WebFlux.md",
+    "00-面试准备/06-Spring _ MVC _ Mybatis FrameWork/Spring Cloud 微服务生态.md",
+    "00-面试准备/06-Spring _ MVC _ Mybatis FrameWork/Spring 原理与实践.md",
+    "00-面试准备/06-Spring _ MVC _ Mybatis FrameWork/Mybatis 持久层框架.md",
+    "00-面试准备/04-Cache & DataBase/Redis.md",
+    "00-面试准备/05-Message Queue/消息队列与分布式中间件.md",
+    "00-面试准备/05-Message Queue/消息队列与数据库协同.md",
+    "00-面试准备/05-Message Queue/消息队列原理与选型.md",
+    "00-面试准备/04-Cache & DataBase/Mysql.md",
+    "00-面试准备/04-Cache & DataBase/MongoDB.md",
+    "00-面试准备/04-Cache & DataBase/Elasticsearch 搜索.md",
+    "00-面试准备/04-Cache & DataBase/消息队列与数据库协同.md",
+    "00-面试准备/04-Cache & DataBase/缓存设计与策略.md",
+    "00-面试准备/04-Cache & DataBase/分布式数据库与一致性.md",
+    "Notion/框架/Kafka.md",
+    "00-面试准备/03-大模型应用基础/07 Agent 架构/Multi-Agent 协作.md",
+    "00-面试准备/03-大模型应用基础/07 Agent 架构/Agent Framework/SpringAI.md",
+    "00-面试准备/03-大模型应用基础/06 Agent Skill/Agent Skills.md",
+    "00-面试准备/03-大模型应用基础/05 Agent Tool/工具设计与实现.md",
+    "Notion/大模型基础.md",
+    "00-面试准备/03-大模型应用基础/07 Agent 架构/Agent Framework/主流 AI 框架对比与选型.md",
+    "00-面试准备/03-大模型应用基础/08 Agent 评测/Agent 评估体系.md",
+    "00-面试准备/03-大模型应用基础/08 Agent 评测/Agent 观测体系.md",
+    "00-面试准备/03-大模型应用基础/08 Agent 评测/工程实践与可观测性.md",
+    "00-面试准备/03-大模型应用基础",
     "Notion/ALL IN AI/backend-learning-path",
-    "Notion/ALL IN AI/cc 学习/s08_context_compact/README.md",
-    "Notion/ALL IN AI/Agent/learn-claude-code/s06-context-compact.md",
-    "Notion/ALL IN AI/Agent/learn-claude-code/s05-skill-loading.md",
-    "00-面试准备/02_JAVA语言特性/5、JVM调优.md",
-    "00-面试准备/AI Coding.md",
-    "Notion/ALL IN AI/how-claude-code-works/docs/08-memory-system.md",
-    "Notion/ALL IN AI/how-claude-code-works/docs/07-multi-agent.md",
-    "Notion/ALL IN AI/how-claude-code-works/docs/06-hooks-extensibility.md",
-    "Notion/ALL IN AI/how-claude-code-works/docs/02-agent-loop.md",
-    "Notion/软件基础/算法.md",
-    "Notion/ALL IN AI/cc 学习/s20_comprehensive/README.md",
-    "Notion/ALL IN AI/cc 学习/s19_mcp_plugin/README.md",
-    "Notion/ALL IN AI/cc 学习/s18_worktree_isolation/README.md",
     "Notion/ALL IN AI/cc 学习/s11_error_recovery/images/error-recovery-overview.svg",
     "Notion/ALL IN AI/cc 学习/s11_error_recovery/images",
     "Notion/ALL IN AI/cc 学习/s11_error_recovery/code.py",
@@ -248,7 +249,6 @@
     "Notion/ALL IN AI/cc 学习/s03_permission",
     "Notion/ALL IN AI/cc 学习/skills/agent-builder/scripts/init_agent.py",
     "Notion/ALL IN AI/cc 学习/skills/agent-builder/references/tool-templates.py",
-    "Notion/ALL IN AI/cc 学习/skills/agent-builder/references/subagent-pattern.py",
     "Notion/ALL IN AI/cc 学习/s02_tool_use/images/tool-dispatch.svg",
     "Notion/ALL IN AI/cc 学习/s02_tool_use/images/concurrency-comparison.svg",
     "Notion/ALL IN AI/cc 学习/s20_comprehensive/images/system-architecture.svg",

@@ -1,4 +1,3 @@
-# 主流 AI 框架对比与选型
 
 ### **[LangChain / LangGraph / SpringAI / LangChain4J / LlamaIndex / AutoGen / CrewAI 全景对比]**
 

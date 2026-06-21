@@ -1,5 +1,3 @@
-# Elasticsearch 搜索
-
 ## 8.12 Elasticsearch 搜索与 Agent 知识库
 
 #### 1、基础题：Elasticsearch 的倒排索引原理是什么？为什么搜索快？
