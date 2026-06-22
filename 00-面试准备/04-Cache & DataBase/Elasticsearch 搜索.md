@@ -10,18 +10,6 @@
 
 **难度级别**：⭐⭐⭐⭐（BM25关键词检索、向量相似度检索、混合检索Hybrid Search、Rerank、分词器选型）
 
-**1️⃣ Common Answer**
-
-重点总结（便于面试记忆）：
-
-- 倒排索引深入
-- 混合检索架构
-- Rerank 策略权衡
-- Agent 场景实践
-- Term Dictionary：词典，存储所有分词后的词项，按字典序排序，支持二分查找
-- Term Index：词项索引，使用 FST（Finite State Transducer）压缩存储，加载到内存，快��定位 Term Dictionary 的位置
-
-**2️⃣ Impressive Answer**
 
 混合检索是 Agent 知识库的**核心检索架构**，需要从倒排索引原理、混合检索设计、Rerank 策略三个层面理解：
 
@@ -54,85 +42,12 @@
   - **知识库检索链路**：用户 Query → Query 改写（同义词扩展、意图识别）→ 多路召回（BM25 + 向量）→ 融合（RRF）→ Rerank（Top-20 精排）→ LLM 生成
 
   - **ES 索引设计**：使用 `nested` 类型存储文档分块，避免扁平化导致的父子关系丢失；`dense_vector` 存储向量，支持混合检索
-
-**3️⃣ Key Differences**
-
-<table>
-<tr>
-<td>
-维度
-</td>
-<td>
-Common Answer
-</td>
-<td>
-Impressive Answer
-</td>
-</tr>
-<tr>
-<td>
-结构性
-</td>
-<td>
-概念简单，缺乏系统设计
-</td>
-<td>
-从原理→架构→实现，完整技术链路
-</td>
-</tr>
-<tr>
-<td>
-技术深度
-</td>
-<td>
-知道倒排索引，不懂压缩优化
-</td>
-<td>
-深入 FST、Roaring Bitmap、RRF 算法
-</td>
-</tr>
-<tr>
-<td>
-实践经验
-</td>
-<td>
-理论概念，缺乏工程落地
-</td>
-<td>
-结合索引设计、检索链路优化
-</td>
-</tr>
-<tr>
-<td>
-面试官印象
-</td>
-<td>
-基础知识掌握，但缺乏架构能力
-</td>
-<td>
-系统设计能力强，适合复杂场景
-</td>
-</tr>
-</table>
-
 ---
 
 #### 3、进阶题：ES 的分片（Shard）和副本（Replica）机制是怎样的？如何规划集群容量？
 
 **难度级别**：⭐⭐⭐（主分片/副本分片、分片路由算法、分片数不可变、容量规划、集群扩容）
 
-**1️⃣ Common Answer**
-
-重点总结（便于面试记忆）：
-
-- 分片机制详解
-- 副本与高可用
-- 集群容量规划
-- Agent 场景实践
-- 主分片（Primary Shard）：索引创建时指定，数量固定不可变，负责处理写入请求
-- 副本分片（Replica Shard）：主分片的完整副本，可动态调整，提供读扩展和故障转移
-
-**2️⃣ Impressive Answer**
 
 分片和副本是 ES 分布式架构的**核心机制**，理解它需要从原理、路由、规划三个层面展开：
 
@@ -172,84 +87,12 @@ Impressive Answer
 
   - **滚动索引策略**：按时间创建索引（如 `kb-2024-01`），便于数据归档和删除
 
-**3️⃣ Key Differences**
-
-<table>
-<tr>
-<td>
-维度
-</td>
-<td>
-Common Answer
-</td>
-<td>
-Impressive Answer
-</td>
-</tr>
-<tr>
-<td>
-结构性
-</td>
-<td>
-简单描述分片和副本概念
-</td>
-<td>
-系统阐述路由算法、不可变原因、规划公式
-</td>
-</tr>
-<tr>
-<td>
-技术深度
-</td>
-<td>
-不知道路由算法和不可变原因
-</td>
-<td>
-深入 hash 路由、Reindex 机制、滚动索引
-</td>
-</tr>
-<tr>
-<td>
-实践经验
-</td>
-<td>
-无具体规划方案
-</td>
-<td>
-结合租户隔离、路由优化、滚动索引给出实践
-</td>
-</tr>
-<tr>
-<td>
-面试官印象
-</td>
-<td>
-了解基础概念，缺乏深度
-</td>
-<td>
-掌握核心原理，有架构规划能力
-</td>
-</tr>
-</table>
-
 ---
 
 #### 4、进阶题：ES 写入和查询的性能如何优化？近实时搜索（NRT）的原理是什么？
 
 **难度级别**：⭐⭐⭐⭐（refresh/flush/translog、段合并Segment Merge、写入批量优化、查询缓存、近实时搜索1秒延迟）
 
-**1️⃣ Common Answer**
-
-重点总结（便于面试记忆）：
-
-- 写入流程与优化
-- 查询性能优化
-- 段合并（Segment Merge）
-- Agent 场景实践
-- 写入路径：Client → Coordinating Node → Primary Shard → Replicas → Translog → Lucene Segment
-- Translog（事务日志）：保证数据持久性，写入前先追加到 Translog，成功后再返回
-
-**2️⃣ Impressive Answer**
 
 ES 的写入查询优化和 NRT 机制需要从**写入流程、查询优化、NRT 原理**三个层面深入理解：
 
@@ -290,66 +133,6 @@ ES 的写入查询优化和 NRT 机制需要从**写入流程、查询优化、N
   - **实时查询优化**：使用 `search_after` 替代深分页，配合 `filter` 缓存提升热点查询性能
 
   - **监控指标**：关注 `refresh_interval`、`merge_time`、`indexing_latency`，通过 `_cat/segments` 分析段分布
-
-**3️⃣ Key Differences**
-
-<table>
-<tr>
-<td>
-维度
-</td>
-<td>
-Common Answer
-</td>
-<td>
-Impressive Answer
-</td>
-</tr>
-<tr>
-<td>
-结构性
-</td>
-<td>
-简单罗列批量写入和缓存
-</td>
-<td>
-系统阐述写入流程、查询优化、段合并机制
-</td>
-</tr>
-<tr>
-<td>
-技术深度
-</td>
-<td>
-不知道 refresh/flush/translog 区别
-</td>
-<td>
-深入 NRT 原理、段合并代价、search_after 机制
-</td>
-</tr>
-<tr>
-<td>
-实践经验
-</td>
-<td>
-无具体优化方案
-</td>
-<td>
-结合批量导入、查询优化、监控指标给出实践
-</td>
-</tr>
-<tr>
-<td>
-面试官印象
-</td>
-<td>
-了解基本用法，缺乏深度
-</td>
-<td>
-掌握核心机制，有性能优化能力
-</td>
-</tr>
-</table>
 
 ---
 

@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "00-面试准备/00大模型基础/01_RAG核心链路.md",
+                "file": "Notion/数据库/MySQL/MySQL.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "01_RAG核心链路"
+              "title": "MySQL"
             }
           }
         ]
@@ -156,13 +156,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "00-面试准备/00大模型基础/01_RAG核心链路.md",
+                "file": "Notion/数据库/MySQL/MySQL.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "01_RAG核心链路 的大纲"
+              "title": "MySQL 的大纲"
             }
           },
           {
@@ -208,11 +208,23 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "6fa9c2ffdf78413e",
+  "active": "acdd72415a8b8fe0",
   "lastOpenFiles": [
+    "Notion/软件基础/设计模式.md",
+    "Notion/软件基础/算法.md",
+    "Notion/软件基础/系统设计.md",
+    "Notion/框架/Spring.md",
+    "Notion/框架/MyBatis.md",
+    "Notion/框架/Kafka.md",
+    "00-面试准备/04-Cache & DataBase/Mysql.md",
+    "00-面试准备/04-Cache & DataBase/MongoDB.md",
+    "00-面试准备/04-Cache & DataBase/Elasticsearch 搜索.md",
+    "00-面试准备/04-Cache & DataBase/消息队列与数据库协同.md",
+    "00-面试准备/04-Cache & DataBase/缓存设计与策略.md",
+    "00-面试准备/04-Cache & DataBase/分布式数据库与一致性.md",
+    "00-面试准备/00大模型基础/01_RAG核心链路.md",
     "00-面试准备/00大模型基础/02_Agent核心原理.md",
     "00-面试准备/00大模型基础/03_大模型应用工程化.md",
-    "00-面试准备/00大模型基础/01_RAG核心链路.md",
     "00-面试准备/07-Distributed systems and consistency/分布式系统与一致性.md",
     "00-面试准备/06-Spring _ MVC _ Mybatis FrameWork/SpringBoot 原理与实践.md",
     "00-面试准备/06-Spring _ MVC _ Mybatis FrameWork/Spring MVC 与 WebFlux.md",
@@ -223,19 +235,7 @@
     "00-面试准备/05-Message Queue/消息队列与分布式中间件.md",
     "00-面试准备/05-Message Queue/消息队列与数据库协同.md",
     "00-面试准备/05-Message Queue/消息队列原理与选型.md",
-    "00-面试准备/04-Cache & DataBase/Mysql.md",
-    "00-面试准备/04-Cache & DataBase/MongoDB.md",
-    "00-面试准备/04-Cache & DataBase/Elasticsearch 搜索.md",
-    "00-面试准备/04-Cache & DataBase/消息队列与数据库协同.md",
-    "00-面试准备/04-Cache & DataBase/缓存设计与策略.md",
-    "00-面试准备/04-Cache & DataBase/分布式数据库与一致性.md",
-    "Notion/框架/Kafka.md",
     "00-面试准备/03-大模型应用基础/07 Agent 架构/Multi-Agent 协作.md",
-    "00-面试准备/03-大模型应用基础/07 Agent 架构/Agent Framework/SpringAI.md",
-    "00-面试准备/03-大模型应用基础/06 Agent Skill/Agent Skills.md",
-    "00-面试准备/03-大模型应用基础/05 Agent Tool/工具设计与实现.md",
-    "Notion/大模型基础.md",
-    "00-面试准备/03-大模型应用基础/07 Agent 架构/Agent Framework/主流 AI 框架对比与选型.md",
     "00-面试准备/03-大模型应用基础",
     "Notion/ALL IN AI/backend-learning-path",
     "Notion/ALL IN AI/cc 学习/s11_error_recovery/images/error-recovery-overview.svg",
