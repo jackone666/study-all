@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "00-面试准备/07-Distributed systems and consistency/分布式系统与一致性.md",
+                "file": "00-面试准备/00大模型基础/01_RAG核心链路.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "分布式系统与一致性"
+              "title": "01_RAG核心链路"
             }
           }
         ]
@@ -156,13 +156,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "00-面试准备/07-Distributed systems and consistency/分布式系统与一致性.md",
+                "file": "00-面试准备/00大模型基础/01_RAG核心链路.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "分布式系统与一致性 的大纲"
+              "title": "01_RAG核心链路 的大纲"
             }
           },
           {
@@ -208,10 +208,13 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "acdd72415a8b8fe0",
+  "active": "6fa9c2ffdf78413e",
   "lastOpenFiles": [
-    "00-面试准备/06-Spring _ MVC _ Mybatis FrameWork/SpringBoot 原理与实践.md",
+    "00-面试准备/00大模型基础/02_Agent核心原理.md",
+    "00-面试准备/00大模型基础/03_大模型应用工程化.md",
+    "00-面试准备/00大模型基础/01_RAG核心链路.md",
     "00-面试准备/07-Distributed systems and consistency/分布式系统与一致性.md",
+    "00-面试准备/06-Spring _ MVC _ Mybatis FrameWork/SpringBoot 原理与实践.md",
     "00-面试准备/06-Spring _ MVC _ Mybatis FrameWork/Spring MVC 与 WebFlux.md",
     "00-面试准备/06-Spring _ MVC _ Mybatis FrameWork/Spring Cloud 微服务生态.md",
     "00-面试准备/06-Spring _ MVC _ Mybatis FrameWork/Spring 原理与实践.md",
@@ -233,9 +236,6 @@
     "00-面试准备/03-大模型应用基础/05 Agent Tool/工具设计与实现.md",
     "Notion/大模型基础.md",
     "00-面试准备/03-大模型应用基础/07 Agent 架构/Agent Framework/主流 AI 框架对比与选型.md",
-    "00-面试准备/03-大模型应用基础/08 Agent 评测/Agent 评估体系.md",
-    "00-面试准备/03-大模型应用基础/08 Agent 评测/Agent 观测体系.md",
-    "00-面试准备/03-大模型应用基础/08 Agent 评测/工程实践与可观测性.md",
     "00-面试准备/03-大模型应用基础",
     "Notion/ALL IN AI/backend-learning-path",
     "Notion/ALL IN AI/cc 学习/s11_error_recovery/images/error-recovery-overview.svg",
