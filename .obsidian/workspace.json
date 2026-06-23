@@ -53,7 +53,7 @@
             "state": {
               "type": "search",
               "state": {
-                "query": "tag:#扫描目录下启用的skill，加载如下，skill命中则调取工具读取详细的skill及其引用",
+                "query": "",
                 "matchingCase": false,
                 "explainSearch": false,
                 "collapseAll": false,
@@ -187,11 +187,11 @@
             }
           }
         ],
-        "currentTab": 4
+        "currentTab": 5
       }
     ],
     "direction": "horizontal",
-    "width": 324.5
+    "width": 618.5
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -211,6 +211,7 @@
   },
   "active": "acdd72415a8b8fe0",
   "lastOpenFiles": [
+    "Pasted image 20260623121240.png",
     "Pasted image 20260623114446.png",
     "Pasted image 20260623114230.png",
     "Pasted image 20260623113817.png",
@@ -255,7 +256,6 @@
     "Notion/ALL IN AI/cc 学习/s03_permission/code.py",
     "Notion/ALL IN AI/cc 学习/s03_permission",
     "Notion/ALL IN AI/cc 学习/s02_tool_use/images/tool-dispatch.svg",
-    "Notion/ALL IN AI/cc 学习/s02_tool_use/images/concurrency-comparison.svg",
-    "Notion/ALL IN AI/cc 学习/s20_comprehensive/images/system-architecture.svg"
+    "Notion/ALL IN AI/cc 学习/s02_tool_use/images/concurrency-comparison.svg"
   ]
 }
