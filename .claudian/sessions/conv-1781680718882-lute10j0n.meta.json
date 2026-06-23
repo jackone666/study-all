@@ -4,20 +4,20 @@
   "title": "移除文档中的超链接",
   "titleGenerationStatus": "success",
   "createdAt": 1781680718882,
-  "updatedAt": 1782188113601,
-  "lastResponseAt": 1782188113601,
+  "updatedAt": 1782201784996,
+  "lastResponseAt": 1782201784996,
   "sessionId": "00364a33-14bd-42a5-835f-0128867d8562",
   "providerState": {
     "providerSessionId": "00364a33-14bd-42a5-835f-0128867d8562"
   },
   "usage": {
     "model": "haiku",
-    "inputTokens": 1104,
+    "inputTokens": 319,
     "cacheCreationInputTokens": 0,
-    "cacheReadInputTokens": 111232,
+    "cacheReadInputTokens": 125184,
     "contextWindow": 200000,
-    "contextTokens": 112336,
-    "percentage": 56,
+    "contextTokens": 125503,
+    "percentage": 63,
     "contextWindowIsAuthoritative": true
   }
 }

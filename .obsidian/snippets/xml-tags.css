@@ -1,0 +1,9 @@
+/* XML 标签颜色 */
+.xml-tag {
+  color: #e06c75;
+  background: rgba(224, 108, 117, 0.1);
+  padding: 1px 4px;
+  border-radius: 3px;
+  font-family: var(--font-monospace);
+  font-size: 0.9em;
+}
