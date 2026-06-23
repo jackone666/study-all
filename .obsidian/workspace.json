@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Notion/数据库/MySQL/MySQL.md",
+                "file": "Notion/ALL IN AI/Agent/LangGraph框架.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "MySQL"
+              "title": "LangGraph框架"
             }
           }
         ]
@@ -156,13 +156,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Notion/数据库/MySQL/MySQL.md",
+                "file": "Notion/ALL IN AI/Agent/LangGraph框架.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "MySQL 的大纲"
+              "title": "LangGraph框架 的大纲"
             }
           },
           {
@@ -210,9 +210,9 @@
   },
   "active": "acdd72415a8b8fe0",
   "lastOpenFiles": [
+    "Notion/数据库/MySQL/MySQL.md",
     "Notion/数据库/MySQL/MYSQL-补充/MYSQL.md",
     "Notion/ALL IN AI/RAG/06-RAG评估与应用平台.md",
-    "Notion/数据库/MySQL/MySQL.md",
     "Notion/软件基础/设计模式.md",
     "Notion/软件基础/算法.md",
     "Notion/软件基础/系统设计.md",
