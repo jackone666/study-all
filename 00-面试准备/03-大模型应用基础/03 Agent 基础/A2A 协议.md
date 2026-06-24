@@ -59,7 +59,7 @@ stateDiagram-v2
     Working --> Completed : 成功
     Working --> Failed : 失败
     Working --> Canceled : 取消
-    
+
     Completed --> [*]
     Failed --> [*]
     Canceled --> [*]

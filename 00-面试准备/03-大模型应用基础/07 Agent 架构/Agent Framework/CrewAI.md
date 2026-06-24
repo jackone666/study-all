@@ -515,7 +515,7 @@ class DatabaseSearchTool(BaseTool):
     name: str = "database_search"
     description: str = "用于搜索数据库中的数据"
     args_schema: Type[BaseModel] = DatabaseSearchInput
-    
+
     def _run(self, query: str, limit: int = 10) -> str:
         """同步执行数据库搜索"""
         try:
@@ -523,11 +523,11 @@ class DatabaseSearchTool(BaseTool):
             return f"查询成功，找到 {len(results)} 条记录"
         except Exception as e:
             return f"查询失败：{str(e)}"
-    
+
     async def _arun(self, query: str, limit: int = 10) -> str:
         """异步执行（可选）"""
         return self._run(query, limit)
-    
+
     def _execute_query(self, query: str, limit: int) -> list:
         # 实际的数据库查询实现
         pass
@@ -832,13 +832,13 @@ code_quality_task = Task(
     description="""
     分析以下代码的质量问题：
     {code}
-    
+
     请从以下维度进行评估：
     1. 命名规范（变量、函数、类名是否语义化）
     2. 代码重复（是否有重复的逻辑可以抽取）
     3. 复杂度控制（函数长度、嵌套层次是否合理）
     4. 注释完整性（关键逻辑是否有注释）
-    
+
     输出格式：JSON
     """,
     agent=code_quality_analyst,
@@ -850,14 +850,14 @@ security_task = Task(
     description="""
     审查以下代码的安全问题：
     {code}
-    
+
     请检查以下安全风险：
     1. SQL 注入漏洞
     2. XSS 跨站脚本攻击
     3. 硬编码密钥或敏感信息
     4. 不安全的加密算法
     5. 未经验证的输入
-    
+
     输出格式：JSON
     """,
     agent=security_reviewer,
@@ -869,13 +869,13 @@ performance_task = Task(
     description="""
     分析以下代码的性能问题：
     {code}
-    
+
     请关注以下性能维度：
     1. 算法复杂度（时间复杂度、空间复杂度）
     2. 循环嵌套（是否存在不必要的嵌套）
     3. 数据库查询（是否存在 N+1 查询）
     4. 内存使用（是否存在内存泄漏风险）
-    
+
     输出格式：JSON
     """,
     agent=performance_reviewer,
@@ -886,22 +886,22 @@ performance_task = Task(
 summary_task = Task(
     description="""
     整合以下三个维度的审查结果，生成综合报告：
-    
+
     请按以下格式生成报告：
-    
+
     # 代码审查综合报告
-    
+
     ## 总体评分
     - 代码质量：{quality_score}/100
     - 安全性：{security_score}/100
     - 性能：{performance_score}/100
-    
+
     ## 关键问题（按严重程度排序）
-    
+
     ### 🔴 Critical（必须立即修复）
     ### 🟡 High（本周内修复）
     ### 🟢 Medium（下个迭代修复）
-    
+
     ## 修复优先级建议
     """,
     agent=result_summarizer,
@@ -941,7 +941,7 @@ public class UserService {
         String sql = "SELECT * FROM user WHERE id = " + id;
         return jdbcTemplate.queryForObject(sql, User.class);
     }
-    
+
     public List<User> getAllUsers() {
         List<String> ids = getUserIds();
         for (String id : ids) {

@@ -343,7 +343,7 @@ Gunicorn + Uvicorn Worker 组合、Worker 数量策略、优雅关闭
 
 重点总结（便于面试记忆）：
 
-- Histogram：agent_request_duration_seconds：用 类型，能看 P50/P95/P99 分布，而不只是平均值
+- Histogram：agent_request_duration_seconds：用类型，能看 P50/P95/P99 分布，而不只是平均值
 - agent_request_errors_total：按错误类型打标签分别统计（LLM 超时、工具调用失败、Token 超限）
 - llm_tokens_total：按模型、接口类型统计，这是成本的直接来源
 - agent_tool_calls_total：按工具名统计调用量和成功率，发现哪个工具最脆弱

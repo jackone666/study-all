@@ -210,7 +210,7 @@ Impressive Answer
 ```java
 @Component
 public class LLMClient {
-    
+
     @PostConstruct
     public void warmUp() {
         try {
@@ -482,13 +482,13 @@ Impressive Answer
 public class A {
     @Autowired private B b;
 }
-    
+
 @Component
 @Transactional
 public class B {
     @Autowired private A a;
 }
-    
+
 // 流程：
 // 1. 创建 A，实例化，工厂放入三级缓存
 // 2. 注入 B，发现 B 依赖 A
@@ -601,7 +601,7 @@ public class AgentExecutor {
 @Component
 public class ToolRegistry implements ApplicationListener<AgentReadyEvent> {
     private AgentExecutor executor;
-    
+
     @Override
     public void onApplicationEvent(AgentReadyEvent event) {
         this.executor = event.getExecutor();
@@ -612,7 +612,7 @@ public class ToolRegistry implements ApplicationListener<AgentReadyEvent> {
 public class AgentExecutor implements InitializingBean {
     @Autowired
     private ToolRegistry registry;
-    
+
     @Override
     public void afterPropertiesSet() {
         // 发布事件，通知 ToolRegistry
@@ -1248,14 +1248,14 @@ Impressive Answer
 public interface LLMProvider {
     String chat(String prompt, String model);
 }
-    
+
 // 多个实现
 @Service("openai")
 public class OpenAIProvider implements LLMProvider { ... }
-    
+
 @Service("claude")
 public class ClaudeProvider implements LLMProvider { ... }
-    
+
 @Service("qwen")
 public class QwenProvider implements LLMProvider { ... }
 ```
@@ -1266,12 +1266,12 @@ public class QwenProvider implements LLMProvider { ... }
 @Service
 public class AgentService {
     private final Map<String, LLMProvider> providerMap;
-        
+
     @Autowired
     public AgentService(Map<String, LLMProvider> providerMap) {
         this.providerMap = providerMap; // 自动注入所有实现，key = bean name
     }
-        
+
     public String execute(String prompt, String providerName) {
         LLMProvider provider = providerMap.get(providerName);
         if (provider == null) {
@@ -1296,7 +1296,7 @@ public class LLMConfig {
     @Bean
     @ConditionalOnProperty(name = "agent.llm.provider", havingValue = "openai")
     public LLMProvider openaiProvider() { return new OpenAIProvider(); }
-        
+
     @Bean
     @ConditionalOnProperty(name = "agent.llm.provider", havingValue = "claude")
     public LLMProvider claudeProvider() { return new ClaudeProvider(); }
@@ -1309,7 +1309,7 @@ public class LLMConfig {
 @Service
 public class TenantLLMProvider {
     private final Map<String, LLMProvider> providerMap;
-        
+
     public String chat(String prompt) {
         String tenantId = TenantContext.getTenantId();
         String providerName = tenantConfigService.getProvider(tenantId);
@@ -1473,13 +1473,13 @@ Spring 如何解决循环依赖？
 ```java
 @Cacheable(value = "users", key = "#userId", unless = "#result == null")
 public User getUser(Long userId) { ... }
-    
+
 @CachePut(value = "users", key = "#user.id")
 public User updateUser(User user) { ... }
-    
+
 @CacheEvict(value = "users", key = "#userId")
 public void deleteUser(Long userId) { ... }
-    
+
 @Caching(evict = {
     @CacheEvict(value = "users", key = "#userId"),
     @CacheEvict(value = "userOrders", allEntries = true)
@@ -1588,11 +1588,11 @@ public class CacheConfig {
                 .fromSerializer(new StringRedisSerializer()))
             .serializeValuesWith(RedisSerializationContext.SerializationPair
                 .fromSerializer(new GenericJackson2JsonRedisSerializer()));
-            
+
         Map<String, RedisCacheConfiguration> cacheConfigurations = new HashMap<>();
         cacheConfigurations.put("users", config.entryTtl(Duration.ofHours(1)));
         cacheConfigurations.put("tools", config.entryTtl(Duration.ofMinutes(10)));
-            
+
         return RedisCacheManager.builder(factory)
             .cacheDefaults(config)
             .withInitialCacheConfigurations(cacheConfigurations)
@@ -1703,7 +1703,7 @@ Impressive Answer
 ```java
 @Service
 public class ToolExecutor {
-        
+
     @Cacheable(
         value = "toolResults",
         key = "#toolName + '::' + #params.hashCode()",
@@ -1712,7 +1712,7 @@ public class ToolExecutor {
     public ToolResult executeTool(String toolName, Map<String, Object> params) {
         // 调用外部工具 API
     }
-        
+
     @CacheEvict(value = "toolResults", key = "#toolName + '::' + #params.hashCode()")
     public void invalidateTool(String toolName, Map<String, Object> params) {
         // 手动清除缓存
@@ -1726,19 +1726,19 @@ public class ToolExecutor {
 @Bean
 public RedisCacheManager cacheManager(RedisConnectionFactory factory) {
     Map<String, RedisCacheConfiguration> configs = new HashMap<>();
-        
+
     // 天气工具：数据变化快，短 TTL
     configs.put("weather", config.entryTtl(Duration.ofMinutes(10)));
-        
+
     // 搜索工具：数据相对稳定，长 TTL
     configs.put("search", config.entryTtl(Duration.ofHours(1)));
-        
+
     // 知识库查询：数据稳定，超长 TTL
     configs.put("kb", config.entryTtl(Duration.ofHours(24)));
-        
+
     // 计算工具：结果不变，永久缓存
     configs.put("calculator", config.entryTtl(Duration.ofDays(7)));
-        
+
     return RedisCacheManager.builder(factory)
         .withInitialCacheConfigurations(configs)
         .build();
@@ -1911,7 +1911,7 @@ Spring @Transactional 和缓存如何配合？
 @Configuration
 @EnableAsync
 public class AsyncConfig {
-        
+
     @Bean("taskExecutor")
     public ThreadPoolTaskExecutor taskExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
@@ -1933,12 +1933,12 @@ public class AsyncConfig {
 ```java
 @Service
 public class AsyncService {
-        
+
     @Async("taskExecutor")  // 指定线程池
     public void asyncMethod() {
         // 异步执行
     }
-        
+
     @Async
     public CompletableFuture<String> asyncWithReturn() {
         return CompletableFuture.completedFuture("result");
@@ -2076,7 +2076,7 @@ public CompletableFuture<String> asyncMethod() {
         throw new RuntimeException("error");
     });
 }
-        
+
 // 调用方
 asyncMethod()
     .exceptionally(ex -> {
@@ -2168,19 +2168,19 @@ Impressive Answer
 ```java
 @Service
 public class AgentToolService {
-        
+
     @Async("toolExecutor")
     public CompletableFuture<ToolResult> queryWeather(Map<String, Object> params) {
         WeatherResult result = weatherService.query(params);
         return CompletableFuture.completedFuture(result);
     }
-        
+
     @Async("toolExecutor")
     public CompletableFuture<ToolResult> searchKb(Map<String, Object> params) {
         SearchResult result = kbService.search(params);
         return CompletableFuture.completedFuture(result);
     }
-        
+
     @Async("toolExecutor")
     public CompletableFuture<ToolResult> queryDatabase(Map<String, Object> params) {
         DbResult result = dbService.query(params);
@@ -2194,7 +2194,7 @@ public class AgentToolService {
 ```java
 @Service
 public class AgentExecutor {
-        
+
     public List<ToolResult> executeParallel(List<ToolCall> calls) {
         List<CompletableFuture<ToolResult>> futures = calls.stream()
             .map(call -> switch (call.getType()) {
@@ -2207,19 +2207,19 @@ public class AgentExecutor {
                 default -> CompletableFuture.completedFuture(ToolResult.error("Unknown type"));
             })
             .toList();
-            
+
         // 等待所有任务完成（带超时）
         CompletableFuture<Void> allOf = CompletableFuture.allOf(
             futures.toArray(new CompletableFuture[0])
         );
-            
+
         try {
             allOf.get(30, TimeUnit.SECONDS);  // 30 秒超时
         } catch (TimeoutException e) {
             log.warn("Tool execution timeout");
             futures.forEach(f -> f.cancel(true));
         }
-            
+
         // 收集结果
         return futures.stream()
             .map(CompletableFuture::join)
@@ -2510,12 +2510,12 @@ Impressive Answer
 ```java
 // AOP 执行链路示例
 Proxy proxy = ProxyFactory.getProxy(classLoader, interfaces);
-proxy.method() → 
-  ReflectiveMethodInvocation.proceed() → 
-    interceptor1.invoke() → 
-      interceptor2.invoke() → 
-        target.method() → 
-      interceptor2.invoke() → 
+proxy.method() →
+  ReflectiveMethodInvocation.proceed() →
+    interceptor1.invoke() →
+      interceptor2.invoke() →
+        target.method() →
+      interceptor2.invoke() →
     interceptor1.invoke() →
   result
 ```
@@ -2619,37 +2619,37 @@ public @interface ToolCall {
 @Component
 @Slf4j
 public class ToolCallAspect {
-    
+
     @Autowired
     private MeterRegistry meterRegistry;
-    
+
     @Around("@annotation(toolCall)")
     public Object monitorToolCall(ProceedingJoinPoint pjp, ToolCall toolCall) throws Throwable {
-        String toolName = toolCall.toolName().isEmpty() 
-            ? pjp.getSignature().getName() 
+        String toolName = toolCall.toolName().isEmpty()
+            ? pjp.getSignature().getName()
             : toolCall.toolName();
-        
+
         Timer.Sample sample = Timer.start(meterRegistry);
         long startTime = System.currentTimeMillis();
-        
+
         try {
             // 重试逻辑
             int retries = toolCall.maxRetries();
             Throwable lastException = null;
-            
+
             for (int i = 0; i <= retries; i++) {
                 try {
                     Object result = pjp.proceed();
-                    
+
                     // 记录成功指标
                     sample.stop(Timer.builder("tool.call.duration")
                         .tag("tool", toolName)
                         .tag("status", "success")
                         .register(meterRegistry));
-                    
-                    meterRegistry.counter("tool.call.count", 
+
+                    meterRegistry.counter("tool.call.count",
                         "tool", toolName, "status", "success").increment();
-                    
+
                     return result;
                 } catch (Exception e) {
                     lastException = e;
@@ -2659,19 +2659,19 @@ public class ToolCallAspect {
                     }
                 }
             }
-            
+
             throw lastException;
-            
+
         } catch (Throwable e) {
             // 记录失败指标
             sample.stop(Timer.builder("tool.call.duration")
                 .tag("tool", toolName)
                 .tag("status", "error")
                 .register(meterRegistry));
-            
-            meterRegistry.counter("tool.call.count", 
+
+            meterRegistry.counter("tool.call.count",
                 "tool", toolName, "status", "error").increment();
-            
+
             log.error("Tool call failed: {}", toolName, e);
             throw e;
         }
@@ -2684,7 +2684,7 @@ public class ToolCallAspect {
 ```java
 @Service
 public class WeatherService {
-    
+
     @ToolCall(toolName = "weather_query", maxRetries = 2)
     public WeatherResult queryWeather(String city) {
         // 调用天气 API
@@ -2982,7 +2982,7 @@ public class UserService {
     public void methodA() {
         methodB(); // 事务失效，直接调用不经过代理
     }
-        
+
     @Transactional
     public void methodB() { }
 }
@@ -3110,7 +3110,7 @@ public void outer() {
         // outer 可以继续执行
     }
 }
-    
+
 @Transactional(propagation = Propagation.NESTED)
 public void inner() {
     // 失败回滚到 savepoint
@@ -3209,18 +3209,18 @@ Impressive Answer
 ```java
 @Service
 public class AgentExecutor {
-    
+
     @Transactional(rollbackFor = Exception.class)
     public AgentResult execute(AgentRequest request) {
         // 1. 工具调用
         ToolResult toolResult = toolCallService.call(request.getTool());
-        
+
         // 2. 结果存储
         executionRepository.save(toolResult);
-        
+
         // 3. 状态更新
         agentRepository.updateStatus(request.getAgentId(), "COMPLETED");
-        
+
         return AgentResult.success(toolResult);
     }
 }
@@ -3231,35 +3231,35 @@ public class AgentExecutor {
 ```java
 @Service
 public class AgentExecutor {
-    
+
     @Transactional(rollbackFor = Exception.class)
     public AgentResult execute(AgentRequest request) {
         ToolResult toolResult = null;
-        
+
         try {
             // 1. 工具调用（可能调用外部服务，不放在事务中）
             toolResult = toolCallService.call(request.getTool());
-            
+
             // 2. 结果存储（独立事务）
             saveExecution(toolResult);
-            
+
             // 3. 状态更新（独立事务）
             updateAgentStatus(request.getAgentId(), "COMPLETED");
-            
+
             return AgentResult.success(toolResult);
-            
+
         } catch (Exception e) {
             // 补偿：回滚状态
             updateAgentStatus(request.getAgentId(), "FAILED");
             throw e;
         }
     }
-    
+
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void saveExecution(ToolResult result) {
         executionRepository.save(result);
     }
-    
+
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void updateAgentStatus(String agentId, String status) {
         agentRepository.updateStatus(agentId, status);
@@ -3272,14 +3272,14 @@ public class AgentExecutor {
 ```java
 @Service
 public class AgentSaga {
-    
+
     public AgentResult execute(AgentRequest request) {
         List<SagaStep> steps = Arrays.asList(
             new ToolCallStep(request),
             new SaveExecutionStep(),
             new UpdateStatusStep("COMPLETED")
         );
-        
+
         return sagaExecutor.execute(steps, new AgentCompensation(request));
     }
 }
@@ -4253,13 +4253,13 @@ public class SharedService {
 public class AgentService {
     @Autowired
     private ApplicationEventPublisher eventPublisher;
-        
+
     public void executeAgent() {
         // 执行逻辑
         eventPublisher.publishEvent(new AgentCompletedEvent(data));
     }
 }
-    
+
 @Service
 public class ToolService {
     @EventListener
@@ -4279,12 +4279,12 @@ public class ToolService {
 public interface ToolExecutor {
     void execute(ToolRequest request);
 }
-    
+
 @Service
 public class AgentService {
     private final ToolExecutor executor;  // 依赖接口
 }
-    
+
 @Service
 public class ToolService implements ToolExecutor {
     // 不依赖 AgentService
@@ -4439,7 +4439,7 @@ Prototype 作用域无法解决循环依赖
 public class AppConfig {
     @Bean
     public DataSource dataSource() { return new HikariDataSource(); }
-        
+
     @Bean
     public JdbcTemplate jdbcTemplate() {
         // Full 模式：调用 dataSource() 返回同一个实例
@@ -4586,7 +4586,7 @@ public class DevConfig {
         return new MockLLMProvider();  // 开发环境用 Mock
     }
 }
-    
+
 @Profile("prod")
 @Configuration
 public class ProdConfig {
@@ -4595,7 +4595,7 @@ public class ProdConfig {
         return new OpenAIProvider();  // 生产环境用真实 LLM
     }
 }
-    
+
 // 激活环境
 @SpringBootApplication
 public class AgentApplication {
@@ -4615,19 +4615,19 @@ public class ToolConfig {
     public ToolRegistry toolRegistry() {
         return new DefaultToolRegistry();  // 工具功能开启时才加载
     }
-        
+
     @Bean
     @ConditionalOnMissingBean(ToolRegistry.class)
     public ToolRegistry emptyToolRegistry() {
         return new EmptyToolRegistry();  // 工具功能关闭时用空实现
     }
 }
-    
+
 // application-dev.yml
 agent:
   tools:
     enabled: true  // 开发环境开启工具
-    
+
 // application-prod.yml
 agent:
   tools:
@@ -5126,7 +5126,7 @@ Spring SPI 机制（spring.factories）和 Java SPI 的区别？
 public class AgentCompletedEvent extends ApplicationEvent {
     private final String agentId;
     private final AgentResult result;
-        
+
     public AgentCompletedEvent(Object source, String agentId, AgentResult result) {
         super(source);
         this.agentId = agentId;
@@ -5142,7 +5142,7 @@ public class AgentCompletedEvent extends ApplicationEvent {
 public class AgentService {
     @Autowired
     private ApplicationEventPublisher eventPublisher;
-        
+
     public AgentResult execute(String agentId, AgentRequest request) {
         AgentResult result = doExecute(request);
         eventPublisher.publishEvent(new AgentCompletedEvent(this, agentId, result));
@@ -5332,8 +5332,8 @@ public class ToolCallCompletedEvent extends ApplicationEvent {
     private final ToolRequest request;
     private final ToolResponse response;
     private final long duration;
-        
-    public ToolCallCompletedEvent(Object source, String toolId, 
+
+    public ToolCallCompletedEvent(Object source, String toolId,
                                   ToolRequest request, ToolResponse response, long duration) {
         super(source);
         this.toolId = toolId;
@@ -5351,7 +5351,7 @@ public class ToolCallCompletedEvent extends ApplicationEvent {
 public class ToolExecutor {
     @Autowired
     private ApplicationEventPublisher eventPublisher;
-        
+
     public ToolResponse execute(String toolId, ToolRequest request) {
         long start = System.currentTimeMillis();
         ToolResponse response = doExecute(toolId, request);
@@ -5367,20 +5367,20 @@ public class ToolExecutor {
 ```java
 @Component
 public class ToolCallListeners {
-        
+
     // 日志监听器（同步，确保日志不丢失）
     @EventListener
     public void logToolCall(ToolCallCompletedEvent event) {
         log.info("Tool {} executed in {}ms", event.getToolId(), event.getDuration());
     }
-        
+
     // 计费监听器（异步，不阻塞主流程）
     @Async("billingExecutor")
     @EventListener(condition = "#event.response.success")
     public void chargeToolUsage(ToolCallCompletedEvent event) {
         billingService.charge(event.getToolId(), event.getDuration());
     }
-        
+
     // 审计监听器（事务提交后执行）
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void auditToolCall(ToolCallCompletedEvent event) {
@@ -5552,7 +5552,7 @@ public class LLMConfig {
     public LLMProvider openaiLLM() {
         return new OpenAIProvider();  // 类路径存在 OpenAI 类时才创建
     }
-        
+
     @Bean
     @ConditionalOnMissingBean(LLMProvider.class)
     public LLMProvider mockLLM() {
@@ -5613,13 +5613,13 @@ com.example.agent.autoconfigure.ToolAutoConfiguration
 @ConditionalOnProperty(prefix = "agent", name = "enabled", havingValue = "true", matchIfMissing = true)
 @EnableConfigurationProperties(AgentProperties.class)
 public class AgentAutoConfiguration {
-        
+
     @Bean
     @ConditionalOnMissingBean
     public AgentService agentService(AgentProperties properties) {
         return new AgentService(properties);
     }
-        
+
     @Bean
     @ConditionalOnProperty(prefix = "agent.tools", name = "enabled", havingValue = "true")
     public ToolRegistry toolRegistry() {
@@ -5743,15 +5743,15 @@ public class AgentProperties {
     private String apiKey;
     private double temperature = 0.7;
     private Tools tools = new Tools();
-        
+
     public static class Tools {
         private boolean enabled = true;
         private List<String> includes = new ArrayList<>();
         private List<String> excludes = new ArrayList<>();
-            
+
         // getters and setters
     }
-        
+
     // getters and setters
 }
 ```
@@ -5764,13 +5764,13 @@ public class AgentProperties {
 @ConditionalOnProperty(prefix = "agent", name = "enabled", havingValue = "true", matchIfMissing = true)
 @EnableConfigurationProperties(AgentProperties.class)
 public class AgentAutoConfiguration {
-        
+
     @Bean
     @ConditionalOnMissingBean
     public AgentService agentService(AgentProperties properties) {
         return new AgentService(properties);
     }
-        
+
     @Bean
     @ConditionalOnProperty(prefix = "agent.tools", name = "enabled", havingValue = "true")
     public ToolRegistry toolRegistry(AgentProperties properties) {
@@ -6009,7 +6009,7 @@ public class ToolRequest {
 public class AgentService {
     @Autowired
     private ToolRequest toolRequest;  // Prototype Bean
-        
+
     public void execute() {
         // 每次都是同一个 toolRequest 实例，不是新的！
     }
@@ -6027,11 +6027,11 @@ public class AgentService {
 @Component
 @Scope("singleton")
 public abstract class AgentService {
-        
+
     public void execute() {
         ToolRequest toolRequest = getToolRequest();  // 每次调用都返回新实例
     }
-        
+
     @Lookup
     protected abstract ToolRequest getToolRequest();  // Spring 会生成子类实现
 }
@@ -6049,7 +6049,7 @@ public abstract class AgentService {
 public class AgentService {
     @Autowired
     private ObjectProvider<ToolRequest> toolRequestProvider;
-        
+
     public void execute() {
         ToolRequest toolRequest = toolRequestProvider.getObject();  // 每次获取新实例
     }
@@ -6163,15 +6163,15 @@ public class AgentSessionContext {
     private List<Message> conversationHistory = new ArrayList<>();
     private String userId;
     private Map<String, Object> metadata = new HashMap<>();
-        
+
     public void addMessage(Message message) {
         conversationHistory.add(message);
     }
-        
+
     public List<Message> getConversationHistory() {
         return Collections.unmodifiableList(conversationHistory);
     }
-        
+
     // getters and setters
 }
 ```
@@ -6183,13 +6183,13 @@ public class AgentSessionContext {
 public class AgentService {
     @Autowired
     private AgentSessionContext sessionContext;  // 代理对象
-        
+
     public AgentResponse chat(AgentRequest request) {
         // 每次请求都会从当前 Session 获取对应的上下文
         sessionContext.addMessage(new Message("user", request.getContent()));
-            
+
         AgentResponse response = doChat(request);
-            
+
         sessionContext.addMessage(new Message("assistant", response.getContent()));
         return response;
     }
@@ -6208,7 +6208,7 @@ public class AgentService {
 @Component
 @Scope(value = WebApplicationContext.SCOPE_SESSION, proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class AgentSessionContext implements HttpSessionListener {
-        
+
     @PreDestroy
     public void cleanup() {
         // Session 销毁时清理资源
@@ -6422,7 +6422,7 @@ Spring 的 ThreadLocal 和 Session 作用域的区别？
 public class AgentProperties {
     private String apiKey;
     private double temperature;
-        
+
     // getters and setters
 }
 ```
@@ -6553,17 +6553,17 @@ Impressive Answer
 public class LLmProperties {
     @NotBlank
     private String provider = "openai";
-        
+
     @NotBlank
     private String apiKey;
-        
+
     @Min(0) @Max(2)
     private double temperature = 0.7;
-        
+
     private int maxTokens = 2048;
-        
+
     private Map<String, String> customParams = new HashMap<>();
-        
+
     // getters and setters
 }
 ```
@@ -6575,11 +6575,11 @@ public class LLmProperties {
 public class LLMService {
     @Autowired
     private LLMProperties llmProperties;  // 代理对象
-        
+
     public String chat(String prompt) {
         // 每次调用都会从代理获取最新配置
-        return llmProperties.getProvider().equals("openai") 
-            ? callOpenAI(prompt) 
+        return llmProperties.getProvider().equals("openai")
+            ? callOpenAI(prompt)
             : callClaude(prompt);
     }
 }
@@ -6625,7 +6625,7 @@ curl -X POST http://localhost:8080/actuator/refresh
 ```java
 @Component
 public class ConfigChangeListener {
-        
+
     @EventListener
     public void onRefreshScopeRefreshed(RefreshScopeRefreshedEvent event) {
         log.info("Configuration refreshed: {}", event.getName());
@@ -6777,18 +6777,18 @@ Spring Cloud Config 和 Nacos 的区别？
 ```java
 @Scheduled(fixedRate = 5000)  // 固定频率（上次开始后 5 秒执行，不考虑上次的执行时间）
 public void fixedRateTask() { ... }
-    
+
 @Scheduled(fixedDelay = 5000)  // 固定延迟（上次结束后 5 秒执行）
 public void fixedDelayTask() { ... }
-    
+
 @Scheduled(initialDelay = 1000, fixedRate = 5000)  // 初始延迟 1 秒，然后每 5 秒执行
 public void initialDelayTask() { ... }
-    
+
 @Scheduled(cron = "0 0 2 * * ?")  // 每天凌晨 2 点执行
 public void cronTask() { ... }
 ```
 
-1. **Cron 表达式格式**：`秒 分 时 日 月 周 [年]`
+1. **Cron 表达式格式**：`秒分时日月周 [年]`
 
 <table>
 <tr>
@@ -6985,7 +6985,7 @@ Impressive Answer
 @Configuration
 @EnableScheduling
 public class ScheduleConfig {
-        
+
     @Bean
     public TaskScheduler taskScheduler() {
         ThreadPoolTaskScheduler scheduler = new ThreadPoolTaskScheduler();
@@ -7132,7 +7132,7 @@ Impressive Answer
 @Configuration
 @EnableAsync
 public class AsyncConfig {
-    
+
     @Bean("agentExecutor")
     public Executor agentExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
@@ -7144,7 +7144,7 @@ public class AsyncConfig {
         executor.initialize();
         return executor;
     }
-    
+
     @Bean("toolExecutor")
     public Executor toolExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
@@ -7195,7 +7195,7 @@ public class AgentService {
         // 主事务
         AgentResult result = doExecute(request);
         agentRepository.save(result);  // 在主事务中
-        
+
         asyncService.saveAsync(result);  // 异步方法，不在主事务中
         return result;
     }
@@ -7303,30 +7303,30 @@ Impressive Answer
 ```java
 @Component
 public class AgentScheduledTasks {
-        
+
     // 每天凌晨 3 点清理过期对话（保留 30 天）
     @Scheduled(cron = "0 0 3 * * ?")
-    @SchedulerLock(name = "cleanupExpiredConversations", 
+    @SchedulerLock(name = "cleanupExpiredConversations",
                   lockAtMostFor = "2h", lockAtLeastFor = "1h")
     public void cleanupExpiredConversations() {
         LocalDateTime cutoff = LocalDateTime.now().minusDays(30);
         int deleted = conversationRepository.deleteByCreatedAtBefore(cutoff);
         log.info("Deleted {} expired conversations", deleted);
     }
-        
+
     // 每小时刷新工具列表
     @Scheduled(cron = "0 0 * * * ?")
-    @SchedulerLock(name = "refreshToolList", 
+    @SchedulerLock(name = "refreshToolList",
                   lockAtMostFor = "55m", lockAtLeastFor = "50m")
     public void refreshToolList() {
         List<ToolDefinition> tools = toolRegistry.fetchLatestTools();
         toolRegistry.updateTools(tools);
         log.info("Refreshed {} tools", tools.size());
     }
-        
+
     // 每天凌晨 4 点统计 Token 消耗
     @Scheduled(cron = "0 0 4 * * ?")
-    @SchedulerLock(name = "aggregateTokenUsage", 
+    @SchedulerLock(name = "aggregateTokenUsage",
                   lockAtMostFor = "1h", lockAtLeastFor = "50m")
     public void aggregateTokenUsage() {
         LocalDate yesterday = LocalDate.now().minusDays(1);
@@ -7368,7 +7368,7 @@ public void cleanupExpiredConversations() {
         throw e;  // 触发重试
     }
 }
-    
+
 @Recover
 public void recover(Exception e) {
     log.error("Task failed after 3 retries, sending alert", e);
@@ -7387,10 +7387,10 @@ public void cleanupExpiredConversations() {
         sample.stop(Timer.builder("scheduled.task.duration")
             .tag("task", "cleanupConversations")
             .register(meterRegistry));
-        meterRegistry.counter("scheduled.task.success", 
+        meterRegistry.counter("scheduled.task.success",
             "task", "cleanupConversations").increment();
     } catch (Exception e) {
-        meterRegistry.counter("scheduled.task.failure", 
+        meterRegistry.counter("scheduled.task.failure",
             "task", "cleanupConversations").increment();
         throw e;
     }
@@ -7551,18 +7551,18 @@ public class ToolService {
 public class AgentService {
     @Autowired
     private ToolService toolService;
-        
+
     public Map<String, ToolResponse> batchCall(List<ToolRequest> requests, long timeout, TimeUnit unit) {
         // 1. 提交所有异步任务
         List<CompletableFuture<ToolResponse>> futures = requests.stream()
             .map(toolService::callAsync)
             .toList();
-            
+
         // 2. 等待所有完成，设置超时
         CompletableFuture<Void> allFutures = CompletableFuture.allOf(
             futures.toArray(new CompletableFuture[0])
         );
-            
+
         try {
             allFutures.get(timeout, unit);
         } catch (TimeoutException e) {
@@ -7572,7 +7572,7 @@ public class AgentService {
         } catch (Exception e) {
             throw new AgentException("Tool call failed", e);
         }
-            
+
         // 3. 收集结果
         Map<String, ToolResponse> results = new HashMap<>();
         for (int i = 0; i < requests.size(); i++) {
@@ -7587,7 +7587,7 @@ public class AgentService {
                 results.put(request.getToolId(), ToolResponse.failed(e));
             }
         }
-            
+
         return results;
     }
 }
@@ -7621,7 +7621,7 @@ public class AgentService {
         List<CompletableFuture<ToolResponse>> futures = requests.stream()
             .map(toolService::callAsync)
             .toList();
-            
+
         CompletableFuture<Void> allFutures = CompletableFuture.allOf(
             futures.toArray(new CompletableFuture[0])
         ).exceptionally(e -> {
@@ -7629,9 +7629,9 @@ public class AgentService {
             log.error("Batch tool call failed: {}", e.getMessage());
             return null;
         });
-            
+
         allFutures.join();  // 等待所有完成
-            
+
         // 收集结果，处理异常
         return futures.stream()
             .collect(Collectors.toMap(
@@ -7823,19 +7823,19 @@ Spring 的线程池监控和调优？
 ```java
 @WebMvcTest(AgentController.class)
 public class AgentControllerTest {
-        
+
     @Autowired
     private MockMvc mockMvc;
-        
+
     @MockBean  // 完全 Mock，所有方法都是模拟的
     private AgentService agentService;
-        
+
     @Test
     public void testChat() throws Exception {
         // Mock 返回值
         when(agentService.chat(any()))
             .thenReturn(AgentResponse.success("Hello"));
-            
+
         mockMvc.perform(post("/api/agent/chat")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"prompt\":\"Hi\"}"))
@@ -7850,19 +7850,19 @@ public class AgentControllerTest {
 ```java
 @SpringBootTest
 public class AgentServiceTest {
-        
+
     @Autowired
     private AgentService agentService;
-        
+
     @SpyBean  // 部分 Mock，真实方法可以调用
     private LLMService llmService;
-        
+
     @Test
     public void testChat() {
         // Mock LLM 调用，但其他方法真实执行
         when(llmService.chat(any()))
             .thenReturn(LLMResponse.success("Hello"));
-            
+
         AgentResponse response = agentService.chat(new AgentRequest("Hi"));
         assertEquals("Hello", response.getContent());
     }
@@ -7880,21 +7880,21 @@ public class AgentServiceTest {
 ```java
 @WebMvcTest(AgentController.class)
 public class AgentControllerTest {
-        
+
     @MockBean
     private AgentService agentService;
-        
+
     @Test
     public void testChatWithToolCall() {
         // Mock Agent 调用工具
         ToolResponse toolResponse = ToolResponse.success("Weather: Sunny");
         when(agentService.callTool("weather-tool", any()))
             .thenReturn(CompletableFuture.completedFuture(toolResponse));
-            
+
         // Mock LLM 响应
         when(agentService.chat(any()))
             .thenReturn(AgentResponse.success("Today is sunny"));
-            
+
         // 测试完整流程
     }
 }
@@ -7985,19 +7985,19 @@ Impressive Answer
 @SpringBootTest
 @AutoConfigureMockMvc
 public class AgentIntegrationTest {
-        
+
     @Autowired
     private MockMvc mockMvc;
-        
+
     @MockBean
     private LLMService llmService;
-        
+
     @MockBean
     private ToolService toolService;
-        
+
     @Captor
     private ArgumentCaptor<ToolRequest> toolRequestCaptor;
-        
+
     @Test
     public void testAgentToolCallSequence() throws Exception {
         // 1. Mock LLM 响应：第一次请求要求调用工具
@@ -8008,41 +8008,41 @@ public class AgentIntegrationTest {
             ))
             .build();
         when(llmService.chat(any())).thenReturn(llmResponse1);
-            
+
         // 2. Mock 工具响应
         ToolResponse toolResponse = ToolResponse.success("Java is a programming language");
         when(toolService.call(any())).thenReturn(CompletableFuture.completedFuture(toolResponse));
-            
+
         // 3. Mock LLM 响应：第二次请求基于工具结果回答
         LLMResponse llmResponse2 = LLMResponse.builder()
             .content("Java is a programming language created by Sun Microsystems")
             .build();
         when(llmService.chat(any())).thenReturn(llmResponse2);
-            
+
         // 4. 执行 Agent 调用
         mockMvc.perform(post("/api/agent/chat")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"prompt\":\"What is Java?\"}"))
             .andExpect(status().isOk())
             .andExpect(jsonPath("$.content").value("Java is a programming language created by Sun Microsystems"));
-            
+
         // 5. 验证工具调用顺序
         InOrder inOrder = inOrder(llmService, toolService);
-            
+
         // 验证：第一次调用 LLM
-        inOrder.verify(llmService).chat(argThat(req -> 
+        inOrder.verify(llmService).chat(argThat(req ->
             req.getPrompt().equals("What is Java?")
         ));
-            
+
         // 验证：调用工具
-        inOrder.verify(toolService).call(argThat(req -> 
+        inOrder.verify(toolService).call(argThat(req ->
             req.getToolId().equals("search-tool") &&
             req.getParameters().get("query").equals("Java")
         ));
-            
+
         // 验证：第二次调用 LLM（包含工具结果）
-        inOrder.verify(llmService).chat(argThat(req -> 
-            req.getMessages().stream().anyMatch(msg -> 
+        inOrder.verify(llmService).chat(argThat(req ->
+            req.getMessages().stream().anyMatch(msg ->
                 msg.getContent().contains("Java is a programming language")
             )
         ));
@@ -8056,16 +8056,16 @@ public class AgentIntegrationTest {
 @Test
 public void testToolCallParameters() {
     // ... Mock 设置
-        
+
     mockMvc.perform(post("/api/agent/chat")
             .contentType(MediaType.APPLICATION_JSON)
             .content("{\"prompt\":\"Search for Java\"}"))
         .andExpect(status().isOk());
-        
+
     // 验证工具调用参数
     verify(toolService).call(toolRequestCaptor.capture());
     ToolRequest capturedRequest = toolRequestCaptor.getValue();
-        
+
     assertEquals("search-tool", capturedRequest.getToolId());
     assertEquals("Java", capturedRequest.getParameters().get("query"));
 }
@@ -8077,15 +8077,15 @@ public void testToolCallParameters() {
 @Test
 public void testToolCallCount() {
     // ... Mock 设置
-        
+
     mockMvc.perform(post("/api/agent/chat")
             .contentType(MediaType.APPLICATION_JSON)
             .content("{\"prompt\":\"Search for Java\"}"))
         .andExpect(status().isOk());
-        
+
     // 验证工具只调用了一次
     verify(toolService, times(1)).call(any());
-        
+
     // 验证 LLM 调用了两次（初始请求 + 工具结果后的请求）
     verify(llmService, times(2)).chat(any());
 }
@@ -8099,7 +8099,7 @@ public void testToolCallFailure() throws Exception {
     // Mock 工具调用失败
     when(toolService.call(any()))
         .thenReturn(CompletableFuture.failedFuture(new RuntimeException("Tool failed")));
-        
+
     // 验证 Agent 能够处理工具失败
     mockMvc.perform(post("/api/agent/chat")
             .contentType(MediaType.APPLICATION_JSON)
@@ -8241,7 +8241,7 @@ Spring Test 的事务管理（@Transactional）？
 ```java
 @ControllerAdvice
 public class GlobalExceptionHandler {
-       
+
     @ExceptionHandler(Exception.class)
     @ResponseBody
     public ResponseEntity<ErrorResponse> handleException(Exception e) {
@@ -8299,7 +8299,7 @@ public ResponseEntity<ErrorResponse> handleBusinessException(BusinessException e
     // 如果抛出 BusinessException，会进入这里
     return ResponseEntity.badRequest().body(ErrorResponse.from(e));
 }
-   
+
 @ExceptionHandler(Exception.class)
 public ResponseEntity<ErrorResponse> handleException(Exception e) {
     // 其他异常进入这里
@@ -8312,9 +8312,9 @@ public ResponseEntity<ErrorResponse> handleException(Exception e) {
 ```java
 @Component
 public class CustomExceptionResolver implements HandlerExceptionResolver {
-       
+
     @Override
-    public ModelAndView resolveException(HttpServletRequest request, 
+    public ModelAndView resolveException(HttpServletRequest request,
             HttpServletResponse response, Object handler, Exception ex) {
         // 自定义异常处理逻辑
         if (ex instanceof BusinessException) {
@@ -8424,15 +8424,15 @@ public enum ErrorCode {
     TOOL_EXECUTION_FAILED(1002, "Tool execution failed"),
     VALIDATION_FAILED(1003, "Parameter validation failed"),
     INTERNAL_ERROR(500, "Internal server error");
-       
+
     private final int code;
     private final String message;
-       
+
     ErrorCode(int code, String message) {
         this.code = code;
         this.message = message;
     }
-       
+
     public int getCode() { return code; }
     public String getMessage() { return message; }
 }
@@ -8443,21 +8443,21 @@ public enum ErrorCode {
 ```java
 public class AgentException extends RuntimeException {
     private final ErrorCode errorCode;
-       
+
     public AgentException(ErrorCode errorCode, String message) {
         super(message);
         this.errorCode = errorCode;
     }
-       
+
     public ErrorCode getErrorCode() { return errorCode; }
 }
-   
+
 public class LlmTimeoutException extends AgentException {
     public LlmTimeoutException(String message) {
         super(ErrorCode.LLM_TIMEOUT, message);
     }
 }
-   
+
 public class ToolExecutionException extends AgentException {
     public ToolExecutionException(String message) {
         super(ErrorCode.TOOL_EXECUTION_FAILED, message);
@@ -8474,7 +8474,7 @@ public class ApiResponse<T> {
     private int code;
     private String message;
     private T data;
-       
+
     public static <T> ApiResponse<T> success(T data) {
         return ApiResponse.<T>builder()
             .code(ErrorCode.SUCCESS.getCode())
@@ -8482,7 +8482,7 @@ public class ApiResponse<T> {
             .data(data)
             .build();
     }
-       
+
     public static <T> ApiResponse<T> error(ErrorCode errorCode, String message) {
         return ApiResponse.<T>builder()
             .code(errorCode.getCode())
@@ -8497,19 +8497,19 @@ public class ApiResponse<T> {
 ```java
 @RestControllerAdvice
 public class GlobalExceptionHandler {
-       
+
     @ExceptionHandler(LlmTimeoutException.class)
     public ApiResponse<Void> handleLlmTimeout(LlmTimeoutException e) {
         log.error("LLM timeout: {}", e.getMessage());
         return ApiResponse.error(e.getErrorCode(), e.getMessage());
     }
-       
+
     @ExceptionHandler(ToolExecutionException.class)
     public ApiResponse<Void> handleToolExecution(ToolExecutionException e) {
         log.error("Tool execution failed: {}", e.getMessage());
         return ApiResponse.error(e.getErrorCode(), e.getMessage());
     }
-       
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ApiResponse<Void> handleValidation(MethodArgumentNotValidException e) {
         String message = e.getBindingResult().getFieldErrors().stream()
@@ -8518,7 +8518,7 @@ public class GlobalExceptionHandler {
         log.error("Validation failed: {}", message);
         return ApiResponse.error(ErrorCode.VALIDATION_FAILED, message);
     }
-       
+
     @ExceptionHandler(Exception.class)
     public ApiResponse<Void> handleException(Exception e) {
         log.error("Unexpected error", e);
@@ -8533,13 +8533,13 @@ public class GlobalExceptionHandler {
 @RestController
 @RequestMapping("/api/agent")
 public class AgentController {
-       
+
     @Autowired
     private LlmService llmService;
-       
+
     @Autowired
     private ToolService toolService;
-       
+
     @PostMapping("/chat")
     public ApiResponse<ChatResponse> chat(@Valid @RequestBody ChatRequest request) {
         try {
@@ -8550,7 +8550,7 @@ public class AgentController {
             throw new LlmTimeoutException("LLM call timeout: " + e.getMessage());
         }
     }
-       
+
     @PostMapping("/tool")
     public ApiResponse<ToolResponse> executeTool(@Valid @RequestBody ToolRequest request) {
         try {
@@ -8873,7 +8873,7 @@ agent:
   llm:
     timeout: 30000
     max-retries: 3
-   
+
 # application-dev.yml（开发环境）
 spring:
   profiles: dev
@@ -8882,7 +8882,7 @@ agent:
     api-key: ${LLM_API_KEY:sk-dev-xxx}
     model: gpt-4
     endpoint: https://api.openai.com/v1
-   
+
 # application-prod.yml（生产环境）
 spring:
   profiles: prod
@@ -8901,22 +8901,22 @@ agent:
 @ConfigurationProperties(prefix = "agent.llm")
 @Validated
 public class LlmConfig {
-       
+
     @NotBlank(message = "API Key cannot be blank")
     private String apiKey;
-       
+
     @NotBlank(message = "Model cannot be blank")
     private String model;
-       
+
     @NotBlank(message = "Endpoint cannot be blank")
     private String endpoint;
-       
+
     @Min(value = 1000, message = "Timeout must be at least 1000ms")
     private Integer timeout = 30000;
-       
+
     @Min(value = 0, message = "Max retries must be non-negative")
     private Integer maxRetries = 3;
-       
+
     // getters and setters
 }
 ```
@@ -8927,13 +8927,13 @@ public class LlmConfig {
 @RestController
 @RequestMapping("/api/admin/config")
 public class ConfigController {
-       
+
     @Autowired
     private LlmConfig llmConfig;
-       
+
     @Autowired
     private ContextRefresher contextRefresher;
-       
+
     @PostMapping("/refresh")
     public ApiResponse<Void> refreshConfig() {
         // 刷新配置
@@ -8941,7 +8941,7 @@ public class ConfigController {
         log.info("Refreshed config keys: {}", refreshedKeys);
         return ApiResponse.success(null);
     }
-       
+
     @GetMapping("/llm")
     public ApiResponse<LlmConfig> getLlmConfig() {
         return ApiResponse.success(llmConfig);
@@ -8976,10 +8976,10 @@ agent:
 ```java
 @Component
 public class ConfigValidator implements ApplicationListener<EnvironmentChangeEvent> {
-       
+
     @Autowired
     private LlmConfig llmConfig;
-       
+
     @Override
     public void onApplicationEvent(EnvironmentChangeEvent event) {
         if (event.getKeys().contains("agent.llm.api-key")) {
@@ -9130,7 +9130,7 @@ Impressive Answer
 @Configuration
 @EnableAsync
 public class AsyncConfig {
-       
+
     @Bean("taskExecutor")
     public TaskExecutor taskExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
@@ -9149,7 +9149,7 @@ public class AsyncConfig {
 ```java
 @Service
 public class AsyncService {
-       
+
     @Async("taskExecutor")
     public CompletableFuture<String> asyncMethod() {
         // 异步执行
@@ -9206,12 +9206,12 @@ public class AsyncService {
 ```java
 @Service
 public class AsyncService {
-       
+
     @Async
     public CompletableFuture<String> asyncMethod() {
         return CompletableFuture.completedFuture("done");
     }
-       
+
     public void callAsyncMethod() {
         // 获取代理，调用异步方法
         AsyncService proxy = (AsyncService) AopContext.currentProxy();
@@ -9328,10 +9328,10 @@ Impressive Answer
 ```java
 @Service
 public class ToolService {
-       
+
     @Autowired
     private TaskExecutor toolExecutor;
-       
+
     @Async("toolExecutor")
     public CompletableFuture<ToolResult> callTool(ToolRequest request) {
         try {
@@ -9342,7 +9342,7 @@ public class ToolService {
             return CompletableFuture.failedFuture(e);
         }
     }
-       
+
     private ToolResult doCallTool(ToolRequest request) {
         // 实际工具调用逻辑
         return ToolResult.builder()
@@ -9358,21 +9358,21 @@ public class ToolService {
 ```java
 @Service
 public class AgentOrchestrator {
-       
+
     @Autowired
     private ToolService toolService;
-       
+
     public CompletableFuture<AgentResponse> orchestrateTools(List<ToolRequest> requests) {
         // 并发调用所有工具
         List<CompletableFuture<ToolResult>> futures = requests.stream()
             .map(toolService::callTool)
             .collect(Collectors.toList());
-           
+
         // 等待所有任务完成（包括失败的任务）
         CompletableFuture<Void> allFutures = CompletableFuture.allOf(
             futures.toArray(new CompletableFuture[0])
         );
-           
+
         // 处理结果
         return allFutures.thenApply(v -> {
             List<ToolResult> results = futures.stream()
@@ -9387,7 +9387,7 @@ public class AgentOrchestrator {
                     }
                 })
                 .collect(Collectors.toList());
-               
+
             return AgentResponse.builder()
                 .results(results)
                 .build();
@@ -9401,7 +9401,7 @@ public class AgentOrchestrator {
 ```java
 public CompletableFuture<AgentResponse> orchestrateToolsWithTimeout(
         List<ToolRequest> requests, long timeout, TimeUnit unit) {
-       
+
     List<CompletableFuture<ToolResult>> futures = requests.stream()
         .map(request -> toolService.callTool(request)
             .orTimeout(timeout, unit)  // 单个工具超时
@@ -9410,17 +9410,17 @@ public CompletableFuture<AgentResponse> orchestrateToolsWithTimeout(
                 .error("Timeout")
                 .build()))
         .collect(Collectors.toList());
-       
+
     // 整体超时
     CompletableFuture<Void> allFutures = CompletableFuture.allOf(
         futures.toArray(new CompletableFuture[0])
     ).orTimeout(timeout * futures.size(), unit);
-       
+
     return allFutures.thenApply(v -> {
         List<ToolResult> results = futures.stream()
             .map(future -> future.join())
             .collect(Collectors.toList());
-           
+
         return AgentResponse.builder()
             .results(results)
             .build();
@@ -9433,7 +9433,7 @@ public CompletableFuture<AgentResponse> orchestrateToolsWithTimeout(
 ```java
 public CompletableFuture<AgentResponse> orchestrateToolsWithPartialFailure(
         List<ToolRequest> requests) {
-       
+
     List<CompletableFuture<ToolResult>> futures = requests.stream()
         .map(request -> toolService.callTool(request)
             .handle((result, e) -> {
@@ -9446,18 +9446,18 @@ public CompletableFuture<AgentResponse> orchestrateToolsWithPartialFailure(
                 return result;
             }))
         .collect(Collectors.toList());
-       
+
     return CompletableFuture.allOf(
         futures.toArray(new CompletableFuture[0])
     ).thenApply(v -> {
         List<ToolResult> results = futures.stream()
             .map(CompletableFuture::join)
             .collect(Collectors.toList());
-           
+
         // 检查是否有失败的工具
         boolean hasFailure = results.stream()
             .anyMatch(r -> r.getError() != null);
-           
+
         return AgentResponse.builder()
             .results(results)
             .hasFailure(hasFailure)
@@ -9472,7 +9472,7 @@ public CompletableFuture<AgentResponse> orchestrateToolsWithPartialFailure(
 @Configuration
 @EnableAsync
 public class AsyncConfig {
-       
+
     @Bean("toolExecutor")
     public TaskExecutor toolExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
@@ -9792,15 +9792,15 @@ Impressive Answer
 ```java
 @Service
 public class AgentService {
-       
+
     @Autowired
     private MessageProducer messageProducer;
-       
+
     @Transactional
     public void executeToolAndSendMessage(ToolRequest request) {
         // 1. 执行工具调用（事务操作）
         ToolResult result = toolService.execute(request);
-           
+
         // 2. 注册事务同步器
         TransactionSynchronizationManager.registerSynchronization(
             new TransactionSynchronization() {
@@ -9809,7 +9809,7 @@ public class AgentService {
                     // 事务提交后才发消息
                     messageProducer.send(result);
                 }
-                   
+
                 @Override
                 public void afterCompletion(int status) {
                     // 事务完成后清理资源
@@ -9818,7 +9818,7 @@ public class AgentService {
                     }
                 }
             });
-           
+
         // 3. 返回结果
         return result;
     }
@@ -9830,7 +9830,7 @@ public class AgentService {
 ```java
 @Component
 public class TransactionHelper {
-       
+
     public void afterCommit(Runnable callback) {
         if (TransactionSynchronizationManager.isActualTransactionActive()) {
             TransactionSynchronizationManager.registerSynchronization(
@@ -9845,7 +9845,7 @@ public class TransactionHelper {
             callback.run();
         }
     }
-       
+
     public void afterCompletion(Runnable callback) {
         if (TransactionSynchronizationManager.isActualTransactionActive()) {
             TransactionSynchronizationManager.registerSynchronization(
@@ -9867,23 +9867,23 @@ public class TransactionHelper {
 ```java
 @Service
 public class AgentService {
-       
+
     @Autowired
     private TransactionHelper transactionHelper;
-       
+
     @Autowired
     private MessageProducer messageProducer;
-       
+
     @Transactional
     public void executeToolAndSendMessage(ToolRequest request) {
         // 执行工具调用
         ToolResult result = toolService.execute(request);
-           
+
         // 注册事务提交后回调
         transactionHelper.afterCommit(() -> {
             messageProducer.send(result);
         });
-           
+
         return result;
     }
 }
@@ -9895,7 +9895,7 @@ public class AgentService {
 @Transactional
 public void executeToolAndSendMessage(ToolRequest request) {
     ToolResult result = toolService.execute(request);
-       
+
     transactionHelper.afterCompletion(status -> {
         if (status == TransactionSynchronization.STATUS_COMMITTED) {
             // 事务提交成功，发送消息
@@ -9906,7 +9906,7 @@ public void executeToolAndSendMessage(ToolRequest request) {
             messageProducer.sendCompensation(result);
         }
     });
-       
+
     return result;
 }
 ```
@@ -9924,27 +9924,27 @@ public void executeToolAndSendMessage(ToolRequest request) {
 ```java
 @Component
 public class TransactionEventPublisher {
-       
+
     @Autowired
     private ApplicationEventPublisher eventPublisher;
-       
+
     @Transactional
     public void executeToolAndSendMessage(ToolRequest request) {
         ToolResult result = toolService.execute(request);
-           
+
         // 发布事务事件
         eventPublisher.publishEvent(new ToolCompletedEvent(result));
-           
+
         return result;
     }
 }
-   
+
 @Component
 public class TransactionEventListener {
-       
+
     @Autowired
     private MessageProducer messageProducer;
-       
+
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMMIT)
     public void handleToolCompleted(ToolCompletedEvent event) {
         // 事务提交后才执行
@@ -10437,10 +10437,10 @@ Spring Boot 对 refresh() 的封装
 ```java
 // 一级缓存：完整的 Bean（已初始化完成）
 private final Map<String, Object> singletonObjects = new ConcurrentHashMap<>(256);
-    
+
 // 二级缓存：早期暴露的 Bean（实例化但未初始化，可能被代理）
 private final Map<String, Object> earlySingletonObjects = new ConcurrentHashMap<>(16);
-    
+
 // 三级缓存：Bean 工厂（ObjectFactory，用于提前暴露 Bean 或创建 AOP 代理）
 private final Map<String, ObjectFactory<?>> singletonFactories = new HashMap<>(16);
 ```
@@ -10564,7 +10564,7 @@ Impressive Answer
 @Service
 public class ServiceA {
     private final ServiceB serviceB;
-        
+
     public ServiceA(@Lazy ServiceB serviceB) {  // 延迟注入
         this.serviceB = serviceB;
     }
@@ -10599,12 +10599,12 @@ public class ServiceA {
 public class ServiceA {
     @Autowired
     private ApplicationEventPublisher eventPublisher;
-        
+
     public void doSomething() {
         eventPublisher.publishEvent(new MyEvent());
     }
 }
-    
+
 @Service
 public class ServiceB {
     @EventListener
@@ -10752,13 +10752,13 @@ Spring 代理的创建时机？
 // 定义事件
 public class UserRegisteredEvent extends ApplicationEvent {
     private final String username;
-        
+
     public UserRegisteredEvent(Object source, String username) {
         super(source);
         this.username = username;
     }
 }
-    
+
 // 监听事件
 @Component
 public class EmailNotificationListener implements ApplicationListener<UserRegisteredEvent> {
@@ -10767,13 +10767,13 @@ public class EmailNotificationListener implements ApplicationListener<UserRegist
         System.out.println("Send email to " + event.getUsername());
     }
 }
-    
+
 // 发布事件
 @Service
 public class UserService {
     @Autowired
     private ApplicationEventPublisher eventPublisher;
-        
+
     public void register(String username) {
         // 注册逻辑
         eventPublisher.publishEvent(new UserRegisteredEvent(this, username));
@@ -11027,14 +11027,14 @@ public class ToolCallCompletedEvent extends ApplicationEvent {
     private final String toolName;
     private final Object result;
     private final long duration;
-        
+
     public ToolCallCompletedEvent(Object source, String toolName, Object result, long duration) {
         super(source);
         this.toolName = toolName;
         this.result = result;
         this.duration = duration;
     }
-        
+
     // getters...
 }
 ```
@@ -11048,16 +11048,16 @@ public class ToolCallCompletedEvent extends ApplicationEvent {
 public class AgentService {
     @Autowired
     private ApplicationEventPublisher eventPublisher;
-        
+
     @Async
     public CompletableFuture<Object> callTool(String toolName, Map<String, Object> params) {
         long start = System.currentTimeMillis();
         Object result = toolExecutor.execute(toolName, params);
         long duration = System.currentTimeMillis() - start;
-            
+
         // 发布事件（异步发布，不阻塞当前线程）
         eventPublisher.publishEvent(new ToolCallCompletedEvent(this, toolName, result, duration));
-            
+
         return CompletableFuture.completedFuture(result);
     }
 }
@@ -11076,7 +11076,7 @@ public class MonitoringListener {
         metricsService.recordToolCall(event.getToolName(), event.getDuration());
     }
 }
-    
+
 @Component
 public class AuditListener {
     @Async("agentEventExecutor")
@@ -11085,7 +11085,7 @@ public class AuditListener {
         auditService.logToolCall(event.getToolName(), event.getResult());
     }
 }
-    
+
 @Component
 public class LogListener {
     @Async("agentEventExecutor")
@@ -11367,7 +11367,7 @@ prototype
 public class SingletonService {
     @Autowired
     private PrototypeBean prototypeBean;  // 只注入一次
-        
+
     public void doSomething() {
         prototypeBean.execute();  // 每次都是同一个实例
     }
@@ -11384,7 +11384,7 @@ public abstract class SingletonService {
         PrototypeBean prototypeBean = getPrototypeBean();  // 每次调用都创建新实例
         prototypeBean.execute();
     }
-        
+
     @Lookup
     protected abstract PrototypeBean getPrototypeBean();
 }
@@ -11403,7 +11403,7 @@ public abstract class SingletonService {
 public class SingletonService {
     @Autowired
     private ObjectFactory<PrototypeBean> prototypeBeanFactory;
-        
+
     public void doSomething() {
         PrototypeBean prototypeBean = prototypeBeanFactory.getObject();  // 每次获取新实例
         prototypeBean.execute();
@@ -11420,7 +11420,7 @@ public class SingletonService {
 public class SingletonService {
     @Autowired
     private Provider<PrototypeBean> prototypeBeanProvider;
-        
+
     public void doSomething() {
         PrototypeBean prototypeBean = prototypeBeanProvider.get();  // 每次获取新实例
         prototypeBean.execute();
@@ -11437,7 +11437,7 @@ public class SingletonService {
 public class SingletonService {
     @Autowired
     private ApplicationContext applicationContext;
-        
+
     public void doSomething() {
         PrototypeBean prototypeBean = applicationContext.getBean(PrototypeBean.class);
         prototypeBean.execute();
@@ -11601,19 +11601,19 @@ Impressive Answer
 public class AgentSessionContext {
     private List<Message> history = new ArrayList<>();
     private Map<String, Object> preferences = new HashMap<>();
-        
+
     public void addMessage(Message message) {
         history.add(message);
     }
-        
+
     // getters...
 }
-    
+
 @Service
 public class AgentService {
     @Autowired
     private AgentSessionContext sessionContext;  // 每个用户会话一个实例
-        
+
     public void chat(String message) {
         sessionContext.addMessage(new Message(message));
         // 处理逻辑
@@ -11633,33 +11633,33 @@ public class AgentService {
 // 定义自定义 Scope
 public class ConversationScope implements Scope {
     private final ThreadLocal<Map<String, Object>> conversationContext = ThreadLocal.withInitial(HashMap::new);
-        
+
     @Override
     public Object get(String name, ObjectFactory<?> objectFactory) {
         return conversationContext.get().computeIfAbsent(name, k -> objectFactory.getObject());
     }
-        
+
     @Override
     public Object remove(String name) {
         return conversationContext.get().remove(name);
     }
-        
+
     @Override
     public void registerDestructionCallback(String name, Runnable callback) {
         // 销毁回调
     }
-        
+
     @Override
     public Object resolveContextualObject(String key) {
         return null;
     }
-        
+
     @Override
     public String getConversationId() {
         return String.valueOf(Thread.currentThread().getId());
     }
 }
-    
+
 // 注册自定义 Scope
 @Configuration
 public class ScopeConfig {
@@ -11670,7 +11670,7 @@ public class ScopeConfig {
         return configurer;
     }
 }
-    
+
 // 使用自定义 Scope
 @Component
 @Scope("conversation")
@@ -11688,20 +11688,20 @@ public class AgentContext {
 @Component
 public class AgentContextHolder {
     private static final ThreadLocal<AgentContext> CONTEXT = new ThreadLocal<>();
-        
+
     public static void setContext(AgentContext context) {
         CONTEXT.set(context);
     }
-        
+
     public static AgentContext getContext() {
         return CONTEXT.get();
     }
-        
+
     public static void clear() {
         CONTEXT.remove();
     }
 }
-    
+
 // 拦截器中设置上下文
 @Component
 public class AgentInterceptor implements HandlerInterceptor {
@@ -11712,7 +11712,7 @@ public class AgentInterceptor implements HandlerInterceptor {
         AgentContextHolder.setContext(context);
         return true;
     }
-        
+
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
         AgentContextHolder.clear();
@@ -11929,19 +11929,19 @@ ScopedProxyMode 的 JDK 动态代理 vs CGLIB
 ```java
 @Configuration
 public class AgentConfiguration {
-        
+
     @Bean
     @ConditionalOnProperty(name = "agent.enabled", havingValue = "true")
     public AgentService agentService() {
         return new AgentService();
     }
-        
+
     @Bean
     @ConditionalOnClass(name = "com.alibaba.dubbo.config.ApplicationConfig")
     public DubboAgentService dubboAgentService() {
         return new DubboAgentService();
     }
-        
+
     @Bean
     @ConditionalOnMissingBean(ToolExecutor.class)
     public DefaultToolExecutor defaultToolExecutor() {
@@ -12009,7 +12009,7 @@ public class AutoConfigurationImportSelector implements DeferredImportSelector {
     public String[] selectImports(AnnotationMetadata annotationMetadata) {
         // 从 spring.factories 加载所有自动配置类
         List<String> configurations = getCandidateConfigurations(
-            annotationMetadata, 
+            annotationMetadata,
             getAttributes()
         );
         // 去重、排序
@@ -12019,11 +12019,11 @@ public class AutoConfigurationImportSelector implements DeferredImportSelector {
         configurations = filter(configurations, getAutoConfigurationMetadata());
         return configurations.toArray(new String[0]);
     }
-        
+
     protected List<String> getCandidateConfigurations(AnnotationMetadata metadata, Attributes attributes) {
         // 从 spring.factories 加载
         return SpringFactoriesLoader.loadFactoryNames(
-            getSpringFactoriesLoaderFactoryClass(), 
+            getSpringFactoriesLoaderFactoryClass(),
             getBeanClassLoader()
         );
     }
@@ -12053,7 +12053,7 @@ org.springframework.boot.autoconfigure.amqp.RabbitAutoConfiguration,\
 @ConditionalOnMissingBean(DataSource.class)  // 容器中没有 DataSource Bean
 @EnableConfigurationProperties(DataSourceProperties.class)  // 绑定配置属性
 public class DataSourceAutoConfiguration {
-        
+
     @Bean
     @ConditionalOnProperty(name = "spring.datasource.type")  // 配置了 type 属性
     public DataSource dataSource(DataSourceProperties properties) {
@@ -12198,7 +12198,7 @@ public class LlmProperties {
     private String model = "gpt-3.5-turbo";
     private Integer timeout = 30000;
     private Integer maxRetries = 3;
-        
+
     // getters and setters...
 }
 ```
@@ -12211,32 +12211,32 @@ public class LlmProperties {
 public interface LlmClient {
     String chat(String prompt);
 }
-    
+
 public class OpenAiLlmClient implements LlmClient {
     private final String apiKey;
     private final String model;
-        
+
     public OpenAiLlmClient(String apiKey, String model) {
         this.apiKey = apiKey;
         this.model = model;
     }
-        
+
     @Override
     public String chat(String prompt) {
         // 调用 OpenAI API
         return "Response from OpenAI";
     }
 }
-    
+
 public class QwenLlmClient implements LlmClient {
     private final String apiKey;
     private final String model;
-        
+
     public QwenLlmClient(String apiKey, String model) {
         this.apiKey = apiKey;
         this.model = model;
     }
-        
+
     @Override
     public String chat(String prompt) {
         // 调用通义千问 API
@@ -12255,7 +12255,7 @@ public class QwenLlmClient implements LlmClient {
 @ConditionalOnClass(LlmClient.class)  // classpath 中有 LlmClient 类
 @ConditionalOnProperty(prefix = "agent.llm", name = "enabled", havingValue = "true", matchIfMissing = true)
 public class LlmAutoConfiguration {
-        
+
     @Bean
     @ConditionalOnMissingBean(LlmClient.class)  // 容器中没有 LlmClient Bean
     public LlmClient llmClient(LlmProperties properties) {
@@ -12268,7 +12268,7 @@ public class LlmAutoConfiguration {
                 throw new IllegalArgumentException("Unsupported provider: " + properties.getProvider());
         }
     }
-        
+
     @Bean
     @ConditionalOnProperty(prefix = "agent.llm", name = "async", havingValue = "true")
     public LlmClient asyncLlmClient(LlmClient llmClient) {
@@ -12317,7 +12317,7 @@ agent:
 public class AgentService {
     @Autowired
     private LlmClient llmClient;  // 自动注入
-        
+
     public String chat(String prompt) {
         return llmClient.chat(prompt);
     }

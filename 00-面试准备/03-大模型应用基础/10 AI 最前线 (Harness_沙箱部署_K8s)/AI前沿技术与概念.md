@@ -40,7 +40,7 @@ public interface OrderAgent {
     @Permission(roles = {"operator", "admin"})
     @Audit(level = AuditLevel.FULL)
     OrderResult processOrder(OrderRequest request);
-    
+
     @Constraint(forbiddenTools = {"database_delete", "payment_refund"})
     QueryResult queryOrder(String orderId);
 }
@@ -185,7 +185,7 @@ Agent 自主进化是当前 AI Agent 研究最前沿的方向之一。它的终�
 
 ```
 Level 3: 架构进化 —— Agent 自己设计更好的 Agent 架构
-Level 2: 策略进化 —— Agent 优化自己的决策和推理策略  
+Level 2: 策略进化 —— Agent 优化自己的决策和推理策略
 Level 1: 知识进化 —— Agent 积累和更新领域知识
 ```
 
@@ -197,25 +197,25 @@ Level 1: 知识进化 —— Agent 积累和更新领域知识
 public class EvolvableAgent {
     private final VectorStore experienceMemory;
     private final LLM reflectionModel;
-    
+
     public AgentResult execute(String task) {
         // 1. 检索相关历史经验
-        List<Experience> relevantExperiences = 
+        List<Experience> relevantExperiences =
             experienceMemory.similaritySearch(task, topK: 5);
-        
+
         // 2. 将经验注入上下文
         String enrichedPrompt = buildPromptWithExperience(task, relevantExperiences);
-        
+
         // 3. 执行任务
         AgentResult result = runAgent(enrichedPrompt);
-        
+
         // 4. 反思和存储经验
         Experience newExperience = reflect(task, result);
         experienceMemory.store(newExperience);
-        
+
         return result;
     }
-    
+
     private Experience reflect(String task, AgentResult result) {
         String reflection = reflectionModel.generate(
             "分析这次任务执行的成功和失败之处，提取可复用的经验：\n" +
@@ -553,10 +553,10 @@ public class ContextSelector {
         // 1. 相关性排序：用 Embedding 相似度筛选最相关的信息
         List<ContextItem> candidates = retrieveAll(query);
         candidates.sort(Comparator.comparing(ContextItem::getRelevanceScore).reversed());
-        
+
         // 2. 多样性保证：避免信息重复
         candidates = diversityFilter(candidates);
-        
+
         // 3. 预算约束：在 Token 预算内选择最优子集
         return knapsackSelect(candidates, budget.getRemainingTokens());
     }
@@ -586,10 +586,10 @@ public class ContextCache {
     // Prefix Caching：缓存不变的上下文前缀
     // 系统指令 + 工具描述 通常不变，可以缓存
     private final Map<String, CachedPrefix> prefixCache;
-    
+
     public CachedContext buildContext(String sessionId, String newMessage) {
         CachedPrefix prefix = prefixCache.computeIfAbsent(
-            "system_v2.1", 
+            "system_v2.1",
             key -> cacheProvider.cachePrefix(systemPrompt + toolDescriptions)
         );
         // 只需要发送变化的部分，节省 Token 和延迟
@@ -817,7 +817,7 @@ public class EpisodicMemory {
             )
         );
     }
-    
+
     // 检索相关经历
     public List<Episode> recall(String currentSituation, int topK) {
         return vectorStore.similaritySearch(currentSituation, topK)
@@ -1040,7 +1040,7 @@ public class HallucinationDetector {
     public VerificationResult verify(String agentOutput, String sourceContext) {
         // 1. 提取输出中的事实声明
         List<Claim> claims = claimExtractor.extract(agentOutput);
-        
+
         // 2. 对每个声明进行 RAG 验证
         for (Claim claim : claims) {
             List<Document> evidence = vectorStore.search(claim.getText());
@@ -3069,7 +3069,7 @@ OpenClaw 的多 Agent 协作并非简单的任务分发，而是基于一套成�
 **1**、**核心架构：主从调度 (Orchestrator-Worker)**
 这是 OpenClaw 多 Agent 协作的核心。系统会设立一个“总指挥”（Orchestrator Agent），它负责理解用户的复杂指令，将其拆解成多个子任务，然后分派给不同的“执行者”（Worker Agent）。
 
-**2、 角色分工与职责隔离**
+**2、角色分工与职责隔离**
 每个 Agent 都被赋予特定的角色和职责，并绑定专属的 Skill 集和知识域，避免了能力混杂和冲突。
 
 - **Orchestrator Agent (总指挥):** 负责意图解析、任务拆解、分配、结果校验与汇总。
@@ -3080,7 +3080,7 @@ OpenClaw 的多 Agent 协作并非简单的任务分发，而是基于一套成�
 
 - **Executor Agent (执行员):** 负责落地执行，安装了文件操作、邮件发送等 Skill。
 
-**3、 协作流程与通信**
+**3、协作流程与通信**
 整个协作过程是高度自动化的：
 
 - **任务编排:** 用户发出指令后，Orchestrator 解析并拆解任务。

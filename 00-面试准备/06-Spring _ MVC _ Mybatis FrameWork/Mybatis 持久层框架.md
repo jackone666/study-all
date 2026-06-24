@@ -417,12 +417,12 @@ MapperProxy→MappedStatement→SqlSession→Spring 整合，全链路
 @MappedJdbcTypes(JdbcType.VARCHAR)
 public class ChatMessageTypeHandler extends BaseTypeHandler<ChatMessage> {
   private static final ObjectMapper MAPPER = new ObjectMapper();
-  
+
   @Override
   public void setNonNullParameter(PreparedStatement ps, int i,ChatMessage param, JdbcType jdbcType) throws SQLException {
     ps.setString(i, MAPPER.writeValueAsString(param));
   }
-  
+
   @Override
   public ChatMessage getNullableResult(ResultSet rs, String col) throws SQLException {
       String json = rs.getString(col);
@@ -1585,12 +1585,12 @@ public class DataSourceConfig {
     public DataSource primaryDataSource() {
         return DataSourceBuilder.create().url("jdbc:mysql://primary-db").build();
     }
-       
+
     @Bean(name = "secondaryDataSource")
     public DataSource secondaryDataSource() {
         return DataSourceBuilder.create().url("jdbc:mysql://secondary-db").build();
     }
-       
+
     @Bean(name = "primarySqlSessionFactory")
     @Primary
     public SqlSessionFactory primarySqlSessionFactory(@Qualifier("primaryDataSource") DataSource dataSource) throws Exception {
@@ -1599,7 +1599,7 @@ public class DataSourceConfig {
         factory.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("classpath:mapper/primary/*.xml"));
         return factory.getObject();
     }
-       
+
     @Bean(name = "secondarySqlSessionFactory")
     public SqlSessionFactory secondarySqlSessionFactory(@Qualifier("secondaryDataSource") DataSource dataSource) throws Exception {
         SqlSessionFactoryBean factory = new SqlSessionFactoryBean();
@@ -1615,7 +1615,7 @@ public class DataSourceConfig {
 ```java
 @MapperScan(basePackages = "com.example.primary.mapper", sqlSessionFactoryRef = "primarySqlSessionFactory")
 public class PrimaryMapperConfig {}
-   
+
 @MapperScan(basePackages = "com.example.secondary.mapper", sqlSessionFactoryRef = "secondarySqlSessionFactory")
 public class SecondaryMapperConfig {}
 ```
@@ -1719,11 +1719,11 @@ Impressive Answer
 ```java
 public class DynamicDataSource extends AbstractRoutingDataSource {
     private static final ThreadLocal<String> contextHolder = new ThreadLocal<>();
-       
+
     public static void setDataSourceKey(String key) {
         contextHolder.set(key);
     }
-       
+
     @Override
     protected Object determineCurrentLookupKey() {
         return contextHolder.get();
@@ -2159,7 +2159,7 @@ public class MyMetaObjectHandler implements MetaObjectHandler {
         this.strictInsertFill(metaObject, "createTime", LocalDateTime.class, LocalDateTime.now());
         this.strictInsertFill(metaObject, "createBy", String.class, getCurrentUserId());
     }
-         
+
     @Override
     public void updateFill(MetaObject metaObject) {
         this.strictUpdateFill(metaObject, "updateTime", LocalDateTime.class, LocalDateTime.now());
@@ -4327,7 +4327,7 @@ Lombok
 | 动态 SQL 与缓存机制 | 一级缓存（SqlSession 级别）：基于 PerpetualCache 实现，默认开启，缓存 key 是 Statement ID + 参数 + SQL。在同一个 SqlSession 内，相同查询直接返回缓存结果，避免重复查库。失效条件：执行 insert/update/delete、调用 sqlSession.clearCache()、SqlSession 关闭；二级缓存（Mapper 级别）：基于 Mapper 的 namespace，需要在 XML 中配置 ` 开启，多个 SqlSession 共享同一 Mapper 的缓存。核心区别：一级缓存只在 SqlSession 内有效，二级缓存跨 SqlSession 共享；二级缓存需要实体类实现 Serializable`（缓存需要序列化对象）；多表查询脏读风险：二级缓存是 namespace 级别的，多表关联查询时，A 表更新不会自动清除 B 表 Mapper 的缓存，导致脏读。最佳实践：多表关联查询时关闭二级缓存，或在关联的 Mapper 中配置 `` 共享缓存，保证一致性。 |
 | MyBatis 的一级缓存和二级缓存有什么区别？ | 一级缓存（SqlSession 级别）：基于 PerpetualCache 实现，默认开启，缓存 key 是 Statement ID + 参数 + SQL。在同一个 SqlSession 内，相同查询直接返回缓存结果，避免重复查库。失效条件：执行 insert/update/delete、调用 sqlSession.clearCache()、SqlSession 关闭；二级缓存（Mapper 级别）：基于 Mapper 的 namespace，需要在 XML 中配置 ` 开启，多个 SqlSession 共享同一 Mapper 的缓存。核心区别：一级缓存只在 SqlSession 内有效，二级缓存跨 SqlSession 共享；二级缓存需要实体类实现 Serializable`（缓存需要序列化对象）；多表查询脏读风险：二级缓存是 namespace 级别的，多表关联查询时，A 表更新不会自动清除 B 表 Mapper 的缓存，导致脏读。最佳实践：多表关联查询时关闭二级缓存，或在关联的 Mapper 中配置 `` 共享缓存，保证一致性。 |
 | MyBatis 的插件（Interceptor）机制是如何实现的？ | 四大对象拦截点：MyBatis 只允许拦截 Executor（执行）、StatementHandler（SQL 组装）、ParameterHandler（参数处理）、ResultSetHandler（结果映射）四类对象的特定方法，通过 @Intercepts + @Signature 精确声明拦截目标；Plugin.wrap 的代理机制：Plugin.wrap(target, interceptor) 判断目标对象是否命中签名，是则用 JDK 动态代理包装，拦截对应方法；执行时进入 intercept(Invocation) 方法，调用 invocation.proceed() 放行原始逻辑；分页插件原理：PageHelper 拦截 StatementHandler.prepare()，在 SQL 执行前改写 SQL，追加 LIMIT ? OFFSET ?，并拦截 Executor.query() 额外执行 COUNT SQL 获取总数。 |
-| Agent 需要根据运行时条件动态拼接查询 SQL，MyBatis 如何安全实现？ | #{} vs ${} 是安全红线：#{} 是预编译参数占位符，MyBatis 会转成 PreparedStatement 的 ?，完全防注入；${} 是字符串替换，直接拼入 SQL，只能用于表名/列名等结构性参数，绝不能用于用户输入值；动态标签安全构建：用 `、、、、 组合动态条件； 自动去掉多余的 AND/OR，` 自动去掉末尾逗号，比手动拼 SQL 更安全稳健；Agent 场景特殊处理：Agent 可能传入动态字段名（如按哪个字段排序），字段名必须走白名单校验后再用 ${}，绝不能直接透传 LLM 生成的字段名；参数值统一走 #{} 预编译。 |
+| Agent 需要根据运行时条件动态拼接查询 SQL，MyBatis 如何安全实现？ | #{} vs ${} 是安全红线：#{} 是预编译参数占位符，MyBatis 会转成 PreparedStatement 的 ?，完全防注入；${} 是字符串替换，直接拼入 SQL，只能用于表名/列名等结构性参数，绝不能用于用户输入值；动态标签安全构建：用 `、、、、组合动态条件；自动去掉多余的 AND/OR，` 自动去掉末尾逗号，比手动拼 SQL 更安全稳健；Agent 场景特殊处理：Agent 可能传入动态字段名（如按哪个字段排序），字段名必须走白名单校验后再用 ${}，绝不能直接透传 LLM 生成的字段名；参数值统一走 #{} 预编译。 |
 | MyBatis 的 Mapper 接口没有实现类，为什么能直接调用？底层原理是什么？ | MapperProxy 动态代理：MyBatis 启动时，MapperRegistry 为每个 Mapper 接口创建 MapperProxyFactory；获取 Mapper 时，工厂用 JDK 动态代理生成 MapperProxy 实例，所有方法调用都被 MapperProxy.invoke() 拦截；方法到 SQL 的映射：invoke() 内部根据接口全限定名 + 方法名（如 com.example.UserMapper.selectById）从 Configuration 中查找对应的 MappedStatement，获取 SQL、参数映射、结果映射等元数据；SqlSession 执行：最终委托给 SqlSession.selectOne/selectList/insert/update/delete 执行，SqlSession 再通过 Executor → StatementHandler → JDBC 完成数据库操作。 |
 | Agent 的对话记录需要存储到 MySQL，消息体是变长 JSON，如何用 MyBatis 优雅处理？ | 变长 JSON 消息体适合用 MyBatis TypeHandler 在对象和 JSON 字符串之间转换，数据库字段可用 JSON/TEXT，写入时序列化、读取时反序列化；同时要保留 sessionId、role、createdAt 等可索引字段，避免所有查询都解析 JSON。 |
 | 一级缓存与二级缓存 | 一级缓存（SqlSession 级别）：基于 PerpetualCache 实现，默认开启，缓存 key 是 Statement ID + 参数 + SQL。在同一个 SqlSession 内，相同查询直接返回缓存结果，避免重复查询数据库。失效条件：执行 insert/update/delete、调用 sqlSession.clearCache()、SqlSession 关闭；二级缓存（Mapper 级别）：基于 Mapper 的 namespace，需要配置 `` 开启，多个 SqlSession 共享同一 Mapper 的缓存。核心区别：一级缓存只在 SqlSession 内有效，二级缓存跨 SqlSession 共享；二级缓存需要序列化对象（要求实体类实现 Serializable）；多表查询脏读风险：一级缓存可能脏读（多表关联时，只查询主表可能返回缓存的旧数据），二级缓存通过 flushCache 配置避免。最佳实践：多表关联查询时关闭二级缓存或设置 flushCache="true"，避免脏数据。 |
@@ -4347,11 +4347,11 @@ Lombok
 | MyBatis-Plus 的条件构造器（LambdaQueryWrapper）和手写 XML 动态 SQL 各有什么优缺点？ | 类型安全：编译期检查字段名，避免 SQL 拼写错误；代码可读性：Java 代码直观，IDE 支持重构和跳转；动态条件：支持 if 条件判断，动态构建查询：；链式调用：API 设计优雅，代码简洁；复杂查询限制：多表关联、子查询、复杂聚合查询不如 XML 灵活。 |
 | Agent 需要根据 LLM 返回的结构化条件动态构建查询，MyBatis-Plus 和 XML 动态 SQL 如何选型？ | 解析 LLM 返回的 JSON，动态构建 LambdaQueryWrapper：；优点：类型安全、代码简洁、支持动态条件；缺点：复杂操作符（如 IN、BETWEEN）需要手动处理；在 Mapper XML 中使用 `、、` 动态构建 SQL：；优点：SQL 灵活、支持复杂操作符。 |
 | MyBatis 的 ResultMap 和 resultType 有什么区别？什么时候必须用 ResultMap？ | resultType 自动映射：resultType="com.example.User" 基于 Java Bean 规范，通过反射自动映射，要求数据库列名和 Java 属性名完全一致（或遵循驼峰命名转换）。适用场景：简单查询、单表映射、字段名规范；ResultMap 手动映射：` 精确控制字段映射关系，通过 ` 指定映射。必须用 ResultMap 的场景：字段名不一致、多表关联、复杂类型映射、需要延迟加载；高级映射能力：ResultMap 支持 association（一对一）、collection（一对多）、discriminator（鉴别器）等高级映射，能解决复杂对象关系映射问题。resultType 无法处理这些场景。 |
-| ResultMap 的 association（一对一）和 collection（一对多）如何配置？嵌套查询和嵌套结果的区别？ | association 一对一配置：` 嵌套查询方式，或 嵌套结果方式，通过 resultMap` 复用映射规则；collection 一对多配置：` 嵌套查询，或 ` 嵌套结果，一对多返回 List；嵌套查询 vs 嵌套结果：嵌套查询执行多条 SQL（主查询 + N 条子查询），N+1 问题：查 100 条工具调用记录，会执行 101 条 SQL；嵌套结果执行一条 SQL，通过 JOIN 查询，性能更好，但 SQL 复杂度增加。 |
+| ResultMap 的 association（一对一）和 collection（一对多）如何配置？嵌套查询和嵌套结果的区别？ | association 一对一配置：` 嵌套查询方式，或嵌套结果方式，通过 resultMap` 复用映射规则；collection 一对多配置：` 嵌套查询，或 ` 嵌套结果，一对多返回 List；嵌套查询 vs 嵌套结果：嵌套查询执行多条 SQL（主查询 + N 条子查询），N+1 问题：查 100 条工具调用记录，会执行 101 条 SQL；嵌套结果执行一条 SQL，通过 JOIN 查询，性能更好，但 SQL 复杂度增加。 |
 | Agent 的工具调用记录需要关联查询工具详情和参数列表（一对多），如何用 ResultMap 优雅映射？ | 嵌套结果优化：为避免 N+1 问题，使用嵌套结果方式，一条 SQL 查询所有数据：；SELECT c.id as call_id, c.tool_name, t.*, p.*；LEFT JOIN tool t ON c.tool_id = t.id。 |
 | MyBatis 批量操作优化 | foreach 标签批量插入：INSERT INTO table (col1, col2) VALUES (#{item.col1}, #{item.col2})，生成一条长 SQL，性能最优（一次网络交互），但有 SQL 长度限制（MySQL 默认 4MB）；ExecutorType.BATCH 批量：sqlSessionFactory.openSession(ExecutorType.BATCH) 开启批处理，循环调用 mapper.insert()，MyBatis 缓存 SQL 和参数，最后 session.flushStatements() 一次性提交。优点：无 SQL 长度限制，适合大批量数据；缺点：性能略低于 foreach；foreach 一次网络交互，性能最佳（1000 条数据约 50ms）；BATCH 多次网络交互但批量提交，性能次之（1000 条约 100ms）；普通循环插入性能最差（1000 条约 2000ms）。 |
 | MyBatis 如何实现批量插入？foreach 标签和 ExecutorType.BATCH 有什么区别？ | foreach 标签批量插入：INSERT INTO table (col1, col2) VALUES (#{item.col1}, #{item.col2})，生成一条长 SQL，性能最优（一次网络交互），但有 SQL 长度限制（MySQL 默认 4MB）；ExecutorType.BATCH 批量：sqlSessionFactory.openSession(ExecutorType.BATCH) 开启批处理，循环调用 mapper.insert()，MyBatis 缓存 SQL 和参数，最后 session.flushStatements() 一次性提交。优点：无 SQL 长度限制，适合大批量数据；缺点：性能略低于 foreach；foreach 一次网络交互，性能最佳（1000 条数据约 50ms）；BATCH 多次网络交互但批量提交，性能次之（1000 条约 100ms）；普通循环插入性能最差（1000 条约 2000ms）。 |
-| MyBatis 的 BatchExecutor 和 ReuseExecutor 的工作原理是什么？如何选择合适的 Executor 类型？ | SimpleExecutor（默认）：每次执行 SQL 都创建新的 PreparedStatement，执行完立即关闭。适用场景：普通 CRUD 操作，SQL 不重复，简单直接；ReuseExecutor：内部维护 Map，相同 SQL 复用同一个 PreparedStatement，只重新设置参数。原理：StatementId = SQL + 数据库 作为 key，执行时先从缓存获取，不存在则创建。适用场景：循环执行相同 SQL（如批量更新不同记录），减少 PreparedStatement 创建开销；BatchExecutor：批量执行 SQL，内部维护 List，每次 update/insert 将 SQL 和参数加入批处理队列，flushStatements() 时一次性提交。原理：JDBC 的 addBatch() + executeBatch()，减少网络交互。适用场景：大批量插入/更新（如 Agent 消息记录归档）。 |
+| MyBatis 的 BatchExecutor 和 ReuseExecutor 的工作原理是什么？如何选择合适的 Executor 类型？ | SimpleExecutor（默认）：每次执行 SQL 都创建新的 PreparedStatement，执行完立即关闭。适用场景：普通 CRUD 操作，SQL 不重复，简单直接；ReuseExecutor：内部维护 Map，相同 SQL 复用同一个 PreparedStatement，只重新设置参数。原理：StatementId = SQL + 数据库作为 key，执行时先从缓存获取，不存在则创建。适用场景：循环执行相同 SQL（如批量更新不同记录），减少 PreparedStatement 创建开销；BatchExecutor：批量执行 SQL，内部维护 List，每次 update/insert 将 SQL 和参数加入批处理队列，flushStatements() 时一次性提交。原理：JDBC 的 addBatch() + executeBatch()，减少网络交互。适用场景：大批量插入/更新（如 Agent 消息记录归档）。 |
 | Agent 每次对话结束需要批量保存 100+ 条消息记录，如何用 MyBatis 实现高性能批量写入？ | INSERT INTO agent_message (session_id, role, content, create_time)；(#{msg.sessionId}, #{msg.role}, #{msg.content}, #{msg.createTime})；性能：100 条数据约 50ms，一次网络交互，最优方案。 |
 | MyBatis 与 Spring 事务集成 | SqlSessionTemplate 的作用：SqlSessionTemplate 是线程安全的 SqlSession 封装，内部代理了 DefaultSqlSession，确保每次操作在事务内共享同一个 SqlSession，非事务时创建新 SqlSession。核心方法：getMapper()、selectList()、insert() 等，自动处理事务边界；事务管理器集成：DataSourceTransactionManager 管理事务，通过 @Transactional 注解开启事务；事务开始时，SqlSessionUtils 创建 SqlSession 并绑定到 ThreadLocal；事务提交/回滚时，自动关闭 SqlSession；事务传播行为：@Transactional(propagation = Propagation.REQUIRED) 默认行为，加入已有事务或创建新事务；REQUIRES_NEW 挂起当前事务，创建新事务；SUPPORTS 有事务则加入，无事务则非事务执行。Agent 场景：工具调用链中，多个 Mapper 操作默认 REQUIRED，确保原子性。 |
 | MyBatis 的 SqlSession 和 Spring 的事务管理器是如何集成的？ | SqlSessionTemplate 的作用：SqlSessionTemplate 是线程安全的 SqlSession 封装，内部代理了 DefaultSqlSession，确保每次操作在事务内共享同一个 SqlSession，非事务时创建新 SqlSession。核心方法：getMapper()、selectList()、insert() 等，自动处理事务边界；事务管理器集成：DataSourceTransactionManager 管理事务，通过 @Transactional 注解开启事务；事务开始时，SqlSessionUtils 创建 SqlSession 并绑定到 ThreadLocal；事务提交/回滚时，自动关闭 SqlSession；事务传播行为：@Transactional(propagation = Propagation.REQUIRED) 默认行为，加入已有事务或创建新事务；REQUIRES_NEW 挂起当前事务，创建新事务；SUPPORTS 有事务则加入，无事务则非事务执行。Agent 场景：工具调用链中，多个 Mapper 操作默认 REQUIRED，确保原子性。 |

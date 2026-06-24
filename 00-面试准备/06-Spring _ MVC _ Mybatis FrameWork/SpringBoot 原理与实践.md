@@ -918,27 +918,27 @@ Impressive Answer
 ```java
 @Component
 public class LLMConnectionPool implements SmartLifecycle {
-    
+
     private boolean isRunning = false;
-    
+
     @Override
     public void start() {
         isRunning = true;
         // 初始化连接池
     }
-    
+
     @Override
     public void stop() {
         isRunning = false;
         // 等待进行中的请求完成
         shutdown(Duration.ofSeconds(30));
     }
-    
+
     @Override
     public int getPhase() {
         return 1; // 较小值，优先停机
     }
-    
+
     @Override
     public boolean isRunning() {
         return isRunning;
@@ -955,7 +955,7 @@ public class LLMConnectionPool implements SmartLifecycle {
 ```java
 @Component
 public class ShutdownListener {
-    
+
     @EventListener(ContextClosedEvent.class)
     public void onContextClosed() {
         log.info("Context is closing, performing cleanup...");
@@ -1113,25 +1113,25 @@ spec:
 ```java
 @Component
 public class AgentHealthIndicator implements HealthIndicator {
-    
+
     @Autowired
     private LLMClient llmClient;
-    
+
     @Override
     public Health health() {
         Health.Builder builder = Health.up();
-        
+
         // 检查 LLM 连接
         if (!llmClient.isHealthy()) {
             builder.down().withDetail("llm", "connection failed");
         }
-        
+
         // 检查进行中的请求
         int activeRequests = getActiveRequestCount();
         if (activeRequests > 100) {
             builder.down().withDetail("requests", activeRequests);
         }
-        
+
         return builder.build();
     }
 }
@@ -1142,14 +1142,14 @@ public class AgentHealthIndicator implements HealthIndicator {
 ```java
 @Component
 public class SSEConnectionManager implements SmartLifecycle {
-    
+
     private final Set<SseEmitter> activeEmitters = ConcurrentHashMap.newKeySet();
-    
+
     @Override
     public int getPhase() {
         return Integer.MAX_VALUE; // 最后停机
     }
-    
+
     @Override
     public void stop() {
         // 等待所有 SSE 连接完成
@@ -1160,7 +1160,7 @@ public class SSEConnectionManager implements SmartLifecycle {
                 log.error("Failed to complete emitter", e);
             }
         });
-        
+
         // 等待最多 30 秒
         awaitTermination(Duration.ofSeconds(30));
     }
@@ -1350,7 +1350,7 @@ management:
 ```java
 @Configuration
 public class ActuatorSecurityConfig {
-    
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -1360,7 +1360,7 @@ public class ActuatorSecurityConfig {
                 .anyRequest().hasRole("ADMIN")
             )
             .httpBasic(withDefaults());
-        
+
         return http.build();
     }
 }
@@ -1458,16 +1458,16 @@ Impressive Answer
 ```java
 @Component
 public class LLMHealthIndicator implements HealthIndicator {
-    
+
     @Autowired
     private LLMClient llmClient;
-    
+
     @Override
     public Health health() {
         try {
             // 检查 LLM 连接
             boolean healthy = llmClient.ping();
-            
+
             if (healthy) {
                 return Health.up()
                     .withDetail("model", llmClient.getModel())
@@ -1490,30 +1490,30 @@ public class LLMHealthIndicator implements HealthIndicator {
 ```java
 @Component
 public class ToolCallMetrics {
-    
+
     private final Counter toolCallCounter;
     private final Timer toolCallTimer;
     private final Gauge activeConnections;
-    
+
     public ToolCallMetrics(MeterRegistry registry) {
         this.toolCallCounter = Counter.builder("tool.call.count")
             .description("Total tool calls")
             .tag("type", "all")
             .register(registry);
-        
+
         this.toolCallTimer = Timer.builder("tool.call.duration")
             .description("Tool call duration")
             .register(registry);
-        
-        this.activeConnections = Gauge.builder("llm.active.connections", 
+
+        this.activeConnections = Gauge.builder("llm.active.connections",
             llmClient, LLMClient::getActiveConnections)
             .register(registry);
     }
-    
+
     public void recordToolCall(String toolName, long duration, boolean success) {
         toolCallCounter.increment(
             Tags.of("tool", toolName, "status", success ? "success" : "error"));
-        
+
         toolCallTimer.record(duration, TimeUnit.MILLISECONDS);
     }
 }
@@ -1646,52 +1646,52 @@ Impressive Answer
 ```java
 @Component
 public class AgentMetrics {
-    
+
     // LLM 调用成功率
     private final Counter llmCallCounter;
-    
+
     // Token 消耗量
     private final Counter tokenConsumption;
-    
+
     // 工具调用延迟
     private final Timer toolCallTimer;
-    
+
     // 工具调用失败率
     private final Counter toolFailureCounter;
-    
+
     public AgentMetrics(MeterRegistry registry) {
         this.llmCallCounter = Counter.builder("llm.call.count")
             .description("LLM call count")
             .tag("type", "all")
             .register(registry);
-        
+
         this.tokenConsumption = Counter.builder("llm.token.consumption")
             .description("Token consumption")
             .register(registry);
-        
+
         this.toolCallTimer = Timer.builder("tool.call.duration")
             .description("Tool call duration")
             .register(registry);
-        
+
         this.toolFailureCounter = Counter.builder("tool.call.failure")
             .description("Tool call failure count")
             .register(registry);
     }
-    
+
     public void recordLLMCall(String model, boolean success, int tokens) {
         llmCallCounter.increment(
             Tags.of("model", model, "status", success ? "success" : "error"));
-        
+
         if (success) {
             tokenConsumption.increment(
                 Tags.of("model", model), tokens);
         }
     }
-    
+
     public void recordToolCall(String tool, long duration, boolean success) {
         toolCallTimer.record(duration, TimeUnit.MILLISECONDS,
             Tags.of("tool", tool));
-        
+
         if (!success) {
             toolFailureCounter.increment(Tags.of("tool", tool));
         }
@@ -1708,14 +1708,14 @@ groups:
       # LLM 调用成功率低于 95%
       - alert: LLMLowSuccessRate
         expr: |
-          sum(rate(llm_call_count{status="success"}[5m])) 
+          sum(rate(llm_call_count{status="success"}[5m]))
           / sum(rate(llm_call_count[5m])) < 0.95
         for: 5m
         labels:
           severity: warning
         annotations:
           summary: "LLM success rate below 95%"
-      
+
       # Token 消耗量异常增长
       - alert: HighTokenConsumption
         expr: rate(llm_token_consumption[1h]) > 10000
@@ -1724,11 +1724,11 @@ groups:
           severity: warning
         annotations:
           summary: "Token consumption rate too high"
-      
+
       # 工具调用延迟 P95 超过 5s
       - alert: ToolCallHighLatency
         expr: |
-          histogram_quantile(0.95, 
+          histogram_quantile(0.95,
             rate(tool_call_duration_bucket[5m])) > 5000
         for: 5m
         labels:
@@ -1924,7 +1924,7 @@ Grafana 如何配置 Dashboard？
 public class AgentIntegrationTest {
     @Autowired
     private MockMvc mockMvc;
-        
+
     @Test
     public void testExecuteTool() throws Exception {
         mockMvc.perform(post("/api/agent/execute")
@@ -1949,15 +1949,15 @@ public class AgentIntegrationTest {
 public class AgentControllerTest {
     @Autowired
     private MockMvc mockMvc;
-        
+
     @MockBean
     private AgentService agentService;
-        
+
     @Test
     public void testExecuteTool() throws Exception {
         when(agentService.executeTool(any()))
             .thenReturn(ToolResult.success("result"));
-            
+
         mockMvc.perform(post("/api/agent/execute")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"tool\":\"weather\",\"params\":{\"city\":\"杭州\"}}"))
@@ -2083,16 +2083,16 @@ Impressive Answer
 public class AgentControllerTest {
     @MockBean
     private AgentService agentService;
-        
+
     @MockBean
     private LLMProvider llmProvider;  // Mock 外部 LLM 服务
-        
+
     @Test
     public void testExecuteTool() {
         // Mock Service 层
         when(agentService.executeTool(any()))
             .thenReturn(ToolResult.success("result"));
-            
+
         // Mock 外部 LLM 服务
         when(llmProvider.chat(anyString(), anyString()))
             .thenReturn("AI response");
@@ -2202,11 +2202,11 @@ Impressive Answer
 @Service
 public class ToolExecutor {
     private final LLMProvider llmProvider;
-        
+
     public ToolExecutor(LLLMProvider llmProvider) {
         this.llmProvider = llmProvider;
     }
-        
+
     public ToolResult execute(ToolCall call) {
         try {
             String prompt = buildPrompt(call);
@@ -2224,13 +2224,13 @@ public class ToolExecutor {
 ```java
 @ExtendWith(MockitoExtension.class)
 public class ToolExecutorTest {
-        
+
     @Mock
     private LLMProvider llmProvider;
-        
+
     @InjectMocks
     private ToolExecutor toolExecutor;
-        
+
     @Test
     public void testExecuteSuccess() {
         // 准备测试数据
@@ -2238,52 +2238,52 @@ public class ToolExecutorTest {
             .tool("weather")
             .params(Map.of("city", "杭州"))
             .build();
-            
+
         // Mock 外部依赖
         when(llmProvider.chat(
-            startsWith("查询杭州的天气"), 
+            startsWith("查询杭州的天气"),
             eq("gpt-4")
         )).thenReturn("{\"temperature\": 25, \"weather\": \"晴\"}");
-            
+
         // 执行测试
         ToolResult result = toolExecutor.execute(call);
-            
+
         // 验证结果
         assertThat(result.isSuccess()).isTrue();
         assertThat(result.getData()).containsEntry("temperature", 25);
-            
+
         // 验证 Mock 被调用
         verify(llmProvider, times(1))
             .chat(anyString(), eq("gpt-4"));
     }
-        
+
     @Test
     public void testExecuteFailure() {
         ToolCall call = ToolCall.builder()
             .tool("weather")
             .params(Map.of("city", "杭州"))
             .build();
-            
+
         // Mock 异常情况
         when(llmProvider.chat(anyString(), anyString()))
             .thenThrow(new LLMException("API rate limit exceeded"));
-            
+
         ToolResult result = toolExecutor.execute(call);
-            
+
         assertThat(result.isError()).isTrue();
         assertThat(result.getError()).contains("rate limit");
     }
-        
+
     @Test
     public void testExecuteWithMultipleCalls() {
         // Mock 多次调用返回不同结果
         when(llmProvider.chat(anyString(), anyString()))
             .thenReturn("{\"result\": \"first\"}")
             .thenReturn("{\"result\": \"second\"}");
-            
+
         ToolResult result1 = toolExecutor.execute(call1);
         ToolResult result2 = toolExecutor.execute(call2);
-            
+
         assertThat(result1.getData()).containsEntry("result", "first");
         assertThat(result2.getData()).containsEntry("result", "second");
     }
@@ -2295,16 +2295,16 @@ public class ToolExecutorTest {
 ```java
 // 精确匹配
 when(llmProvider.chat("exact prompt", "gpt-4")).thenReturn(...);
-    
+
 // 任意参数
 when(llmProvider.chat(anyString(), anyString())).thenReturn(...);
-    
+
 // 部分匹配
 when(llmProvider.chat(
-    startsWith("查询"), 
+    startsWith("查询"),
     endsWith("-4")
 )).thenReturn(...);
-    
+
 // 自定义匹配器
 when(llmProvider.chat(argThat(prompt -> prompt.length() > 10), anyString()))
     .thenReturn(...);
@@ -2317,7 +2317,7 @@ when(llmProvider.chat(argThat(prompt -> prompt.length() > 10), anyString()))
 verify(llmProvider, times(2)).chat(anyString(), anyString());
 verify(llmProvider, never()).chat(eq("forbidden"), anyString());
 verify(llmProvider, atLeastOnce()).chat(anyString(), anyString());
-    
+
 // 验证调用顺序
 InOrder inOrder = inOrder(llmProvider);
 inOrder.verify(llmProvider).chat(eq("first"), anyString());
@@ -2332,15 +2332,15 @@ inOrder.verify(llmProvider).chat(eq("second"), anyString());
 public class ToolExecutionIntegrationTest {
     @Autowired
     private MockMvc mockMvc;
-        
+
     @MockBean
     private LLMProvider llmProvider;
-        
+
     @Test
     public void testToolExecutionApi() throws Exception {
         when(llmProvider.chat(anyString(), anyString()))
             .thenReturn("{\"result\": \"test\"}");
-            
+
         mockMvc.perform(post("/api/tools/execute")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"tool\":\"weather\",\"params\":{\"city\":\"杭州\"}}"))

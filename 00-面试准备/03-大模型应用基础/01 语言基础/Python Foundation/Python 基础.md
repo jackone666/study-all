@@ -499,7 +499,7 @@ asyncio 中如何实现异步重试？
 - 异步生成器（
 - async def
 - yield
-- ）融合了两种机制
+-）融合了两种机制
 
 **2️⃣ Impressive Answer**
 

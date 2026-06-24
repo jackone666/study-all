@@ -310,7 +310,7 @@ public SseEmitter streamChat(@RequestParam String query) {
           emitter.completeWithError(e);
       }
   });
-  
+
   emitter.onTimeout(emitter::complete);
   emitter.onCompletion(() -> log.info("SSE 连接关闭"));
   return emitter;
@@ -479,7 +479,7 @@ public class CurrentUserResolver implements HandlerMethodArgumentResolver {
     }
 
     @Override
-    public Object resolveArgument(MethodParameter parameter, 
+    public Object resolveArgument(MethodParameter parameter,
                                   ModelAndViewContainer mavContainer,
                                   NativeWebRequest webRequest,
                                   WebDataBinderFactory binderFactory) {
@@ -628,7 +628,7 @@ graph TD
 public class ProtobufHttpMessageConverter implements HttpMessageConverter<Message> {
     @Override
     public boolean canRead(Class<?> clazz, MediaType mediaType) {
-        return Message.class.isAssignableFrom(clazz) 
+        return Message.class.isAssignableFrom(clazz)
             && MediaType.parseMediaType("application/x-protobuf").includes(mediaType);
     }
 
@@ -1017,19 +1017,19 @@ public class SseResponseStrategy implements ResponseStrategy {
 @RestController
 @RequestMapping("/agent/chat")
 public class AgentChatController {
-    
+
     @Autowired
     private RestResponseStrategy restStrategy;
-    
+
     @Autowired
     private SseResponseStrategy sseStrategy;
 
-    @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE, 
+    @GetMapping(produces = {MediaType.APPLICATION_JSON_VALUE,
                             MediaType.TEXT_EVENT_STREAM_VALUE})
-    public Object chat(@RequestParam String query, 
+    public Object chat(@RequestParam String query,
                        @RequestHeader("Accept") String accept) {
         Supplier<String> generator = () -> agentService.generate(query);
-        
+
         if (accept.contains(MediaType.TEXT_EVENT_STREAM_VALUE)) {
             return sseStrategy.execute(generator);
         }
@@ -1212,7 +1212,7 @@ public @interface PhoneNumber {
 
 public class PhoneNumberValidator implements ConstraintValidator<PhoneNumber, String> {
     private static final Pattern PATTERN = Pattern.compile("^1[3-9]\\d{9}$");
-    
+
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
         if (value == null) return true;  // @NotNull 负责判空
@@ -1231,7 +1231,7 @@ public class UserDTO {
     @Null(groups = Update.class, message = "创建时 ID 必须为空")
     @NotNull(groups = Create.class, message = "更新时 ID 不能为空")
     private Long id;
-    
+
     @NotBlank(groups = {Create.class, Update.class})
     @PhoneNumber(groups = {Create.class, Update.class})
     private String phone;
@@ -1402,11 +1402,11 @@ Agent 场景
 ```java
 public class ToolParameterValidator {
     private final JsonSchemaFactory factory = JsonSchemaFactory.getInstance(SpecVersion.VersionFlag.V7);
-    
+
     public ValidationResult validate(String schemaJson, Object parameters) {
         JsonSchema schema = factory.getSchema(new JSONObject(schemaJson));
         Set<ValidationMessage> errors = schema.validate(new JSONObject(parameters));
-        
+
         return new ValidationResult(
             errors.isEmpty(),
             errors.stream()
@@ -1618,8 +1618,8 @@ graph TD
 ```java
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
-    protected void doFilterInternal(HttpServletRequest request, 
-                                    HttpServletResponse response, 
+    protected void doFilterInternal(HttpServletRequest request,
+                                    HttpServletResponse response,
                                     FilterChain filterChain) {
         String token = extractToken(request);
         if (token != null) {
@@ -1634,7 +1634,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) {
-        http.addFilterBefore(jwtAuthenticationFilter(), 
+        http.addFilterBefore(jwtAuthenticationFilter(),
                            UsernamePasswordAuthenticationFilter.class);
         // ...
     }
@@ -1885,20 +1885,20 @@ REST API、复杂路由
 ```java
 @Component
 public class VersionedHandlerMapping extends RequestMappingHandlerMapping {
-    
+
     @Override
     protected HandlerMethod getHandlerInternal(HttpServletRequest request) throws Exception {
         String version = request.getHeader("X-Agent-Version");
         if (version == null) {
             version = "v1"; // 默认版本
         }
-        
+
         // 根据版本路由到不同 Controller
         String path = request.getRequestURI();
         if (path.startsWith("/api/agent/")) {
             path = path.replace("/api/agent/", "/api/agent/" + version + "/");
         }
-        
+
         return super.getHandlerInternal(new VersionedRequestWrapper(request, path));
     }
 }
@@ -1991,24 +1991,24 @@ Impressive Answer
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class VersionRoutingHandlerMapping extends RequestMappingHandlerMapping {
-    
+
     private static final String VERSION_HEADER = "X-Agent-Version";
     private static final String DEFAULT_VERSION = "v1";
-    
+
     @Override
     protected HandlerMethod getHandlerInternal(HttpServletRequest request) throws Exception {
         String version = request.getHeader(VERSION_HEADER);
         if (version == null) {
             version = DEFAULT_VERSION;
         }
-        
+
         // 包装请求，修改路径
         String originalPath = request.getRequestURI();
         String versionedPath = injectVersion(originalPath, version);
-        
+
         return super.getHandlerInternal(new VersionedRequestWrapper(request, versionedPath));
     }
-    
+
     private String injectVersion(String path, String version) {
         // /api/agent/chat → /api/agent/v1/chat
         return path.replaceFirst("/api/agent/", "/api/agent/" + version + "/");
@@ -2018,17 +2018,17 @@ public class VersionRoutingHandlerMapping extends RequestMappingHandlerMapping {
 // 请求包装器
 public class VersionedRequestWrapper extends HttpServletRequestWrapper {
     private final String versionedPath;
-    
+
     public VersionedRequestWrapper(HttpServletRequest request, String versionedPath) {
         super(request);
         this.versionedPath = versionedPath;
     }
-    
+
     @Override
     public String getRequestURI() {
         return versionedPath;
     }
-    
+
     @Override
     public String getServletPath() {
         return versionedPath;
@@ -2061,13 +2061,13 @@ public class AgentChatV2Controller {
 @RestController
 @RequestMapping("/api/agent/chat")
 public class AgentChatController {
-    
+
     @PostMapping
     @ConditionalOnHeader(name = "X-Agent-Version", value = "v1")
     public String chatV1(@RequestBody ChatRequest request) {
         return "V1: " + request.getMessage();
     }
-    
+
     @PostMapping
     @ConditionalOnHeader(name = "X-Agent-Version", value = "v2")
     public String chatV2(@RequestBody ChatRequest request) {
@@ -2273,7 +2273,7 @@ public ResponseEntity<Agent> createAgent(@RequestBody Agent agent) {
 ```java
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
-    
+
     @Override
     public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
         configurer
@@ -2290,7 +2290,7 @@ public class WebConfig implements WebMvcConfigurer {
             .mediaType("xml", MediaType.APPLICATION_XML)
             .mediaType("protobuf", MediaType.parseMediaType("application/x-protobuf"));
     }
-    
+
     @Override
     public void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
         // 添加 Protobuf 转换器
@@ -2305,7 +2305,7 @@ public class WebConfig implements WebMvcConfigurer {
 @RestController
 @RequestMapping("/api/agent")
 public class AgentController {
-    
+
     // 根据 Accept 头返回 JSON 或 XML
     @GetMapping("/{id}")
     public Agent getAgent(@PathVariable Long id) {
@@ -2313,7 +2313,7 @@ public class AgentController {
         // Accept: application/json → JSON
         // Accept: application/xml → XML
     }
-    
+
     // ResponseEntity 精确控制
     @GetMapping("/{id}/detail")
     public ResponseEntity<Agent> getAgentDetail(@PathVariable Long id) {
@@ -2332,15 +2332,15 @@ public class AgentController {
 @GetMapping("/agent/tools")
 public ResponseEntity<List<Tool>> listTools(
     @RequestHeader("Accept") String acceptHeader) {
-    
+
     List<Tool> tools = toolService.getAll();
-    
+
     if (acceptHeader.contains("application/x-protobuf")) {
         return ResponseEntity.ok()
             .contentType(MediaType.parseMediaType("application/x-protobuf"))
             .body(tools);
     }
-    
+
     return ResponseEntity.ok()
         .contentType(MediaType.APPLICATION_JSON)
         .body(tools);
@@ -2457,17 +2457,17 @@ message AgentResponse {
 ```java
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
-    
+
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
         // 保留默认转换器
         converters.add(new MappingJackson2HttpMessageConverter());
-        
+
         // 添加 Protobuf 转换器
         ProtobufHttpMessageConverter protobufConverter = new ProtobufHttpMessageConverter();
         converters.add(protobufConverter);
     }
-    
+
     @Override
     public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
         configurer
@@ -2486,7 +2486,7 @@ public class WebConfig implements WebMvcConfigurer {
 @RestController
 @RequestMapping("/api/agent")
 public class AgentController {
-    
+
     // 方案一：根据 Accept 头自动选择
     @GetMapping("/{id}")
     public ResponseEntity<Agent> getAgent(@PathVariable Long id) {
@@ -2495,7 +2495,7 @@ public class AgentController {
         // Accept: application/x-protobuf → Protobuf
         return ResponseEntity.ok(agent);
     }
-    
+
     // 方案二：手动指定格式
     @GetMapping("/{id}/json")
     public ResponseEntity<Agent> getAgentJson(@PathVariable Long id) {
@@ -2504,42 +2504,42 @@ public class AgentController {
             .contentType(MediaType.APPLICATION_JSON)
             .body(agent);
     }
-    
+
     @GetMapping("/{id}/protobuf")
     public ResponseEntity<AgentResponse> getAgentProtobuf(@PathVariable Long id) {
         Agent agent = agentService.findById(id);
-        
+
         // 转换为 Protobuf 消息
         AgentResponse.Builder builder = AgentResponse.newBuilder()
             .setId(agent.getId())
             .setName(agent.getName());
         agent.getTools().forEach(builder::addTools);
-        
+
         return ResponseEntity.ok()
             .contentType(MediaType.parseMediaType("application/x-protobuf"))
             .body(builder.build());
     }
-    
+
     // 方案三：统一接口，内部转换
     @GetMapping("/{id}/unified")
     public ResponseEntity<?> getAgentUnified(
         @PathVariable Long id,
         @RequestHeader("Accept") String accept) {
-        
+
         Agent agent = agentService.findById(id);
-        
+
         if (accept.contains("application/x-protobuf")) {
             AgentResponse protobuf = convertToProtobuf(agent);
             return ResponseEntity.ok()
                 .contentType(MediaType.parseMediaType("application/x-protobuf"))
                 .body(protobuf);
         }
-        
+
         return ResponseEntity.ok()
             .contentType(MediaType.APPLICATION_JSON)
             .body(agent);
     }
-    
+
     private AgentResponse convertToProtobuf(Agent agent) {
         AgentResponse.Builder builder = AgentResponse.newBuilder()
             .setId(agent.getId())
@@ -2714,7 +2714,7 @@ public Callable<String> asyncCallable() {
 @GetMapping("/async/deferred")
 public DeferredResult<String> asyncDeferred() {
     DeferredResult<String> result = new DeferredResult<>(5000L); // 5秒超时
-    
+
     // 在另一个线程设置结果
     new Thread(() -> {
         try {
@@ -2724,7 +2724,7 @@ public DeferredResult<String> asyncDeferred() {
             result.setErrorResult(e);
         }
     }).start();
-    
+
     return result;
 }
 ```
@@ -2784,27 +2784,27 @@ public DeferredResult<String> asyncDeferred() {
 @RestController
 @RequestMapping("/api/agent/async")
 public class AgentAsyncController {
-    
+
     // 超时处理
     @GetMapping("/timeout")
     public DeferredResult<String> asyncWithTimeout() {
         DeferredResult<String> result = new DeferredResult<>(3000L); // 3秒超时
-        
+
         // 超时回调
         result.onTimeout(() -> {
             result.setErrorResult("Request timeout");
         });
-        
+
         // 错误回调
         result.onError((Throwable t) -> {
             result.setErrorResult("Error: " + t.getMessage());
         });
-        
+
         // 完成回调
         result.onCompletion(() -> {
             log.info("Async request completed");
         });
-        
+
         // 异步执行
         CompletableFuture.supplyAsync(() -> {
             try {
@@ -2820,10 +2820,10 @@ public class AgentAsyncController {
                 result.setResult(res);
             }
         });
-        
+
         return result;
     }
-    
+
     // 全局异常处理
     @ExceptionHandler
     @ResponseStatus(HttpStatus.REQUEST_TIMEOUT)
@@ -2838,7 +2838,7 @@ public class AgentAsyncController {
 ```java
 @Service
 public class AgentTaskService {
-    
+
     @Async("agentTaskExecutor")
     public CompletableFuture<String> executeLongRunningTask(String taskId) {
         // Agent 深度搜索、多步推理等长时间任务
@@ -2855,15 +2855,15 @@ public class AgentTaskService {
 @RestController
 @RequestMapping("/api/agent/task")
 public class AgentTaskController {
-    
+
     @PostMapping("/{taskId}")
     public DeferredResult<TaskResult> executeTask(@PathVariable String taskId) {
         DeferredResult<TaskResult> result = new DeferredResult<>(30000L); // 30秒超时
-        
+
         result.onTimeout(() -> {
             result.setErrorResult(TaskResult.error("Task timeout"));
         });
-        
+
         agentTaskService.executeLongRunningTask(taskId)
             .thenAccept(res -> {
                 result.setResult(TaskResult.success(res));
@@ -2872,7 +2872,7 @@ public class AgentTaskController {
                 result.setErrorResult(TaskResult.error(ex.getMessage()));
                 return null;
             });
-        
+
         return result;
     }
 }
@@ -2964,7 +2964,7 @@ Impressive Answer
 @Configuration
 @EnableAsync
 public class AsyncConfig {
-    
+
     @Bean("agentTaskExecutor")
     public Executor agentTaskExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
@@ -2976,7 +2976,7 @@ public class AsyncConfig {
         executor.initialize();
         return executor;
     }
-    
+
     @Bean("agentCallbackExecutor")
     public Executor agentCallbackExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
@@ -2996,20 +2996,20 @@ public class AsyncConfig {
 ```java
 @Service
 public class AgentTaskService {
-    
+
     @Autowired
     @Qualifier("agentTaskExecutor")
     private Executor taskExecutor;
-    
+
     // 深度搜索任务
     public CompletableFuture<SearchResult> deepSearch(String query) {
         return CompletableFuture.supplyAsync(() -> {
             // 1. 向量检索
             List<Document> docs = vectorSearch(query);
-            
+
             // 2. 多步推理
             String reasoning = multiStepReasoning(query, docs);
-            
+
             // 3. 结果汇总
             return SearchResult.builder()
                 .query(query)
@@ -3018,26 +3018,26 @@ public class AgentTaskService {
                 .build();
         }, taskExecutor);
     }
-    
+
     // 多步推理任务
     public CompletableFuture<ReasoningResult> multiStepReasoning(String query, List<Document> docs) {
         return CompletableFuture.supplyAsync(() -> {
             // Step 1: 理解问题
             String understanding = llmService.understand(query);
-            
+
             // Step 2: 规划步骤
             List<String> steps = llmService.plan(understanding);
-            
+
             // Step 3: 执行步骤
             List<String> results = new ArrayList<>();
             for (String step : steps) {
                 String result = executeStep(step, docs);
                 results.add(result);
             }
-            
+
             // Step 4: 综合答案
             String answer = llmService.synthesize(results);
-            
+
             return ReasoningResult.builder()
                 .steps(steps)
                 .results(results)
@@ -3054,25 +3054,25 @@ public class AgentTaskService {
 @RestController
 @RequestMapping("/api/agent")
 public class AgentAsyncController {
-    
+
     @Autowired
     private AgentTaskService agentTaskService;
-    
+
     // 深度搜索（异步）
     @PostMapping("/search/deep")
     public DeferredResult<SearchResult> deepSearch(@RequestBody SearchRequest request) {
         DeferredResult<SearchResult> result = new DeferredResult<>(60000L); // 60秒超时
-        
+
         // 超时处理
         result.onTimeout(() -> {
             result.setErrorResult(SearchResult.error("Search timeout"));
         });
-        
+
         // 错误处理
         result.onError(ex -> {
             result.setErrorResult(SearchResult.error(ex.getMessage()));
         });
-        
+
         // 异步执行
         agentTaskService.deepSearch(request.getQuery())
             .thenAccept(result::setResult)
@@ -3080,29 +3080,29 @@ public class AgentAsyncController {
                 result.setErrorResult(SearchResult.error(ex.getMessage()));
                 return null;
             });
-        
+
         return result;
     }
-    
+
     // 多步推理（异步）
     @PostMapping("/reasoning")
     public DeferredResult<ReasoningResult> reasoning(@RequestBody ReasoningRequest request) {
         DeferredResult<ReasoningResult> result = new DeferredResult<>(90000L); // 90秒超时
-        
+
         result.onTimeout(() -> {
             result.setErrorResult(ReasoningResult.error("Reasoning timeout"));
         });
-        
+
         agentTaskService.multiStepReasoning(request.getQuery(), request.getDocs())
             .thenAccept(result::setResult)
             .exceptionally(ex -> {
                 result.setErrorResult(ReasoningResult.error(ex.getMessage()));
                 return null;
             });
-        
+
         return result;
     }
-    
+
     // 任务状态查询（轮询）
     @GetMapping("/task/{taskId}/status")
     public TaskStatus getTaskStatus(@PathVariable String taskId) {
@@ -3116,13 +3116,13 @@ public class AgentAsyncController {
 ```java
 @Service
 public class AgentTaskService {
-    
+
     private final Map<String, TaskStatus> taskStatusMap = new ConcurrentHashMap<>();
-    
+
     public String createTaskId() {
         return UUID.randomUUID().toString();
     }
-    
+
     public void updateTaskStatus(String taskId, String status, int progress) {
         taskStatusMap.put(taskId, TaskStatus.builder()
             .taskId(taskId)
@@ -3131,7 +3131,7 @@ public class AgentTaskService {
             .timestamp(System.currentTimeMillis())
             .build());
     }
-    
+
     public TaskStatus getTaskStatus(String taskId) {
         return taskStatusMap.get(taskId);
     }
@@ -3277,7 +3277,7 @@ Tomcat 线程池参数如何调优？如何监控线程池状态？
 ```java
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
-    
+
     @Bean
     public MultipartResolver multipartResolver() {
         CommonsMultipartResolver resolver = new CommonsMultipartResolver();
@@ -3295,28 +3295,28 @@ public class WebConfig implements WebMvcConfigurer {
 @RestController
 @RequestMapping("/api/file")
 public class FileUploadController {
-    
+
     @PostMapping("/upload")
     public String upload(@RequestParam("file") MultipartFile file) throws IOException {
         // 获取文件名
         String originalFilename = file.getOriginalFilename();
-        
+
         // 获取文件类型
         String contentType = file.getContentType();
-        
+
         // 获取文件大小
         long size = file.getSize();
-        
+
         // 获取文件字节数组
         byte[] bytes = file.getBytes();
-        
+
         // 获取输入流
         InputStream inputStream = file.getInputStream();
-        
+
         // 保存文件
         File dest = new File("/tmp/" + originalFilename);
         file.transferTo(dest);
-        
+
         return "Upload success: " + originalFilename;
     }
 }
@@ -3406,7 +3406,7 @@ Servlet 3.0+ 推荐
 ```java
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
-    
+
     @Bean
     public MultipartResolver multipartResolver() {
         CommonsMultipartResolver resolver = new CommonsMultipartResolver();
@@ -3424,7 +3424,7 @@ public class WebConfig implements WebMvcConfigurer {
 ```java
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
-    
+
     @Bean
     public MultipartResolver multipartResolver() {
         return new StandardServletMultipartResolver();
@@ -3447,7 +3447,7 @@ spring:
 @RestController
 @RequestMapping("/api/file/chunk")
 public class ChunkUploadController {
-    
+
     // 上传分片
     @PostMapping("/upload")
     public ResponseEntity<ChunkUploadResult> uploadChunk(
@@ -3455,30 +3455,30 @@ public class ChunkUploadController {
         @RequestParam("chunkNumber") int chunkNumber,
         @RequestParam("totalChunks") int totalChunks,
         @RequestParam("identifier") String identifier) throws IOException {
-        
+
         String chunkPath = "/tmp/chunks/" + identifier + "/" + chunkNumber;
         File chunkFile = new File(chunkPath);
         chunkFile.getParentFile().mkdirs();
         file.transferTo(chunkFile);
-        
+
         return ResponseEntity.ok(ChunkUploadResult.builder()
             .chunkNumber(chunkNumber)
             .identifier(identifier)
             .uploaded(true)
             .build());
     }
-    
+
     // 合并分片
     @PostMapping("/merge")
     public ResponseEntity<MergeResult> mergeChunks(
         @RequestParam("identifier") String identifier,
         @RequestParam("filename") String filename,
         @RequestParam("totalChunks") int totalChunks) throws IOException {
-        
+
         String outputPath = "/tmp/uploads/" + filename;
         File outputFile = new File(outputPath);
         outputFile.getParentFile().mkdirs();
-        
+
         try (FileOutputStream fos = new FileOutputStream(outputFile)) {
             for (int i = 1; i <= totalChunks; i++) {
                 File chunkFile = new File("/tmp/chunks/" + identifier + "/" + i);
@@ -3486,7 +3486,7 @@ public class ChunkUploadController {
                 chunkFile.delete(); // 删除分片
             }
         }
-        
+
         return ResponseEntity.ok(MergeResult.builder()
             .filename(filename)
             .path(outputPath)
@@ -3501,22 +3501,22 @@ public class ChunkUploadController {
 ```java
 @Service
 public class AgentDocumentService {
-    
+
     @Async("docUploadExecutor")
     public CompletableFuture<UploadResult> uploadAndIndex(
         MultipartFile file,
         String agentId) {
-        
+
         try {
             // 1. 保存文件
             String filePath = saveFile(file);
-            
+
             // 2. 提取文本
             String text = extractText(filePath);
-            
+
             // 3. 向量化
             List<Float> embedding = embeddingService.embed(text);
-            
+
             // 4. 入库
             documentService.index(Document.builder()
                 .agentId(agentId)
@@ -3524,10 +3524,10 @@ public class AgentDocumentService {
                 .content(text)
                 .embedding(embedding)
                 .build());
-            
+
             return CompletableFuture.completedFuture(
                 UploadResult.success(file.getOriginalFilename()));
-            
+
         } catch (Exception e) {
             return CompletableFuture.failedFuture(e);
         }
@@ -3621,22 +3621,22 @@ Impressive Answer
 @RestController
 @RequestMapping("/api/agent/kb")
 public class KnowledgeBaseController {
-    
+
     @Autowired
     private AgentDocumentService documentService;
-    
+
     // 流式上传并处理
     @PostMapping("/upload/stream")
     public DeferredResult<UploadResult> uploadStream(
         @RequestParam("file") MultipartFile file,
         @RequestParam("agentId") String agentId) {
-        
+
         DeferredResult<UploadResult> result = new DeferredResult<>(60000L);
-        
+
         result.onTimeout(() -> {
             result.setErrorResult(UploadResult.error("Upload timeout"));
         });
-        
+
         // 异步流式处理
         documentService.processStream(file.getInputStream(), agentId, file.getOriginalFilename())
             .thenAccept(result::setResult)
@@ -3644,7 +3644,7 @@ public class KnowledgeBaseController {
                 result.setErrorResult(UploadResult.error(ex.getMessage()));
                 return null;
             });
-        
+
         return result;
     }
 }
@@ -3655,50 +3655,50 @@ public class KnowledgeBaseController {
 ```java
 @Service
 public class AgentDocumentService {
-    
+
     @Autowired
     private EmbeddingService embeddingService;
-    
+
     @Autowired
     private VectorStore vectorStore;
-    
+
     @Async("docProcessExecutor")
     public CompletableFuture<UploadResult> processStream(
         InputStream inputStream,
         String agentId,
         String filename) {
-        
+
         try {
             // 1. 检测文件类型
             String fileType = detectFileType(filename);
-            
+
             // 2. 流式提取文本
             List<TextChunk> chunks = new ArrayList<>();
             TextExtractor extractor = getExtractor(fileType);
-            
+
             extractor.extractStream(inputStream, (text, pageIndex) -> {
                 // 3. 分块处理
                 List<TextChunk> pageChunks = chunkText(text, 500, 50);
                 chunks.addAll(pageChunks);
-                
+
                 // 4. 边提取边向量化
                 for (TextChunk chunk : pageChunks) {
                     processChunk(chunk, agentId, filename, pageIndex);
                 }
             });
-            
+
             return CompletableFuture.completedFuture(
                 UploadResult.success(filename, chunks.size()));
-            
+
         } catch (Exception e) {
             return CompletableFuture.failedFuture(e);
         }
     }
-    
+
     private void processChunk(TextChunk chunk, String agentId, String filename, int pageIndex) {
         // 1. 向量化
         List<Float> embedding = embeddingService.embed(chunk.getText());
-        
+
         // 2. 入库
         vectorStore.insert(Document.builder()
             .agentId(agentId)
@@ -3726,16 +3726,16 @@ public interface TextExtractor {
 
 @Component
 public class PdfTextExtractor implements TextExtractor {
-    
+
     @Override
     public void extractStream(InputStream inputStream, BiConsumer<String, Integer> callback) throws IOException {
         try (PDDocument document = PDDocument.load(inputStream)) {
             PDFTextStripper stripper = new PDFTextStripper();
-            
+
             for (int i = 0; i < document.getNumberOfPages(); i++) {
                 stripper.setStartPage(i + 1);
                 stripper.setEndPage(i + 1);
-                
+
                 String text = stripper.getText(document);
                 callback.accept(text.trim(), i);
             }
@@ -3745,20 +3745,20 @@ public class PdfTextExtractor implements TextExtractor {
 
 @Component
 public class WordTextExtractor implements TextExtractor {
-    
+
     @Override
     public void extractStream(InputStream inputStream, BiConsumer<String, Integer> callback) throws IOException {
         XWPFDocument document = new XWPFDocument(inputStream);
-        
+
         for (int i = 0; i < document.getParagraphs().size(); i++) {
             XWPFParagraph paragraph = document.getParagraphs().get(i);
             String text = paragraph.getText();
-            
+
             // 按段落分页（模拟）
             int pageIndex = i / 10;
             callback.accept(text, pageIndex);
         }
-        
+
         document.close();
     }
 }
@@ -3769,14 +3769,14 @@ public class WordTextExtractor implements TextExtractor {
 ```java
 @Component
 public class TextChunker {
-    
+
     public List<TextChunk> chunkText(String text, int chunkSize, int overlap) {
         List<TextChunk> chunks = new ArrayList<>();
-        
+
         String[] sentences = text.split("(?<=[.!?。！？])\\s+");
         StringBuilder currentChunk = new StringBuilder();
         int chunkIndex = 0;
-        
+
         for (String sentence : sentences) {
             if (currentChunk.length() + sentence.length() > chunkSize) {
                 if (currentChunk.length() > 0) {
@@ -3784,24 +3784,24 @@ public class TextChunker {
                         .index(chunkIndex++)
                         .text(currentChunk.toString())
                         .build());
-                    
+
                     // 保留重叠部分
                     String overlapText = currentChunk.substring(
                         Math.max(0, currentChunk.length() - overlap));
                     currentChunk = new StringBuilder(overlapText);
                 }
             }
-            
+
             currentChunk.append(sentence).append(" ");
         }
-        
+
         if (currentChunk.length() > 0) {
             chunks.add(TextChunk.builder()
                 .index(chunkIndex)
                 .text(currentChunk.toString().trim())
                 .build());
         }
-        
+
         return chunks;
     }
 }
@@ -3813,7 +3813,7 @@ public class TextChunker {
 @Configuration
 @EnableAsync
 public class AsyncConfig {
-    
+
     @Bean("docProcessExecutor")
     public Executor docProcessExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
@@ -3954,52 +3954,52 @@ Spring @Async 的原理？如何自定义线程池？
 ```java
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
-    
+
     // 1. 路径匹配配置
     @Override
     public void configurePathMatch(PathMatchConfigurer configurer) {
         configurer.setUseTrailingSlashMatch(true);
     }
-    
+
     // 2. 内容协商配置
     @Override
     public void configureContentNegotiation(ContentNegotiationConfigurer configurer) {
         configurer.favorParameter(true);
     }
-    
+
     // 3. 消息转换器配置
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
         converters.add(new MappingJackson2HttpMessageConverter());
     }
-    
+
     // 4. 拦截器配置
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new LoggingInterceptor())
             .addPathPatterns("/**");
     }
-    
+
     // 5. 跨域配置
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
             .allowedOrigins("*");
     }
-    
+
     // 6. 视图控制器配置
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/").setViewName("index");
     }
-    
+
     // 7. 静态资源配置
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/static/**")
             .addResourceLocations("classpath:/static/");
     }
-    
+
     // 8. 参数解析器配置
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
@@ -4148,10 +4148,10 @@ public class WebConfig implements WebMvcConfigurer {
 ```java
 @Configuration
 public class AgentWebConfig implements WebMvcConfigurer {
-    
+
     @Autowired
     private AgentProperties agentProperties;
-    
+
     // 统一注册 Agent 参数解析器
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
@@ -4159,31 +4159,31 @@ public class AgentWebConfig implements WebMvcConfigurer {
         resolvers.add(new AgentTokenResolver());
         resolvers.add(new AgentVersionResolver());
     }
-    
+
     // 统一注册 Agent 拦截器
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new AgentAuthInterceptor())
             .addPathPatterns("/api/agent/**")
             .excludePathPatterns("/api/agent/public/**");
-        
+
         registry.addInterceptor(new AgentLoggingInterceptor())
             .addPathPatterns("/api/agent/**");
-        
+
         registry.addInterceptor(new AgentRateLimitInterceptor())
             .addPathPatterns("/api/agent/**");
     }
-    
+
     // 统一注册 Agent 消息转换器
     @Override
     public void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
         // Protobuf 转换器
         converters.add(0, new ProtobufHttpMessageConverter());
-        
+
         // 自定义 JSON 转换器（Agent 特定格式）
         converters.add(1, new AgentJsonHttpMessageConverter());
     }
-    
+
     // 统一配置跨域
     @Override
     public void addCorsMappings(CorsRegistry registry) {
@@ -4303,10 +4303,10 @@ public interface AgentMessageConverter extends HttpMessageConverter<?>, AgentCom
 ```java
 @Configuration
 public class AgentComponentAutoConfig {
-    
+
     @Autowired
     private ApplicationContext applicationContext;
-    
+
     @Bean
     public List<AgentArgumentResolver> agentArgumentResolvers() {
         return applicationContext.getBeansOfType(AgentArgumentResolver.class)
@@ -4315,7 +4315,7 @@ public class AgentComponentAutoConfig {
             .sorted(Comparator.comparingInt(AgentComponent::getOrder))
             .collect(Collectors.toList());
     }
-    
+
     @Bean
     public List<AgentInterceptor> agentInterceptors() {
         return applicationContext.getBeansOfType(AgentInterceptor.class)
@@ -4324,7 +4324,7 @@ public class AgentComponentAutoConfig {
             .sorted(Comparator.comparingInt(AgentComponent::getOrder))
             .collect(Collectors.toList());
     }
-    
+
     @Bean
     public List<AgentMessageConverter> agentMessageConverters() {
         return applicationContext.getBeansOfType(AgentMessageConverter.class)
@@ -4341,16 +4341,16 @@ public class AgentComponentAutoConfig {
 ```java
 @Configuration
 public class AgentWebConfig implements WebMvcConfigurer {
-    
+
     @Autowired
     private List<AgentArgumentResolver> agentArgumentResolvers;
-    
+
     @Autowired
     private List<AgentInterceptor> agentInterceptors;
-    
+
     @Autowired
     private List<AgentMessageConverter> agentMessageConverters;
-    
+
     @Override
     public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
         log.info("Registering {} Agent argument resolvers", agentArgumentResolvers.size());
@@ -4359,7 +4359,7 @@ public class AgentWebConfig implements WebMvcConfigurer {
             resolvers.add(resolver);
         });
     }
-    
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         log.info("Registering {} Agent interceptors", agentInterceptors.size());
@@ -4369,7 +4369,7 @@ public class AgentWebConfig implements WebMvcConfigurer {
                 .addPathPatterns("/api/agent/**");
         });
     }
-    
+
     @Override
     public void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
         log.info("Registering {} Agent message converters", agentMessageConverters.size());
@@ -4388,30 +4388,30 @@ public class AgentWebConfig implements WebMvcConfigurer {
 @Component
 @Slf4j
 public class AgentContextResolver implements AgentArgumentResolver {
-    
+
     @Override
     public boolean supportsParameter(MethodParameter parameter) {
         return parameter.getParameterAnnotation(AgentContext.class) != null;
     }
-    
+
     @Override
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer,
                                   NativeWebRequest webRequest, WebDataBinderFactory binderFactory) {
         String agentId = webRequest.getHeader("X-Agent-Id");
         String agentVersion = webRequest.getHeader("X-Agent-Version");
-        
+
         return AgentContext.builder()
             .agentId(agentId)
             .version(agentVersion)
             .timestamp(System.currentTimeMillis())
             .build();
     }
-    
+
     @Override
     public String getName() {
         return "AgentContextResolver";
     }
-    
+
     @Override
     public int getOrder() {
         return 100;
@@ -4422,27 +4422,27 @@ public class AgentContextResolver implements AgentArgumentResolver {
 @Component
 @Slf4j
 public class AgentAuthInterceptor implements AgentInterceptor {
-    
+
     @Autowired
     private AgentAuthService authService;
-    
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         String token = request.getHeader("X-Agent-Token");
-        
+
         if (!authService.validateToken(token)) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             return false;
         }
-        
+
         return true;
     }
-    
+
     @Override
     public String getName() {
         return "AgentAuthInterceptor";
     }
-    
+
     @Override
     public int getOrder() {
         return 100;
@@ -4453,41 +4453,41 @@ public class AgentAuthInterceptor implements AgentInterceptor {
 @Component
 @Slf4j
 public class AgentProtobufConverter implements AgentMessageConverter {
-    
+
     private final ProtobufHttpMessageConverter delegate = new ProtobufHttpMessageConverter();
-    
+
     @Override
     public boolean canRead(Class<?> clazz, MediaType mediaType) {
-        return Message.class.isAssignableFrom(clazz) && 
+        return Message.class.isAssignableFrom(clazz) &&
                delegate.canRead(clazz, mediaType);
     }
-    
+
     @Override
     public boolean canWrite(Class<?> clazz, MediaType mediaType) {
-        return Message.class.isAssignableFrom(clazz) && 
+        return Message.class.isAssignableFrom(clazz) &&
                delegate.canWrite(clazz, mediaType);
     }
-    
+
     @Override
     public List<MediaType> getSupportedMediaTypes() {
         return delegate.getSupportedMediaTypes();
     }
-    
+
     @Override
     public Object read(Class<?> clazz, HttpInputMessage inputMessage) throws IOException {
         return delegate.read(clazz, inputMessage);
     }
-    
+
     @Override
     public void write(Object t, MediaType contentType, HttpOutputMessage outputMessage) throws IOException {
         delegate.write(t, contentType, outputMessage);
     }
-    
+
     @Override
     public String getName() {
         return "AgentProtobufConverter";
     }
-    
+
     @Override
     public int getOrder() {
         return 100;
@@ -4501,7 +4501,7 @@ public class AgentProtobufConverter implements AgentMessageConverter {
 @RestController
 @RequestMapping("/api/agent")
 public class AgentController {
-    
+
     // 自动注入 AgentContext
     @PostMapping("/chat")
     public String chat(@RequestBody ChatRequest request, @AgentContext AgentContext context) {
@@ -4858,35 +4858,35 @@ AsyncRequestTimeoutException
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class AgentExceptionHandlerResolver implements HandlerExceptionResolver {
-    
+
     @Override
     public ModelAndView resolveException(HttpServletRequest request,
                                          HttpServletResponse response,
                                          Object handler,
                                          Exception ex) {
-        
+
         // Agent 工具调用异常
         if (ex instanceof AgentToolCallException) {
             AgentToolCallException toolEx = (AgentToolCallException) ex;
-            return buildErrorResponse(response, 
-                HttpStatus.SERVICE_UNAVAILABLE, 
-                toolEx.getCode(), 
+            return buildErrorResponse(response,
+                HttpStatus.SERVICE_UNAVAILABLE,
+                toolEx.getCode(),
                 toolEx.getMessage());
         }
-        
+
         // LLM 限流异常
         if (ex instanceof AgentRateLimitException) {
             AgentRateLimitException rateEx = (AgentRateLimitException) ex;
             response.setHeader("X-RateLimit-Limit", String.valueOf(rateEx.getLimit()));
             response.setHeader("X-RateLimit-Remaining", "0");
             response.setHeader("X-RateLimit-Reset", String.valueOf(rateEx.getResetTime()));
-            
-            return buildErrorResponse(response, 
-                HttpStatus.TOO_MANY_REQUESTS, 
-                rateEx.getCode(), 
+
+            return buildErrorResponse(response,
+                HttpStatus.TOO_MANY_REQUESTS,
+                rateEx.getCode(),
                 rateEx.getMessage());
         }
-        
+
         // 参数校验异常
         if (ex instanceof MethodArgumentNotValidException) {
             MethodArgumentNotValidException validEx = (MethodArgumentNotValidException) ex;
@@ -4895,17 +4895,17 @@ public class AgentExceptionHandlerResolver implements HandlerExceptionResolver {
                 .stream()
                 .map(error -> error.getField() + ": " + error.getDefaultMessage())
                 .collect(Collectors.joining(", "));
-            
-            return buildErrorResponse(response, 
-                HttpStatus.BAD_REQUEST, 
-                "VALIDATION_ERROR", 
+
+            return buildErrorResponse(response,
+                HttpStatus.BAD_REQUEST,
+                "VALIDATION_ERROR",
                 errorMessage);
         }
-        
+
         // 其他异常不处理，交给下一个解析器
         return null;
     }
-    
+
     private ModelAndView buildErrorResponse(HttpServletResponse response,
                                            HttpStatus status,
                                            String code,
@@ -4913,15 +4913,15 @@ public class AgentExceptionHandlerResolver implements HandlerExceptionResolver {
         try {
             response.setStatus(status.value());
             response.setContentType("application/json;charset=UTF-8");
-            
+
             ErrorResponse errorResponse = ErrorResponse.builder()
                 .code(code)
                 .message(message)
                 .timestamp(System.currentTimeMillis())
                 .build();
-            
+
             response.getWriter().write(new ObjectMapper().writeValueAsString(errorResponse));
-            
+
             return new ModelAndView();
         } catch (IOException e) {
             return null;
@@ -4936,12 +4936,12 @@ public class AgentExceptionHandlerResolver implements HandlerExceptionResolver {
 @ControllerAdvice
 @Slf4j
 public class AgentGlobalExceptionHandler {
-    
+
     // Agent 工具调用超时
     @ExceptionHandler(AgentToolTimeoutException.class)
     public ResponseEntity<ErrorResponse> handleToolTimeout(AgentToolTimeoutException ex) {
         log.error("Agent tool timeout: {}", ex.getMessage(), ex);
-        
+
         return ResponseEntity.status(HttpStatus.GATEWAY_TIMEOUT)
             .body(ErrorResponse.builder()
                 .code("TOOL_TIMEOUT")
@@ -4949,12 +4949,12 @@ public class AgentGlobalExceptionHandler {
                 .timestamp(System.currentTimeMillis())
                 .build());
     }
-    
+
     // LLM 限流
     @ExceptionHandler(AgentRateLimitException.class)
     public ResponseEntity<ErrorResponse> handleRateLimit(AgentRateLimitException ex) {
         log.warn("Agent rate limit: {}", ex.getMessage());
-        
+
         return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS)
             .header("X-RateLimit-Limit", String.valueOf(ex.getLimit()))
             .header("X-RateLimit-Remaining", "0")
@@ -4965,7 +4965,7 @@ public class AgentGlobalExceptionHandler {
                 .timestamp(System.currentTimeMillis())
                 .build());
     }
-    
+
     // 参数校验失败
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponse> handleValidation(MethodArgumentNotValidException ex) {
@@ -4974,7 +4974,7 @@ public class AgentGlobalExceptionHandler {
             .stream()
             .map(error -> error.getField() + ": " + error.getDefaultMessage())
             .collect(Collectors.joining(", "));
-        
+
         return ResponseEntity.badRequest()
             .body(ErrorResponse.builder()
                 .code("VALIDATION_ERROR")
@@ -4982,12 +4982,12 @@ public class AgentGlobalExceptionHandler {
                 .timestamp(System.currentTimeMillis())
                 .build());
     }
-    
+
     // 通用异常
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleException(Exception ex) {
         log.error("Unexpected error: {}", ex.getMessage(), ex);
-        
+
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
             .body(ErrorResponse.builder()
                 .code("INTERNAL_ERROR")
@@ -5085,17 +5085,17 @@ Impressive Answer
 public abstract class AgentBaseException extends RuntimeException {
     private final String code;
     private final int httpStatus;
-    
+
     public AgentBaseException(String code, String message, int httpStatus) {
         super(message);
         this.code = code;
         this.httpStatus = httpStatus;
     }
-    
+
     public String getCode() {
         return code;
     }
-    
+
     public int getHttpStatus() {
         return httpStatus;
     }
@@ -5112,9 +5112,9 @@ public class AgentToolException extends AgentBaseException {
 public class AgentToolTimeoutException extends AgentToolException {
     private final String toolName;
     private final long timeout;
-    
+
     public AgentToolTimeoutException(String toolName, long timeout) {
-        super("TOOL_TIMEOUT", 
+        super("TOOL_TIMEOUT",
               String.format("Tool %s timeout after %dms", toolName, timeout),
               HttpStatus.GATEWAY_TIMEOUT.value());
         this.toolName = toolName;
@@ -5126,19 +5126,19 @@ public class AgentToolTimeoutException extends AgentToolException {
 public class AgentRateLimitException extends AgentBaseException {
     private final int limit;
     private final long resetTime;
-    
+
     public AgentRateLimitException(int limit, long resetTime) {
-        super("RATE_LIMIT_EXCEEDED", 
+        super("RATE_LIMIT_EXCEEDED",
               "Rate limit exceeded, please retry later",
               HttpStatus.TOO_MANY_REQUESTS.value());
         this.limit = limit;
         this.resetTime = resetTime;
     }
-    
+
     public int getLimit() {
         return limit;
     }
-    
+
     public long getResetTime() {
         return resetTime;
     }
@@ -5147,13 +5147,13 @@ public class AgentRateLimitException extends AgentBaseException {
 // 参数校验异常（4xx）
 public class AgentValidationException extends AgentBaseException {
     private final Map<String, String> fieldErrors;
-    
+
     public AgentValidationException(Map<String, String> fieldErrors) {
-        super("VALIDATION_ERROR", "Parameter validation failed", 
+        super("VALIDATION_ERROR", "Parameter validation failed",
               HttpStatus.BAD_REQUEST.value());
         this.fieldErrors = fieldErrors;
     }
-    
+
     public Map<String, String> getFieldErrors() {
         return fieldErrors;
     }
@@ -5176,36 +5176,36 @@ public enum AgentErrorCode {
     INTERNAL_ERROR("1000", "Internal server error"),
     INVALID_REQUEST("1001", "Invalid request"),
     VALIDATION_ERROR("1002", "Parameter validation failed"),
-    
+
     // Agent 工具错误码（2000-2999）
     TOOL_TIMEOUT("2000", "Tool execution timeout"),
     TOOL_ERROR("2001", "Tool execution error"),
     TOOL_NOT_FOUND("2002", "Tool not found"),
     TOOL_DISABLED("2003", "Tool is disabled"),
-    
+
     // LLM 错误码（3000-3999）
     LLM_RATE_LIMIT("3000", "LLM rate limit exceeded"),
     LLM_QUOTA_EXCEEDED("3001", "LLM quota exceeded"),
     LLM_ERROR("3002", "LLM processing error"),
     LLM_TIMEOUT("3003", "LLM request timeout"),
-    
+
     // 知识库错误码（4000-4999）
     KB_NOT_FOUND("4000", "Knowledge base not found"),
     KB_INDEX_ERROR("4001", "Knowledge base index error"),
     KB_SEARCH_ERROR("4002", "Knowledge base search error");
-    
+
     private final String code;
     private final String message;
-    
+
     AgentErrorCode(String code, String message) {
         this.code = code;
         this.message = message;
     }
-    
+
     public String getCode() {
         return code;
     }
-    
+
     public String getMessage() {
         return message;
     }
@@ -5222,7 +5222,7 @@ public class ApiResponse<T> {
     private String message;
     private T data;
     private long timestamp;
-    
+
     public static <T> ApiResponse<T> success(T data) {
         return ApiResponse.<T>builder()
             .code(AgentErrorCode.SUCCESS.getCode())
@@ -5231,7 +5231,7 @@ public class ApiResponse<T> {
             .timestamp(System.currentTimeMillis())
             .build();
     }
-    
+
     public static <T> ApiResponse<T> error(AgentErrorCode errorCode) {
         return ApiResponse.<T>builder()
             .code(errorCode.getCode())
@@ -5239,7 +5239,7 @@ public class ApiResponse<T> {
             .timestamp(System.currentTimeMillis())
             .build();
     }
-    
+
     public static <T> ApiResponse<T> error(String code, String message) {
         return ApiResponse.<T>builder()
             .code(code)
@@ -5256,33 +5256,33 @@ public class ApiResponse<T> {
 @ControllerAdvice
 @Slf4j
 public class AgentGlobalExceptionHandler {
-    
+
     // 工具调用超时
     @ExceptionHandler(AgentToolTimeoutException.class)
     public ResponseEntity<ApiResponse<Void>> handleToolTimeout(AgentToolTimeoutException ex) {
         log.error("Tool timeout: tool={}, timeout={}ms", ex.getToolName(), ex.getTimeout(), ex);
-        
+
         return ResponseEntity.status(HttpStatus.GATEWAY_TIMEOUT)
             .body(ApiResponse.error(AgentErrorCode.TOOL_TIMEOUT));
     }
-    
+
     // LLM 限流
     @ExceptionHandler(AgentRateLimitException.class)
     public ResponseEntity<ApiResponse<Void>> handleRateLimit(AgentRateLimitException ex) {
         log.warn("Rate limit: limit={}, resetTime={}", ex.getLimit(), ex.getResetTime());
-        
+
         return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS)
             .header("X-RateLimit-Limit", String.valueOf(ex.getLimit()))
             .header("X-RateLimit-Remaining", "0")
             .header("X-RateLimit-Reset", String.valueOf(ex.getResetTime()))
             .body(ApiResponse.error(AgentErrorCode.LLM_RATE_LIMIT));
     }
-    
+
     // 参数校验异常
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiResponse<Map<String, String>>> handleValidation(
         MethodArgumentNotValidException ex) {
-        
+
         Map<String, String> fieldErrors = ex.getBindingResult()
             .getFieldErrors()
             .stream()
@@ -5291,7 +5291,7 @@ public class AgentGlobalExceptionHandler {
                 FieldError::getDefaultMessage,
                 (existing, replacement) -> existing
             ));
-        
+
         return ResponseEntity.badRequest()
             .body(ApiResponse.<Map<String, String>>builder()
                 .code(AgentErrorCode.VALIDATION_ERROR.getCode())
@@ -5300,21 +5300,21 @@ public class AgentGlobalExceptionHandler {
                 .timestamp(System.currentTimeMillis())
                 .build());
     }
-    
+
     // Agent 业务异常
     @ExceptionHandler(AgentBusinessException.class)
     public ResponseEntity<ApiResponse<Void>> handleBusiness(AgentBusinessException ex) {
         log.warn("Business error: code={}, message={}", ex.getCode(), ex.getMessage());
-        
+
         return ResponseEntity.badRequest()
             .body(ApiResponse.error(ex.getCode(), ex.getMessage()));
     }
-    
+
     // 通用异常
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponse<Void>> handleException(Exception ex) {
         log.error("Unexpected error", ex);
-        
+
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
             .body(ApiResponse.error(AgentErrorCode.INTERNAL_ERROR));
     }
@@ -5326,7 +5326,7 @@ public class AgentGlobalExceptionHandler {
 ```java
 @Service
 public class AgentToolService {
-    
+
     public String callTool(String toolName, Map<String, Object> params) {
         // 检查工具是否存在
         if (!toolRegistry.exists(toolName)) {
@@ -5334,20 +5334,20 @@ public class AgentToolService {
                 AgentErrorCode.TOOL_NOT_FOUND.getCode(),
                 String.format("Tool %s not found", toolName));
         }
-        
+
         // 检查工具是否启用
         if (!toolRegistry.isEnabled(toolName)) {
             throw new AgentBusinessException(
                 AgentErrorCode.TOOL_DISABLED.getCode(),
                 String.format("Tool %s is disabled", toolName));
         }
-        
+
         try {
             // 执行工具调用（带超时）
             return CompletableFuture.supplyAsync(() -> {
                 return toolExecutor.execute(toolName, params);
             }).get(30, TimeUnit.SECONDS);
-            
+
         } catch (TimeoutException e) {
             throw new AgentToolTimeoutException(toolName, 30000);
         } catch (Exception e) {
@@ -5356,7 +5356,7 @@ public class AgentToolService {
                 String.format("Tool execution error: %s", e.getMessage()));
         }
     }
-    
+
     public String callLLM(String prompt) {
         try {
             return llmService.generate(prompt);
@@ -5493,7 +5493,7 @@ HTTP 状态码的设计原则？如何选择合适的状态码？
 ```java
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
-    
+
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/static/**")
@@ -5702,7 +5702,7 @@ NIO2
 ```java
 @Configuration
 public class TomcatConfig {
-    
+
     @Bean
     public WebServerFactoryCustomizer<TomcatServletWebServerFactory> tomcatCustomizer() {
         return factory -> {
@@ -5714,13 +5714,13 @@ public class TomcatConfig {
             connector.setAcceptCount(200);
             connector.setMaxConnections(10000);
             connector.setConnectionTimeout(30000);
-            
+
             // 启用压缩
             connector.setProperty("compression", "on");
             connector.setProperty("compressionMinSize", "1024");
-            connector.setProperty("compressableMimeType", 
+            connector.setProperty("compressableMimeType",
                 "text/html,text/xml,text/plain,text/css,text/javascript,application/javascript,application/json");
-            
+
             factory.addAdditionalTomcatConnectors(connector);
         };
     }
@@ -5732,7 +5732,7 @@ public class TomcatConfig {
 ```java
 @Configuration
 public class AgentPerformanceConfig {
-    
+
     // Tomcat 线程池优化
     @Bean
     public WebServerFactoryCustomizer<TomcatServletWebServerFactory> tomcatCustomizer() {
@@ -5746,7 +5746,7 @@ public class AgentPerformanceConfig {
             });
         };
     }
-    
+
     // 异步任务线程池
     @Bean("agentTaskExecutor")
     public Executor agentTaskExecutor() {
@@ -5759,26 +5759,26 @@ public class AgentPerformanceConfig {
         executor.initialize();
         return executor;
     }
-    
+
     // 连接池优化
     @Bean
     public RestTemplate restTemplate() {
-        HttpComponentsClientHttpRequestFactory factory = 
+        HttpComponentsClientHttpRequestFactory factory =
             new HttpComponentsClientHttpRequestFactory();
         factory.setConnectTimeout(5000);
         factory.setReadTimeout(30000);
         factory.setConnectionRequestTimeout(5000);
-        
+
         // 连接池配置
-        PoolingHttpClientConnectionManager connectionManager = 
+        PoolingHttpClientConnectionManager connectionManager =
             new PoolingHttpClientConnectionManager();
         connectionManager.setMaxTotal(200);
         connectionManager.setDefaultMaxPerRoute(50);
-        
+
         CloseableHttpClient httpClient = HttpClients.custom()
             .setConnectionManager(connectionManager)
             .build();
-        
+
         factory.setHttpClient(httpClient);
         return new RestTemplate(factory);
     }
@@ -5870,18 +5870,18 @@ Impressive Answer
 ```java
 @Configuration
 public class ThreadPoolOptimizationConfig {
-    
+
     // Tomcat 线程池（IO 线程）
     @Bean
     public WebServerFactoryCustomizer<TomcatServletWebServerFactory> tomcatCustomizer() {
         return factory -> {
             factory.addConnectorCustomizers(connector -> {
                 Http11Nio2Protocol protocol = (Http11Nio2Protocol) connector.getProtocolHandler();
-                
+
                 // 根据 CPU 核数计算
                 int cpuCores = Runtime.getRuntime().availableProcessors();
                 int maxThreads = cpuCores * 100; // 8核 → 800线程
-                
+
                 protocol.setMaxThreads(maxThreads);
                 protocol.setMinSpareThreads(maxThreads / 10); // 80线程
                 protocol.setAcceptCount(maxThreads / 4); // 200队列
@@ -5890,45 +5890,45 @@ public class ThreadPoolOptimizationConfig {
             });
         };
     }
-    
+
     // Agent 任务线程池（业务线程）
     @Bean("agentTaskExecutor")
     public Executor agentTaskExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-        
+
         int cpuCores = Runtime.getRuntime().availableProcessors();
         int corePoolSize = cpuCores * 10; // 8核 → 80线程
         int maxPoolSize = cpuCores * 50; // 8核 → 400线程
-        
+
         executor.setCorePoolSize(corePoolSize);
         executor.setMaxPoolSize(maxPoolSize);
         executor.setQueueCapacity(1000);
         executor.setThreadNamePrefix("agent-task-");
         executor.setKeepAliveSeconds(60);
         executor.setAllowCoreThreadTimeOut(true);
-        
+
         // 拒绝策略：调用者运行
         executor.setRejectedExecutionHandler(new ThreadPoolExecutor.CallerRunsPolicy());
-        
+
         executor.initialize();
         return executor;
     }
-    
+
     // LLM 调用线程池（IO 密集型）
     @Bean("llmExecutor")
     public Executor llmExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-        
+
         // IO 密集型：更多线程
         int cpuCores = Runtime.getRuntime().availableProcessors();
         int maxPoolSize = cpuCores * 200; // 8核 → 1600线程
-        
+
         executor.setCorePoolSize(maxPoolSize / 2);
         executor.setMaxPoolSize(maxPoolSize);
         executor.setQueueCapacity(2000);
         executor.setThreadNamePrefix("llm-call-");
         executor.setRejectedExecutionHandler(new ThreadPoolExecutor.AbortPolicy());
-        
+
         executor.initialize();
         return executor;
     }
@@ -5940,47 +5940,47 @@ public class ThreadPoolOptimizationConfig {
 ```java
 @Configuration
 public class ConnectionOptimizationConfig {
-    
+
     // HTTP 客户端连接池
     @Bean
     public RestTemplate restTemplate() {
-        HttpComponentsClientHttpRequestFactory factory = 
+        HttpComponentsClientHttpRequestFactory factory =
             new HttpComponentsClientHttpRequestFactory();
-        
+
         // 超时配置
         factory.setConnectTimeout(3000); // 连接超时 3秒
         factory.setReadTimeout(30000); // 读取超时 30秒
         factory.setConnectionRequestTimeout(1000); // 获取连接超时 1秒
-        
+
         // 连接池配置
-        PoolingHttpClientConnectionManager connectionManager = 
+        PoolingHttpClientConnectionManager connectionManager =
             new PoolingHttpClientConnectionManager();
         connectionManager.setMaxTotal(500); // 最大连接数
         connectionManager.setDefaultMaxPerRoute(100); // 单路由最大连接数
         connectionManager.setValidateAfterInactivity(30000); // 30秒后验证连接
-        
+
         CloseableHttpClient httpClient = HttpClients.custom()
             .setConnectionManager(connectionManager)
             .setKeepAliveStrategy((response, context) -> 60000) // 60秒 Keep-Alive
             .evictIdleConnections(30000, TimeUnit.SECONDS) // 30秒清理空闲连接
             .build();
-        
+
         factory.setHttpClient(httpClient);
         return new RestTemplate(factory);
     }
-    
+
     // 数据库连接池（HikariCP）
     @Bean
     @ConfigurationProperties(prefix = "spring.datasource.hikari")
     public DataSource dataSource() {
         return DataSourceBuilder.create().type(HikariDataSource.class).build();
     }
-    
+
     // Redis 连接池（Lettuce）
     @Bean
     public RedisConnectionFactory redisConnectionFactory() {
         LettuceConnectionFactory factory = new LettuceConnectionFactory();
-        
+
         LettuceClientConfiguration config = LettuceClientConfiguration.builder()
             .commandTimeout(Duration.ofSeconds(5))
             .shutdownTimeout(Duration.ZERO)
@@ -5992,7 +5992,7 @@ public class ConnectionOptimizationConfig {
                 setTestWhileIdle(true);
             }})
             .build();
-        
+
         factory.setClientConfiguration(config);
         return factory;
     }
@@ -6004,37 +6004,37 @@ public class ConnectionOptimizationConfig {
 ```java
 @Configuration
 public class SerializationOptimizationConfig implements WebMvcConfigurer {
-    
+
     @Override
     public void extendMessageConverters(List<HttpMessageConverter<?>> converters) {
         // 1. Protobuf 转换器（优先级最高）
         ProtobufHttpMessageConverter protobufConverter = new ProtobufHttpMessageConverter();
         converters.add(0, protobufConverter);
-        
+
         // 2. 优化后的 JSON 转换器
-        MappingJackson2HttpMessageConverter jsonConverter = 
+        MappingJackson2HttpMessageConverter jsonConverter =
             new MappingJackson2HttpMessageConverter();
-        
+
         ObjectMapper objectMapper = new ObjectMapper();
-        
+
         // 性能优化配置
         objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
         objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
         objectMapper.registerModule(new JavaTimeModule());
-        
+
         // 使用 FastJson2（可选）
         // objectMapper = new com.alibaba.fastjson2.JSONMapper();
-        
+
         jsonConverter.setObjectMapper(objectMapper);
         converters.add(1, jsonConverter);
     }
-    
+
     // Kryo 序列化（用于缓存）
     @Bean
     public SerializationPair<Object> kryoSerializationPair() {
         return SerializationPair.fromSerializer(new KryoSerializer());
     }
-    
+
     @Bean
     public RedisCacheConfiguration redisCacheConfiguration() {
         return RedisCacheConfiguration.defaultCacheConfig()
@@ -6052,18 +6052,18 @@ public class SerializationOptimizationConfig implements WebMvcConfigurer {
 ```java
 @Configuration
 public class PerformanceMonitorConfig {
-    
+
     @Bean
     public MeterRegistryCustomizer<MeterRegistry> metricsCommonTags() {
         return registry -> registry.config()
             .commonTags("application", "agent-platform");
     }
-    
+
     @Bean
     public TomcatMetricsBinder tomcatMetricsBinder() {
         return new TomcatMetricsBinder();
     }
-    
+
     @Bean
     public ExecutorServiceMetrics executorServiceMetrics(
         @Qualifier("agentTaskExecutor") Executor executor) {
@@ -6387,7 +6387,7 @@ Flux.range(1, 1000)
         protected void hookOnSubscribe(Subscription subscription) {
             request(10); // 初始请求 10 个元素
         }
-        
+
         @Override
         protected void hookOnNext(Integer value) {
             try {
@@ -6491,10 +6491,10 @@ Impressive Answer
 @RestController
 @RequestMapping("/api/agent")
 public class AgentController {
-    
+
     @Autowired
     private LLMService llmService;
-    
+
     @GetMapping(value = "/chat/stream", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public Flux<ServerSentEvent<String>> chatStream(@RequestParam String prompt) {
         return llmService.streamChat(prompt)
@@ -6512,7 +6512,7 @@ public class AgentController {
 ```java
 @Service
 public class LLMService {
-    
+
     public Flux<String> streamChat(String prompt) {
         return Flux.create(sink -> {
             try {
@@ -6521,7 +6521,7 @@ public class LLMService {
                     .model("gpt-4")
                     .messages(List.of(Message.user(prompt)))
                     .build();
-                
+
                 client.stream(request)
                     .onErrorResume(e -> {
                         sink.error(e);
@@ -6530,7 +6530,7 @@ public class LLMService {
                     .subscribe(token -> sink.next(token),
                         e -> sink.error(e),
                         () -> sink.complete());
-                
+
             } catch (Exception e) {
                 sink.error(e);
             }

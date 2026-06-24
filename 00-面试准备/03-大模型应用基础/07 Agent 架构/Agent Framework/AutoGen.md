@@ -382,12 +382,12 @@ def nested_chat_summary(recipient, messages, sender, config):
         }
     ])
     return nested_chat.summary  # 返回摘要而非完整历史
-   
+
 assistant.register_nested_chat(
     nested_chat_summary,
     trigger=lambda msg: "分析数据" in msg["content"]
 )
-   
+
 # Group Chat 对比：所有 Agent 共享同一对话历史
 group_chat = GroupChat(
     agents=[user_proxy, assistant, code_executor],
@@ -490,14 +490,14 @@ requirement_agent = AssistantAgent(
     system_message="你负责理解用户的数据分析需求，明确分析目标、数据源、指标维度，输出结构化需求文档。",
     llm_config={"model": "gpt-4"}
 )
-   
+
 # 2. 代码生成 Agent（AssistantAgent）
 code_generator = AssistantAgent(
     name="data_engineer",
     system_message="你负责根据需求文档生成 Python 数据分析代码，使用 pandas、matplotlib 等库，代码需包含错误处理。",
     llm_config={"model": "gpt-4"}
 )
-   
+
 # 3. 代码执行 Agent（UserProxyAgent）
 code_executor = UserProxyAgent(
     name="executor",
@@ -508,14 +508,14 @@ code_executor = UserProxyAgent(
     },
     human_input_mode="NEVER"
 )
-   
+
 # 4. 可视化专家（AssistantAgent）
 visualization_agent = AssistantAgent(
     name="visualizer",
     system_message="你负责根据分析结果设计合适的可视化方案，生成 matplotlib/seaborn 绘图代码。",
     llm_config={"model": "gpt-3.5-turbo"}  # 成本优化
 )
-   
+
 # 5. 报告生成 Agent（AssistantAgent）
 report_generator = AssistantAgent(
     name="report_writer",
@@ -533,7 +533,7 @@ def main_workflow():
     requirement = requirement_agent.generate_reply(
         messages=[{"role": "user", "content": user_request}]
     )
-       
+
     # 第二步：启动嵌套对话处理数据分析
     analysis_result = initiate_chats([
         {
@@ -549,15 +549,15 @@ def main_workflow():
             "clear_history": True
         }
     ])
-       
+
     # 第三步：生成最终报告
     report = report_generator.generate_reply(
         messages=[{
-            "role": "user", 
+            "role": "user",
             "content": f"需求：{requirement}\n分析结果：{analysis_result}\n生成报告"
         }]
     )
-       
+
     return report
 ```
 
@@ -575,17 +575,17 @@ def main_workflow():
 
 ```
 User: "帮我分析 2024 年 Q1 的销售数据，找出 Top 10 商品，并展示销售趋势"
-   
+
 Requirement_Agent: "需求已明确：1. 数据源：sales_q1_2024.csv 2. 分析目标：Top 10 商品、销售趋势 3. 输出：排行榜 + 折线图"
-   
+
 [Nested Chat 1 - 数据分析]
 Code_Generator → 生成 pandas 聚合代码
 Code_Executor → 执行代码，返回 Top 10 商品数据
-   
+
 [Nested Chat 2 - 可视化]
 Visualization_Agent → 生成 matplotlib 绘图代码
 Code_Executor → 执行代码，生成趋势图
-   
+
 Report_Generator: "## 2024 Q1 销售分析报告\n### Top 10 商品\n[表格]\n### 销售趋势\n[图表]\n### 洞察\n1. 3 月销售额增长 20%..."
 ```
 

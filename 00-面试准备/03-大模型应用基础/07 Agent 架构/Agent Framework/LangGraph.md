@@ -1095,14 +1095,14 @@ Impressive Answer
 ```python
 from langgraph.checkpoint.memory import MemorySaver
 from langgraph.graph import StateGraph
-   
+
 checkpointer = MemorySaver()
 graph = StateGraph(state_schema, checkpointer=checkpointer)
-   
+
 # 执行并获取所有快照
 config = {"thread_id": "debug-123"}
 result = graph.invoke(initial_state, config)
-   
+
 # 时间旅行：查看第 3 步的状态
 for snapshot in graph.get_state_history(config):
     if snapshot.metadata["step"] == 3:
@@ -1213,23 +1213,23 @@ Impressive Answer
 ```python
 from langgraph.graph import StateGraph, END
 from typing import TypedDict
-   
+
 # 子图状态定义
 class SubgraphState(TypedDict):
     sub_data: str
     sub_result: str
-   
+
 # 创建子图
 subgraph = StateGraph(SubgraphState)
 subgraph.add_node("sub_step1", lambda state: {"sub_result": state["sub_data"] + " processed"})
 subgraph.add_edge("sub_step1", END)
 subgraph = subgraph.compile()
-   
+
 # 父图状态定义
 class ParentState(TypedDict):
     parent_data: str
     sub_output: str
-   
+
 # 创建父图并添加子图
 parent_graph = StateGraph(ParentState)
 parent_graph.add_node("call_subgraph", subgraph)
@@ -1247,11 +1247,11 @@ parent_graph.add_node("call_subgraph", subgraph)
 # 状态映射示例
 def map_parent_to_sub(state: ParentState) -> SubgraphState:
     return {"sub_data": state["parent_data"]}
-   
+
 def map_sub_to_parent(state: SubgraphState) -> ParentState:
     return {"sub_output": state["sub_result"]}
-   
-parent_graph.add_node("call_subgraph", subgraph, 
+
+parent_graph.add_node("call_subgraph", subgraph,
                      input=map_parent_to_sub,
                      output=map_sub_to_parent)
 ```
@@ -1357,7 +1357,7 @@ Impressive Answer
 from langgraph.graph import StateGraph, END
 from typing import TypedDict, Literal
 import time
-   
+
 class WorkflowState(TypedDict):
     raw_data: dict
     cleaned_data: dict
@@ -1366,7 +1366,7 @@ class WorkflowState(TypedDict):
     error_step: str
     retry_count: int
     status: Literal["success", "degraded", "failed"]
-   
+
 graph = StateGraph(WorkflowState)
 ```
 
@@ -1391,7 +1391,7 @@ def retry_wrapper(node_func, max_retries=3, backoff_factor=2):
                 # 重试耗尽，触发降级
                 return {"status": "degraded", "error_step": node_func.__name__}
     return wrapper
-   
+
 # 应用重试包装器
 graph.add_node("collect_data", retry_wrapper(collect_data_node, max_retries=3))
 ```
@@ -1400,7 +1400,7 @@ graph.add_node("collect_data", retry_wrapper(collect_data_node, max_retries=3))
 
 ```python
 from concurrent.futures import TimeoutError
-   
+
 def timeout_wrapper(node_func, timeout_seconds=30):
     def wrapper(state):
         start_time = time.time()
@@ -1412,7 +1412,7 @@ def timeout_wrapper(node_func, timeout_seconds=30):
         except TimeoutError:
             return {"status": "degraded", "error_step": node_func.__name__}
     return wrapper
-   
+
 graph.add_node("clean_data", timeout_wrapper(clean_data_node, timeout_seconds=30))
 ```
 
@@ -1422,11 +1422,11 @@ graph.add_node("clean_data", timeout_wrapper(clean_data_node, timeout_seconds=30
 def fallback_collect_data(state):
     # 降级：使用缓存数据或默认数据
     return {"raw_data": {"source": "cache", "data": []}, "status": "degraded"}
-   
+
 def fallback_clean_data(state):
     # 降级：跳过清洗，直接返回原始数据
     return {"cleaned_data": state["raw_data"], "status": "degraded"}
-   
+
 # 条件边：根据状态决定下一步
 def should_retry_or_fallback(state):
     if state["retry_count"] > 0:
@@ -1435,7 +1435,7 @@ def should_retry_or_fallback(state):
         return "fallback"
     else:
         return "next"
-   
+
 graph.add_conditional_edges(
     "collect_data",
     should_retry_or_fallback,
@@ -1457,7 +1457,7 @@ def error_handler(state):
     # 发送告警通知
     # 记录错误日志
     return {"status": "failed"}
-   
+
 graph.add_node("error_handler", error_handler)
 graph.add_edge("generate_report", END)
 graph.add_conditional_edges(
@@ -1471,10 +1471,10 @@ graph.add_conditional_edges(
 
 ```python
 from langgraph.checkpoint.postgres import PostgresSaver
-   
+
 checkpointer = PostgresSaver.from_conn_string("postgresql://...")
 compiled_graph = graph.compile(checkpointer=checkpointer)
-   
+
 # 执行工作流
 result = compiled_graph.invoke(
     initial_state,

@@ -151,7 +151,7 @@ LCEL 不仅仅是"语��糖"，它代表了 LangChain 从**继承式架构到
 ```python
 # 1.0 写法：需要专门的 LLMChain 类
 chain = LLMChain(llm=llm, prompt=prompt, output_parser=parser)
-   
+
 # 2.0 LCEL 写法：管道组合
 chain = prompt | llm | parser
 ```
@@ -248,13 +248,13 @@ chain = prompt | llm | parser
 
 ```python
 from langchain_core.runnables import RunnableParallel, RunnablePassthrough
-   
+
 # 并行执行：同时检索文档和生成问题改写
 parallel_chain = RunnableParallel(
     context=retriever,
     question=RunnablePassthrough()
 ) | prompt | llm | parser
-   
+
 # 条件路由
 from langchain_core.runnables import RunnableBranch
 branch = RunnableBranch(
@@ -496,20 +496,20 @@ Impressive Answer
 ```python
 from langchain.output_parsers import PydanticOutputParser
 from pydantic import BaseModel, Field
-     
+
 class MovieReview(BaseModel):
     title: str = Field(description="电影名称")
     rating: float = Field(description="评分，1-10")
     summary: str = Field(description="一句话评价")
-     
+
 parser = PydanticOutputParser(pydantic_object=MovieReview)
-     
+
 prompt = PromptTemplate(
     template="分析这部电影：{movie}\n{format_instructions}",
     input_variables=["movie"],
     partial_variables={"format_instructions": parser.get_format_instructions()}
 )
-     
+
 chain = prompt | llm | parser  # LCEL 写法
 result = chain.invoke({"movie": "盗梦空间"})
 # result 是 MovieReview 实例
@@ -733,7 +733,7 @@ Final Answer: 阿里巴巴 2024 财年营收为 9411.68 亿元。
 
 ```python
 from langchain.agents import AgentExecutor, create_react_agent
-   
+
 agent = create_react_agent(llm, tools, prompt)
 executor = AgentExecutor(
     agent=agent,
@@ -853,21 +853,21 @@ Impressive Answer
 from langchain_core.runnables import RunnableParallel, RunnablePassthrough, RunnableLambda
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
-   
+
 # Prompt 模板
 prompt = ChatPromptTemplate.from_template("""
 基于以下上下文回答问题。如果上下文中没有相关信息，请明确说明。
-   
+
 上下文：{context}
 问题：{question}
 """)
-   
+
 # 文档格式化函数
 def format_docs(docs):
     if not docs:
         return "未找到相关文档"
     return "\n\n".join(doc.page_content for doc in docs)
-   
+
 # LCEL 链路
 rag_chain = (
     RunnableParallel(
@@ -878,7 +878,7 @@ rag_chain = (
 | llm
 | StrOutputParser()
 )
-   
+
 # 调用
 answer = rag_chain.invoke("LangChain 2.0 有什么新特性？")
 ```
@@ -887,18 +887,18 @@ answer = rag_chain.invoke("LangChain 2.0 有什么新特性？")
 
 ```python
 from langchain_core.runnables import RunnableBranch
-   
+
 # 检查检索结果是否为空
 def has_relevant_docs(input_dict):
     return len(input_dict["context_docs"]) > 0
-   
+
 # 空结果降级链：直接用 LLM 回答（不带上下文）
 fallback_chain = (
     ChatPromptTemplate.from_template("请回答：{question}")
 | llm
 | StrOutputParser()
 )
-   
+
 # 带降级的 RAG 链
 robust_rag_chain = (
     RunnableParallel(

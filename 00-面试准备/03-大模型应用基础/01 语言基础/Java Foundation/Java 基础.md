@@ -1203,7 +1203,7 @@ Impressive Answer
 - 连接池饥饿
 - 不要池化虚拟线程
 - 生产检查清单
-- pin：当虚拟线程执行 synchronized 代码块或 JNI 调用时，会被 在载体线程上，阻塞时无法 unmount
+- pin：当虚拟线程执行 synchronized 代码块或 JNI 调用时，会被在载体线程上，阻塞时无法 unmount
 
 2️⃣ **Impressive Answer**：
 

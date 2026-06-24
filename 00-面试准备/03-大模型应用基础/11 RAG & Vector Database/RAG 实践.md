@@ -2889,7 +2889,7 @@ Impressive Answer
 
   - 识别用户意图：这是一个"变更查询"（问的是"怎么改的"而非"是什么"）
 
-  - 改写为检索友好的查询："个人所得税专项扣除政策 2024 年修订内容 变更要点"
+  - 改写为检索友好的查询："个人所得税专项扣除政策 2024 年修订内容变更要点"
 
   - 可选：用 Multi-Query 生成多个变体覆盖不同表述
 
@@ -3425,7 +3425,7 @@ Agent 评估结果质量，不满意则重新检索
 - Self-RAG（Self-Reflective RAG）
 - CRAG（Corrective RAG）
 - 生产选型
-- Critique Token：核心机制：在模型中训练特殊的 ，用于自主决策
+- Critique Token：核心机制：在模型中训练特殊的，用于自主决策
 - 四种 Critique Token
 - [Retrieve]：判断是否需要检索（Yes/No/Continue）
 
