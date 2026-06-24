@@ -1,24 +1,16 @@
-# SpringAI
+## SpringAI 深度进阶
 
-### SpringAI 深度进阶
-
-#### [Advisor 机制、VectorStore 集成、Function Calling、多模型降级]
+### [Advisor 机制、VectorStore 集成、Function Calling、多模型降级]
 
 ---
 
-##### 18、进阶题：SpringAI 的 Advisor 机制是什么？如何用 Advisor 实现 RAG？
+#### 18、进阶题：SpringAI 的 Advisor 机制是什么？如何用 Advisor 实现 RAG？
 
 **难度**：⭐⭐⭐（Advisor 机制理解、RAG 实现能力、SpringAI 架构设计）
 
 **1️⃣ Common Answer**：
 
-重点总结（便于面试记忆）：
-- Advisor 的核心优势
-- Advisor 是 SpringAI 的核心拦截机制，它基于 AOP 思想设计，在请求和响应的生命周期中插入自定义逻辑。SpringAI 提供了三种 Advisor：Reque...
-- 用 Advisor 实现 RAG 的核心思路是：在 RequestAdvisor 阶段，通过向量检索获取相关文档，然后将文档注入到 system prompt 中...
-- ```java @Service public class ChatService { private final ChatClient chatClient;
-- public ChatService(ChatClient.Builder builder, VectorStore vectorStore) { this.chatClien...
-- public String chat(String message) { return chatClient.prompt() .user(message) .call() ....
+Advisor 就是 SpringAI 里的一种拦截器机制，可以在请求发送到 LLM 之前或响应返回之后做一些处理。实现 RAG 的话，就是在 Advisor 里先去查向量数据库，然后把查询到的文档内容拼接到 prompt 里，再发给 LLM。主要就是实现 RequestAdvisor 接口，重写 adviseRequest 方法，在里面做向量检索和 prompt 拼接。
 
 **2️⃣ Impressive Answer**：
 
@@ -88,84 +80,33 @@ public class CustomRagAdvisor implements RequestAdvisor {
 
 **3️⃣ Key Differences**
 
-<table>
-<tr>
-<td>
-维度
-</td>
-<td>
-Common Answer
-</td>
-<td>
-Impressive Answer
-</td>
-</tr>
-<tr>
-<td>
-技术深度
-</td>
-<td>
-只知道是拦截器，不清楚 Advisor 的分类和设计思想
-</td>
-<td>
-明确三种 Advisor 类型，理解 AOP 设计思想
-</td>
-</tr>
-<tr>
-<td>
-实践经验
-</td>
-<td>
-简单描述流程，无实际代码
-</td>
-<td>
-提供内置 Advisor 和自定义 Advisor 两种实现
-</td>
-</tr>
-<tr>
-<td>
-思考维度
-</td>
-<td>
-只关注功能实现，不考虑扩展性
-</td>
-<td>
-考虑了链式叠加、职责分离等工程设计
-</td>
-</tr>
-<tr>
-<td>
-面试官印象
-</td>
-<td>
-基础掌握，缺乏实战经验
-</td>
-<td>
-深入理解框架设计，有实际项目经验
-</td>
-</tr>
-</table>
+| 维度 | Common Answer | Impressive Answer |
+| --- | --- | --- |
+| 技术深度 | 只知道是拦截器，不清楚 Advisor 的分类和设计思想 | 明确三种 Advisor 类型，理解 AOP 设计思想 |
+| 实践经验 | 简单描述流程，无实际代码 | 提供内置 Advisor 和自定义 Advisor 两种实现 |
+| 思考维度 | 只关注功能实现，不考虑扩展性 | 考虑了链式叠加、职责分离等工程设计 |
+| 面试官印象 | 基础掌握，缺乏实战经验 | 深入理解框架设计，有实际项目经验 |
 
 ---
 
-##### 19、进阶题：SpringAI 如何集成向量数据库？VectorStore 的抽象设计是什么？
+#### 19、进阶题：SpringAI 如何集成向量数据库？VectorStore 的抽象设计是什么？
 
 **难度**：⭐⭐⭐（向量数据库集成能力、抽象设计理解、扩展性思考）
 
 **1️⃣ Common Answer**：
 
-重点总结（便于面试记忆）：
-- VectorStore：核心接口，定义了 add、delete、similaritySearch 等操作
-- SearchRequest：检索请求封装，支持 topK、similarityThreshold、filterExpression
-- Document：文档对象，包含 content、metadata、id
-- FilterExpression：元数据过滤表达式，支持 AND、OR、IN 等操作符
+SpringAI 支持很多向量数据库，比如 Milvus、Redis Vector、pgvector 这些。集成的话主要是配置连接信息，然后注入对应的 VectorStore bean。VectorStore 就是 SpringAI 提供的一个接口，里面有一些增删改查的方法，比如 similaritySearch 做向量检索。不同的向量数据库都有自己的实现类。
 
 **2️⃣ Impressive Answer**：
 
 SpringAI 的 VectorStore 是一套统一的向量数据库抽象，它屏蔽了不同向量数据库的差异，提供统一的 API。核心接口体系包括：
+
 - **VectorStore**：核心接口，定义了 add、delete、similaritySearch 等操作
+
 - **SearchRequest**：检索请求封装，支持 topK、similarityThreshold、filterExpression
+
 - **Document**：文档对象，包含 content、metadata、id
+
 - **FilterExpression**：元数据过滤表达式，支持 AND、OR、IN 等操作符
 
 以 Milvus 为例的集成代码：
@@ -221,77 +162,22 @@ public class DocumentService {
 
 **3️⃣ Key Differences**
 
-<table>
-<tr>
-<td>
-维度
-</td>
-<td>
-Common Answer
-</td>
-<td>
-Impressive Answer
-</td>
-</tr>
-<tr>
-<td>
-技术深度
-</td>
-<td>
-只知道有接口和实现类，不清楚抽象设计
-</td>
-<td>
-深入理解 VectorStore 的接口体系和设计思想
-</td>
-</tr>
-<tr>
-<td>
-实践经验
-</td>
-<td>
-简单描述配置，无完整代码示例
-</td>
-<td>
-提供完整的配置类、Bean 定义和使用代码
-</td>
-</tr>
-<tr>
-<td>
-思考维度
-</td>
-<td>
-只关注基本功能，不考虑高级特性
-</td>
-<td>
-涵盖 FilterExpression 等高级特性，类比 Spring Data
-</td>
-</tr>
-<tr>
-<td>
-面试官印象
-</td>
-<td>
-基础了解，缺乏深入理解
-</td>
-<td>
-系统掌握框架设计，有丰富实战经验
-</td>
-</tr>
-</table>
+| 维度 | Common Answer | Impressive Answer |
+| --- | --- | --- |
+| 技术深度 | 只知道有接口和实现类，不清楚抽象设计 | 深入理解 VectorStore 的接口体系和设计思想 |
+| 实践经验 | 简单描述配置，无完整代码示例 | 提供完整的配置类、Bean 定义和使用代码 |
+| 思考维度 | 只关注基本功能，不考虑高级特性 | 涵盖 FilterExpression 等高级特性，类比 Spring Data |
+| 面试官印象 | 基础了解，缺乏深入理解 | 系统掌握框架设计，有丰富实战经验 |
 
 ---
 
-##### 20、进阶题：SpringAI 的 Function Calling 如何实现？和 LangChain4J 的 @Tool 有什么区别？
+#### 20、进阶题：SpringAI 的 Function Calling 如何实现？和 LangChain4J 的 @Tool 有什么区别？
 
 **难度**：⭐⭐⭐（Function Calling 实现机制、框架对比能力、技术选型思考）
 
 **1️⃣ Common Answer**：
 
-重点总结（便于面试记忆）：
-- SpringAI 实现方式
-- LangChain4J 的 @Tool 实现方式
-- 核心差异对比
-- 选型建议
+SpringAI 的 Function Calling 就是把 Java 方法定义成函数，然后 LLM 可以根据需要调用这些方法。实现的话需要用 @FunctionCallback 注解标注方法，然后在 ChatClient 里注册。和 LangChain4J 的 @Tool 类似，都是用来让 LLM 调用外部工具的。区别可能就是注解名字不一样，配置方式也不太一样。
 
 **2️⃣ Impressive Answer**：
 
@@ -351,152 +237,34 @@ CustomerAgent agent = AiServices.builder(CustomerAgent.class)
 
 **核心差异对比**：
 
-<table>
-<tr>
-<td>
-对比维度
-</td>
-<td>
-SpringAI Function Calling
-</td>
-<td>
-LangChain4J @Tool
-</td>
-</tr>
-<tr>
-<td>
-定义方式
-</td>
-<td>
-@Bean + @Description
-</td>
-<td>
-@Tool 注解在方法上
-</td>
-</tr>
-<tr>
-<td>
-注册方式
-</td>
-<td>
-通过函数名字符串注册
-</td>
-<td>
-直接传入工具实例
-</td>
-</tr>
-<tr>
-<td>
-Spring 集成
-</td>
-<td>
-原生，与 Spring 生态深度集成
-</td>
-<td>
-需要额外配置
-</td>
-</tr>
-<tr>
-<td>
-代码简洁度
-</td>
-<td>
-需要单独的 Config 类
-</td>
-<td>
-注解直接在方法上，更简洁
-</td>
-</tr>
-<tr>
-<td>
-类型安全
-</td>
-<td>
-强类型（Function&lt;Request, Response&gt;）
-</td>
-<td>
-弱类型（方法参数直接映射）
-</td>
-</tr>
-</table>
+| 对比维度 | SpringAI Function Calling | LangChain4J @Tool |
+| --- | --- | --- |
+| 定义方式 | @Bean + @Description | @Tool 注解在方法上 |
+| 注册方式 | 通过函数名字符串注册 | 直接传入工具实例 |
+| Spring 集成 | 原生，与 Spring 生态深度集成 | 需要额外配置 |
+| 代码简洁度 | 需要单独的 Config 类 | 注解直接在方法上，更简洁 |
+| 类型安全 | 强类型（Function<Request, Response>） | 弱类型（方法参数直接映射） |
 
 **选型建议**：已有 Spring Boot 项目且追求与 Spring 生态一致性，选 SpringAI；需要快速开发、代码简洁，选 LangChain4J 的 @Tool。
 
 **3️⃣ Key Differences**
 
-<table>
-<tr>
-<td>
-维度
-</td>
-<td>
-Common Answer
-</td>
-<td>
-Impressive Answer
-</td>
-</tr>
-<tr>
-<td>
-技术深度
-</td>
-<td>
-只知道基本用法，不清楚实现机制
-</td>
-<td>
-深入理解 Function Calling 的完整流程和机制
-</td>
-</tr>
-<tr>
-<td>
-实践经验
-</td>
-<td>
-简单描述注解，无完整代码示例
-</td>
-<td>
-提供两种框架的完整代码对比
-</td>
-</tr>
-<tr>
-<td>
-思考维度
-</td>
-<td>
-只关注功能实现，不做框架对比
-</td>
-<td>
-系统对比两个框架的差异，展现技术选型能力
-</td>
-</tr>
-<tr>
-<td>
-面试官印象
-</td>
-<td>
-基础掌握，缺乏深入思考
-</td>
-<td>
-深入理解框架设计，有技术对比和选型经验
-</td>
-</tr>
-</table>
+| 维度 | Common Answer | Impressive Answer |
+| --- | --- | --- |
+| 技术深度 | 只知道基本用法，不清楚实现机制 | 深入理解 Function Calling 的完整流程和机制 |
+| 实践经验 | 简单描述注解，无完整代码示例 | 提供两种框架的完整代码对比 |
+| 思考维度 | 只关注功能实现，不做框架对比 | 系统对比两个框架的差异，展现技术选型能力 |
+| 面试官印象 | 基础掌握，缺乏深入思考 | 深入理解框架设计，有技术对比和选型经验 |
 
 ---
 
-##### 21、场景题：SpringAI 项目中如何做多模型切换和降级？
+#### 21、场景题：SpringAI 项目中如何做多模型切换和降级？
 
 **难度**：⭐⭐⭐（多模型管理、降级策略、高可用设计）
 
 **1️⃣ Common Answer**：
 
-重点总结（便于面试记忆）：
-- 模型管理
-- 路由策略
-- 降级机制
-- 架构设计
-- 实现代码
-- Resilience4j 配置
+多模型切换就是配置多个 ChatModel，根据需要选择用哪个。降级的话就是如果主模型挂了，就切换到备用模型。可以用配置文件管理多个模型的 key，然后在代码里根据条件选择。也可以用 Sentinel 做熔断降级，主模型不行就切到备用模型。
 
 **2️⃣ Impressive Answer**：
 
@@ -581,78 +349,20 @@ resilience4j:
 ```
 
 **降级策略设计**：
+
 1. **熔断降级**：连续失败达到阈值后熔断，自动切换备用模型
-1. **超时降级**：设置合理的超时时间（如 30 秒），超时后切换
-1. **成本路由**：根据请求复杂度动态选择模型，简单问题用便宜模型
-1. **监控告警**：实时监控各模型的可用性、延迟、成本，及时发现异常
+
+2. **超时降级**：设置合理的超时时间（如 30 秒），超时后切换
+
+3. **成本路由**：根据请求复杂度动态选择模型，简单问题用便宜模型
+
+4. **监控告警**：实时监控各模型的可用性、延迟、成本，及时发现异常
 
 **3️⃣ Key Differences**
 
-<table>
-<tr>
-<td>
-维度
-</td>
-<td>
-Common Answer
-</td>
-<td>
-Impressive Answer
-</td>
-</tr>
-<tr>
-<td>
-技术深度
-</td>
-<td>
-简单描述切换和降级概念
-</td>
-<td>
-系统设计多模型架构，包含路由、降级、监控
-</td>
-</tr>
-<tr>
-<td>
-实践经验
-</td>
-<td>
-理论描述，无具体实现方案
-</td>
-<td>
-提供完整的配置、服务实现和 Resilience4j 配置
-</td>
-</tr>
-<tr>
-<td>
-思考维度
-</td>
-<td>
-只关注功能，不考虑高可用和稳定性
-</td>
-<td>
-综合考虑熔断、重试、超时、成本路由等工程实践
-</td>
-</tr>
-<tr>
-<td>
-面试官印象
-</td>
-<td>
-基础了解，缺乏实战经验
-</td>
-<td>
-深入理解高可用设计，有丰富的生产环境经验
-</td>
-</tr>
-</table>
----
-
-## 知识点一句话总结
-
-| 知识点 | 一句话总结（来自 Impressive Answer） |
-| --- | --- |
-| [Advisor 机制、VectorStore 集成、Function Calling、多模型降级] | Advisor 是 SpringAI 的请求/响应拦截机制，可在模型调用前后插入逻辑；做 RAG 时在请求前用 VectorStore 检索相关文档，把结果注入 Prompt，再交给模型生成，适合把检索增强、审计、限流和后处理做成可复用横切能力。 |
-| SpringAI 的 Advisor 机制是什么？如何用 Advisor 实现 RAG？ | Advisor 是 SpringAI 的请求/响应拦截机制，可在模型调用前后插入逻辑；做 RAG 时在请求前用 VectorStore 检索相关文档，把结果注入 Prompt，再交给模型生成，适合把检索增强、审计、限流和后处理做成可复用横切能力。 |
-| SpringAI 如何集成向量数据库？VectorStore 的抽象设计是什么？ | VectorStore：核心接口，定义了 add、delete、similaritySearch 等操作；SearchRequest：检索请求封装，支持 topK、similarityThreshold、filterExpression；Document：文档对象，包含 content、metadata、id；FilterExpression：元数据过滤表达式，支持 AND、OR、IN 等操作符。 |
-| SpringAI 的 Function Calling 如何实现？和 LangChain4J 的 @Tool 有什么区别？ | 定义方式上，SpringAI Function Calling是@Bean + @Description，LangChain4J @Tool是@Tool 注解在方法上；注册方式上，SpringAI Function Calling是通过函数名字符串注册，LangChain4J @Tool是直接传入工具实例；Spring 集成上，SpringAI Function Calling是原生，与 Spring 生态深度集成，LangChain4J @Tool是需要额外配置；代码简洁度上，SpringAI Function Calling是需要单独的 Config 类，LangChain4J @Tool是注解直接在方法上，更简洁；类型安全上，SpringAI Function Calling是强类型（Function&lt;Request, Response&gt;），LangChain4J @Tool是弱类型（方法参数直接映射）。 |
-| SpringAI 项目中如何做多模型切换和降级？ | 多模型切换和降级需要从模型管理、路由策略、降级机制三个层面设计；A[请求] --> B[ChatService]；C -->\|正常\| D[主模型 GPT-4]。 |
+| 维度 | Common Answer | Impressive Answer |
+| --- | --- | --- |
+| 技术深度 | 简单描述切换和降级概念 | 系统设计多模型架构，包含路由、降级、监控 |
+| 实践经验 | 理论描述，无具体实现方案 | 提供完整的配置、服务实现和 Resilience4j 配置 |
+| 思考维度 | 只关注功能，不考虑高可用和稳定性 | 综合考虑熔断、重试、超时、成本路由等工程实践 |
+| 面试官印象 | 基础了解，缺乏实战经验 | 深入理解高可用设计，有丰富的生产环境经验 |

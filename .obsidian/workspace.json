@@ -4,21 +4,17 @@
     "type": "split",
     "children": [
       {
-        "id": "269c6ac26f44a322",
+        "id": "8e89c4acc0cdcfda",
         "type": "tabs",
         "children": [
           {
-            "id": "acdd72415a8b8fe0",
+            "id": "062738b12afe5eda",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "00-面试准备/03-大模型应用基础/02 大模型基础/大模型基础.md",
-                "mode": "source",
-                "source": false
-              },
+              "type": "empty",
+              "state": {},
               "icon": "lucide-file",
-              "title": "大模型基础"
+              "title": "新标签页"
             }
           }
         ]
@@ -78,7 +74,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 234.5
+    "width": 350.5
   },
   "right": {
     "id": "69d9816c3c00c3b8",
@@ -156,13 +152,12 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "00-面试准备/03-大模型应用基础/02 大模型基础/大模型基础.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "大模型基础 的大纲"
+              "title": "大纲"
             }
           },
           {
@@ -186,7 +181,7 @@
             }
           }
         ],
-        "currentTab": 4
+        "currentTab": 6
       }
     ],
     "direction": "horizontal",
@@ -208,53 +203,53 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "acdd72415a8b8fe0",
+  "active": "d36063cf12dcf266",
   "lastOpenFiles": [
-    "00-面试准备/02-JAVA语言特性/1、Java基础.md",
+    "Notion/ALL IN AI/面试/01-Agent智能体架构.md",
+    "00-面试准备/12 Cache & DataBase/面试实战记录/淘天电商二面 ／ Agent 方向 ／ 候选人反馈好难.md",
+    "00-面试准备/12 Cache & DataBase/面试实战记录/东南大学j'j'j'j'j'j'j'j'j'j'j.md",
+    "00-面试准备/03-大模型应用基础/03 Agent 基础/MCP 定义与设计.md",
+    "00-面试准备/03-大模型应用基础/03 Agent 基础/Agent 核心概念.md",
+    "00-面试准备/03-大模型应用基础/03 Agent 基础/LLM 应用开发.md",
+    "00-面试准备/03-大模型应用基础/03 Agent 基础/A2A 协议.md",
+    "00-面试准备/03-大模型应用基础/03 Agent 基础",
+    "00-面试准备/03-大模型应用基础/11 RAG & Vector Database/RAG 实践.md",
+    "00-面试准备/03-大模型应用基础/11 RAG & Vector Database/RAG 技术.md",
+    "00-面试准备/03-大模型应用基础/11 RAG & Vector Database",
+    "00-面试准备/03-大模型应用基础/05 Agent Tool/工具设计与实现.md",
+    "00-面试准备/03-大模型应用基础/05 Agent Tool",
+    "00-面试准备/03-大模型应用基础/02 大模型基础/推理优化.md",
     "00-面试准备/03-大模型应用基础/02 大模型基础/大模型基础.md",
-    "00-面试准备/09-项目/deer-flow/动态上下文.md",
-    "00-面试准备/09-项目/deer-flow/SDD开发.md",
-    "00-面试准备/AI Coding.md",
-    "Notion/数据库/MySQL/MySQL-合并.md",
-    "Notion/数据库/Redis/Redis-合并.md",
-    "Notion/数据库/MySQL/MySQL.md",
-    "00-面试准备/04-Cache & DataBase/Mysql.md",
-    "00-面试准备/04-Cache & DataBase/Redis.md",
-    "Notion/数据库/Redis/Redis-JavaGuid-补充.md",
-    "Notion/数据库/Redis/Redis.md",
-    "Notion/数据库/MySQL/MYSQL-补充/MYSQL.md",
-    "Notion/软件基础/算法.md",
-    "Notion/软件基础/系统设计.md",
-    "Notion/框架/MyBatis.md",
-    "Notion/框架/Kafka.md",
-    "00-面试准备/03-大模型应用基础/06 Agent Skill/Agent Skills.md",
-    "00-面试准备/02-JAVA语言特性/3、Java并发.md",
-    "00-面试准备/05-Message Queue/消息队列与分布式中间件.md",
+    "00-面试准备/03-大模型应用基础/02 大模型基础/Prompt 设计.md",
+    "00-面试准备/03-大模型应用基础/02 大模型基础/Doing.md",
+    "00-面试准备/03-大模型应用基础/02 大模型基础",
+    "00-面试准备/03-大模型应用基础/01 语言基础/Python Foundation/Python 基础.md",
+    "00-面试准备/03-大模型应用基础/01 语言基础/Java Foundation/Java 基础.md",
+    "00-面试准备/03-大模型应用基础/01 语言基础/Python Foundation",
+    "00-面试准备/03-大模型应用基础/01 语言基础/Java Foundation",
+    "00-面试准备/03-大模型应用基础/01 语言基础",
+    "00-面试准备/07-Distributed systems and consistency/分布式系统与一致性.md",
+    "00-面试准备/07-Distributed systems and consistency",
     "00-面试准备/04-Cache & DataBase/缓存设计与策略.md",
+    "00-面试准备/04-Cache & DataBase/消息队列与数据库协同.md",
     "00-面试准备/04-Cache & DataBase/分布式数据库与一致性.md",
-    "Notion/03temp-框架/Kafka.md",
-    "Notion/03temp-框架/Spring.md",
-    "Notion/03temp-框架/MyBatis.md",
+    "00-面试准备/04-Cache & DataBase/Redis.md",
+    "00-面试准备/04-Cache & DataBase/Mysql.md",
+    "00-面试准备/04-Cache & DataBase/Elasticsearch 搜索.md",
+    "00-面试准备/04-Cache & DataBase/MongoDB.md",
+    "00-面试准备/04-Cache & DataBase",
     "00-面试准备/03-大模型应用基础/09 Agent 部署 观测/部署和成本控制.md",
-    "Pasted image 20260623171831.png",
-    "Pasted image 20260623171147.png",
-    "Pasted image 20260623143206.png",
-    "Pasted image 20260623141804.png",
-    "Pasted image 20260623121240.png",
-    "Pasted image 20260623114446.png",
-    "Pasted image 20260623114230.png",
-    "Pasted image 20260623113817.png",
-    "Pasted image 20260623113248.png",
-    "Pasted image 20260623112651.png",
-    "00-面试准备/09-项目/deer-flow",
-    "00-面试准备/09-项目",
-    "00-面试准备/03-大模型应用基础",
-    "Notion/ALL IN AI/backend-learning-path",
-    "Notion/ALL IN AI/cc 学习/s11_error_recovery/images",
-    "Notion/ALL IN AI/cc 学习/s11_error_recovery/code.py",
-    "Notion/ALL IN AI/cc 学习/s11_error_recovery",
-    "Notion/ALL IN AI/cc 学习/s03_permission/images",
-    "Notion/ALL IN AI/cc 学习/s03_permission/code.py",
-    "Notion/ALL IN AI/cc 学习/s03_permission"
+    "00-面试准备/03-大模型应用基础/09 Agent 部署 观测/多 Agent 可观测性与调试.md",
+    "00-面试准备/03-大模型应用基础/09 Agent 部署 观测",
+    "00-面试准备/images/_assets/img_ff4fdb757144cbda.png",
+    "00-面试准备/images/_assets/img_fe5756736f32d109.png",
+    "00-面试准备/images/_assets/img_fc2059a96b449b83.png",
+    "00-面试准备/images/_assets/img_eca1c6fe85733c85.png",
+    "00-面试准备/images/_assets/img_e79a849e36acf3b9.png",
+    "00-面试准备/images/_assets/img_e305eb63659ba724.png",
+    "00-面试准备/images/_assets/img_e10ed4dba0215f73.png",
+    "00-面试准备/images/_assets/img_ddd4bfcd05cdbd25.jpg",
+    "00-面试准备/images/_assets/img_dc8ea0ccf2bc0d5d.png",
+    "00-面试准备/images/_assets/img_dbaebbeaebdb38df.png"
   ]
 }
