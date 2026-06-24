@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "00-面试准备/09-项目/鸿蒙HybridRAG面试准备/01-项目深挖学习文档.md",
-                "mode": "source",
+                "file": "Notion/数据库/Redis/Redis-JavaGuid-补充.md",
+                "mode": "preview",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "01-项目深挖学习文档"
+              "title": "Redis-JavaGuid-补充"
             }
           }
         ]
@@ -78,7 +78,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 325.5024719238281
+    "width": 234.5
   },
   "right": {
     "id": "69d9816c3c00c3b8",
@@ -156,13 +156,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "00-面试准备/09-项目/鸿蒙HybridRAG面试准备/01-项目深挖学习文档.md",
+                "file": "Notion/数据库/Redis/Redis-JavaGuid-补充.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "01-项目深挖学习文档 的大纲"
+              "title": "Redis-JavaGuid-补充 的大纲"
             }
           },
           {
@@ -190,7 +190,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 200
+    "width": 356.5
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -210,11 +210,32 @@
   },
   "active": "acdd72415a8b8fe0",
   "lastOpenFiles": [
+    "Notion/数据库/Redis/Redis.md",
+    "Notion/数据库/MySQL/MySQL.md",
+    "Notion/数据库/MySQL/MYSQL-补充/MYSQL.md",
+    "00-面试准备/04-Cache & DataBase/Mysql.md",
+    "00-面试准备/04-Cache & DataBase/Redis.md",
+    "Notion/软件基础/算法.md",
+    "Notion/软件基础/系统设计.md",
+    "Notion/框架/MyBatis.md",
+    "Notion/框架/Kafka.md",
+    "00-面试准备/03-大模型应用基础/06 Agent Skill/Agent Skills.md",
+    "00-面试准备/02-JAVA语言特性/3、Java并发.md",
+    "00-面试准备/05-Message Queue/消息队列与分布式中间件.md",
+    "00-面试准备/04-Cache & DataBase/缓存设计与策略.md",
+    "00-面试准备/04-Cache & DataBase/分布式数据库与一致性.md",
+    "Notion/03temp-框架/Kafka.md",
+    "Notion/03temp-框架/Spring.md",
+    "Notion/03temp-框架/MyBatis.md",
+    "00-面试准备/03-大模型应用基础/09 Agent 部署 观测/部署和成本控制.md",
+    "00-面试准备/01-计算机基础/01-操作系统面试知识点.md",
+    "00-面试准备/01-计算机基础/02-计算机网络面试知识点.md",
+    "00-面试准备/02-JAVA语言特性/1、Java基础.md",
+    "00-面试准备/02-JAVA语言特性/2、Java集合.md",
+    "00-面试准备/09-项目/鸿蒙HybridRAG面试准备/01-项目深挖学习文档.md",
     "00-面试准备/09-项目/deer-flow/动态上下文.md",
     "00-面试准备/09-项目/deer-flow/sdd.md",
     "00-面试准备/09-项目/deer-flow/沙箱系统.md",
-    "00-面试准备/09-项目/门琪滨-0618.md",
-    "00-面试准备/09-项目/deer-flow/测评.md",
     "Pasted image 20260623171831.png",
     "Pasted image 20260623171147.png",
     "Pasted image 20260623143206.png",
@@ -225,29 +246,8 @@
     "Pasted image 20260623113817.png",
     "Pasted image 20260623113248.png",
     "Pasted image 20260623112651.png",
-    "Notion/ALL IN AI/Agent/LangGraph框架.md",
     "00-面试准备/09-项目/deer-flow",
     "00-面试准备/09-项目",
-    "Notion/数据库/MySQL/MySQL.md",
-    "Notion/数据库/MySQL/MYSQL-补充/MYSQL.md",
-    "Notion/ALL IN AI/RAG/06-RAG评估与应用平台.md",
-    "Notion/软件基础/设计模式.md",
-    "Notion/软件基础/算法.md",
-    "Notion/软件基础/系统设计.md",
-    "Notion/框架/Spring.md",
-    "Notion/框架/MyBatis.md",
-    "Notion/框架/Kafka.md",
-    "00-面试准备/04-Cache & DataBase/Mysql.md",
-    "00-面试准备/04-Cache & DataBase/MongoDB.md",
-    "00-面试准备/04-Cache & DataBase/Elasticsearch 搜索.md",
-    "00-面试准备/04-Cache & DataBase/消息队列与数据库协同.md",
-    "00-面试准备/04-Cache & DataBase/缓存设计与策略.md",
-    "00-面试准备/04-Cache & DataBase/分布式数据库与一致性.md",
-    "00-面试准备/00大模型基础/01_RAG核心链路.md",
-    "00-面试准备/00大模型基础/02_Agent核心原理.md",
-    "00-面试准备/00大模型基础/03_大模型应用工程化.md",
-    "00-面试准备/07-Distributed systems and consistency/分布式系统与一致性.md",
-    "00-面试准备/06-Spring _ MVC _ Mybatis FrameWork/SpringBoot 原理与实践.md",
     "00-面试准备/03-大模型应用基础",
     "Notion/ALL IN AI/backend-learning-path",
     "Notion/ALL IN AI/cc 学习/s11_error_recovery/images",
