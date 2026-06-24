@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "00-面试准备/03-大模型应用基础/02 大模型基础/大模型基础.md",
+                "file": "00-面试准备/00大模型基础/06_提示工程.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "大模型基础"
+              "title": "06_提示工程"
             }
           }
         ]
@@ -156,13 +156,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "00-面试准备/03-大模型应用基础/02 大模型基础/大模型基础.md",
+                "file": "00-面试准备/00大模型基础/06_提示工程.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "大模型基础 的大纲"
+              "title": "06_提示工程 的大纲"
             }
           },
           {
@@ -210,6 +210,18 @@
   },
   "active": "062738b12afe5eda",
   "lastOpenFiles": [
+    "00-面试准备/00大模型基础/05_大模型基础.md",
+    "00-面试准备/00大模型基础/04_项目面试与场景题.md",
+    "00-面试准备/00大模型基础/03_大模型应用工程化.md",
+    "00-面试准备/00大模型基础/01_RAG核心链路.md",
+    "00-面试准备/03-大模型应用基础/02 大模型基础/Prompt 设计.md",
+    "00-面试准备/03-大模型应用基础/04 Agent Memory/记忆管理.md",
+    "00-面试准备/03-大模型应用基础/05 Agent Tool/工具设计与实现.md",
+    "00-面试准备/00大模型基础/02_Agent核心原理.md",
+    "00-面试准备/03-大模型应用基础/06 Agent Skill/Agent Skills.md",
+    "00-面试准备/03-大模型应用基础/08 Agent 评测/工程实践与可观测性.md",
+    "00-面试准备/03-大模型应用基础/08 Agent 评测/Agent 评估体系.md",
+    "00-面试准备/03-大模型应用基础/02 大模型基础/大模型基础.md",
     "Notion/ALL IN AI/面试/01-Agent智能体架构.md",
     "00-面试准备/12 Cache & DataBase/面试实战记录/淘天电商二面 ／ Agent 方向 ／ 候选人反馈好难.md",
     "00-面试准备/12 Cache & DataBase/面试实战记录/东南大学j'j'j'j'j'j'j'j'j'j'j.md",
@@ -221,11 +233,8 @@
     "00-面试准备/03-大模型应用基础/11 RAG & Vector Database/RAG 实践.md",
     "00-面试准备/03-大模型应用基础/11 RAG & Vector Database/RAG 技术.md",
     "00-面试准备/03-大模型应用基础/11 RAG & Vector Database",
-    "00-面试准备/03-大模型应用基础/05 Agent Tool/工具设计与实现.md",
     "00-面试准备/03-大模型应用基础/05 Agent Tool",
     "00-面试准备/03-大模型应用基础/02 大模型基础/推理优化.md",
-    "00-面试准备/03-大模型应用基础/02 大模型基础/大模型基础.md",
-    "00-面试准备/03-大模型应用基础/02 大模型基础/Prompt 设计.md",
     "00-面试准备/03-大模型应用基础/02 大模型基础/Doing.md",
     "00-面试准备/03-大模型应用基础/02 大模型基础",
     "00-面试准备/03-大模型应用基础/01 语言基础/Python Foundation/Python 基础.md",
@@ -235,16 +244,7 @@
     "00-面试准备/03-大模型应用基础/01 语言基础",
     "00-面试准备/07-Distributed systems and consistency/分布式系统与一致性.md",
     "00-面试准备/07-Distributed systems and consistency",
-    "00-面试准备/04-Cache & DataBase/缓存设计与策略.md",
-    "00-面试准备/04-Cache & DataBase/消息队列与数据库协同.md",
-    "00-面试准备/04-Cache & DataBase/分布式数据库与一致性.md",
-    "00-面试准备/04-Cache & DataBase/Redis.md",
-    "00-面试准备/04-Cache & DataBase/Mysql.md",
-    "00-面试准备/04-Cache & DataBase/Elasticsearch 搜索.md",
-    "00-面试准备/04-Cache & DataBase/MongoDB.md",
     "00-面试准备/04-Cache & DataBase",
-    "00-面试准备/03-大模型应用基础/09 Agent 部署 观测/部署和成本控制.md",
-    "00-面试准备/03-大模型应用基础/09 Agent 部署 观测/多 Agent 可观测性与调试.md",
     "00-面试准备/03-大模型应用基础/09 Agent 部署 观测",
     "00-面试准备/images/_assets/img_ff4fdb757144cbda.png",
     "00-面试准备/images/_assets/img_fe5756736f32d109.png",
