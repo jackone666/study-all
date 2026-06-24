@@ -5,11 +5,8 @@
 **Answer**
 
 Spring Cloud Gateway 基于 Spring WebFlux 构建，核心是三要素：
-
 - **Predicate（断言）**：匹配请求（路径、方法、Header 等）
-
 - **Filter（过滤器）**：请求/响应预处理（鉴权、限流、日志）
-
 - **Route（路由）**：Predicate + Filter → 转发目标
 
 执行流程：请求 → GatewayFilterChain（过滤器链）→ 目标服务
@@ -23,7 +20,6 @@ Spring Cloud Gateway 基于 Spring WebFlux 构建，核心是三要素：
 **1️⃣ Common Answer**
 
 重点总结（便于面试记忆）：
-
 - 动态代理生成
 - 负载均衡
 - Spring Cloud LoadBalancer
@@ -32,13 +28,9 @@ Spring Cloud Gateway 基于 Spring WebFlux 构建，核心是三要素：
 - 解码与编码
 
 **2️⃣ Impressive Answer**
-
 1. **动态代理生成**：Feign 启动时扫描@FeignClient 接口，用 JDK 动态代理生成实现类，方法调用被拦截成 HTTP 请求（RequestTemplate）。
-
 1. **负载均衡**：早期用 Ribbon（已废弃），现在用 **Spring Cloud LoadBalancer**。核心是 `LoadBalancerClient.choose(serviceId)` 从注册中心选实例，支持轮询、权重、Zone 感知等策略。
-
 1. **重试机制**：Spring Cloud OpenFeign 默认不重试（幂等 GET 除外），可配置 `Retryer` 定义重试条件（间隔、次数、哪些异常）。但**POST/PUT 等非幂等操作要谨慎重试**，需业务侧保证幂等性。
-
 1. **解码与编码**：请求参数用 Encoder 编码（Form/JSON），响应用 Decoder 解码（Jackson/Gson）。可自定义 Encoder/Decoder 处理特殊格式（如 Protobuf）。
 
 **3️⃣ Key Differences**
@@ -108,13 +100,9 @@ Impressive Answer
 **难度级别**：⭐⭐⭐⭐（GlobalFilter、Redis 限流、JWT 解析、服务路由）
 
 **Answer**
-
 1. **全局鉴权 Filter**：实现 `GlobalFilter`，在 `filter()` 方法中解析 JWT Token，校验权限；失败直接返回 401，不调用 `chain.filter()`。
-
 1. **限流策略**：基于 Redis + Lua 脚本实现令牌桶/滑动窗口，按用户 ID 或 API Key 限流；超阈值返回 429。
-
 1. **路由隔离**：Agent 相关服务单独分组（如 `agent-service`），Gateway 配置 Predicate 路由到对应服务集群。
-
 1. **降级兜底**：配合 Sentinel 做服务降级，后端服务不可用时返回友好错误，避免 Agent 卡死。
 
 ---
@@ -126,23 +114,16 @@ Impressive Answer
 **1️⃣ Common Answer**
 
 重点总结（便于面试记忆）：
-
 - 注册中心对比
 - Eureka：纯 AP 模式，节点间通过 Peer-to-Peer 复制注册表，网络分区时仍可用但数据可能不一致；客户端定时拉取（默认 30s），感知延迟较高。
 - Nacos：临时实例用 AP 模式（Distro 协议），持久实例用 CP 模式（Raft 协议）。支持服务端主动推送（UDP + 长轮询兜底），服务上下线感知延迟低至秒级。
 
 **2️⃣ Impressive Answer**
-
 1. **注册中心对比**：
-
   - **Eureka**：纯 AP 模式，节点间通过 Peer-to-Peer 复制注册表，网络分区时仍可用但数据可能不一致；客户端定时拉取（默认 30s），感知延迟较高。
-
   - **Nacos**：临时实例用 AP 模式（Distro 协议），持久实例用 CP 模式（Raft 协议）。支持**服务端主动推送**（UDP + 长轮询兜底），服务上下线感知延迟低至秒级。
-
 1. **配置中心原理**：客户端发起**长轮询**请求（默认 30s 超时），服务端挂起请求；配置变更时立即返回变更的 dataId，客户端再拉取最新配置。比定时轮询更实时，比 WebSocket 更轻量。
-
 1. **健康检查差异**：Eureka 靠客户端心跳（默认 30s）；Nacos 临时实例也靠心跳，但持久实例由**服务端主动探测**（TCP/HTTP），更适合非 Java 服务。
-
 1. **选型建议**：新项目首选 Nacos（注册 + 配置一体化）；Eureka 已停止维护（Netflix OSS 进入维护模式）。
 
 **3️⃣ Key Differences**
@@ -214,7 +195,6 @@ Impressive Answer
 **1️⃣ Common Answer**
 
 重点总结（便于面试记忆）：
-
 - Gateway 动态路由
 - Header 标签路由：请求头带 X-Model-Version: gpt4 时，路由到对应版本的服务实例
 - 权重路由：90% 流量走稳定版，10% 走灰度版，通过 Nacos 配置中心动态调整权重
@@ -223,7 +203,6 @@ Impressive Answer
 **2️⃣ Impressive Answer**
 
 我设计过类似的灰度路由方案，分三层实现：
-
 1. **Nacos 元数据标签**：每个模型服务实例注册时携带元数据（如 `model-version=gpt4`、`canary=true`），Gateway 根据元数据做路由匹配。
 
 ```yaml
@@ -236,17 +215,11 @@ spring:
           model-version: gpt4-turbo
           canary: true
 ```
-
 1. **Gateway 动态路由**：
-
   - **Header 标签路由**：请求头带 `X-Model-Version: gpt4` 时，路由到对应版本的服务实例
-
   - **权重路由**：90% 流量走稳定版，10% 走灰度版，通过 Nacos 配置中心动态调整权重
-
   - **用户维度灰度**：按用户 ID 哈希取模，保证同一用户始终命中同一版本（避免体验不一致）
-
 1. **动态切换**：路由规则存 Nacos 配置中心，修改后 Gateway 通过长轮询实时感知，**无需重启**即可切换流量比例或全量切换。
-
 1. **回滚机制**：监控灰度版本的错误率和延迟，超过阈值自动回滚到稳定版（配合 Sentinel 熔断）。
 
 **3️⃣ Key Differences**
@@ -318,15 +291,10 @@ Impressive Answer
 **难度级别**：⭐（singleton、prototype、request、session、application）
 
 **Answer**
-
 - **singleton**（默认）：整个容器一个实例
-
 - **prototype**：每次请求新实例
-
 - **request**：每个 HTTP 请求一个实例（Web 环境）
-
 - **session**：每个 Session 一个实例（Web 环境）
-
 - **application**：每个 ServletContext 一个实例
 
 ---
@@ -340,25 +308,17 @@ Impressive Answer
 **1️⃣ Common Answer**
 
 重点总结（便于面试记忆）：
-
 - 一级缓存：成品 Bean
 - 二级缓存：早期暴露的 Bean（未填充属性）
 - 三级缓存：ObjectFactory，用于生成 AOP 代理的早期引用
 
 **2️⃣ Impressive Answer**
-
 1. **@Lazy 的本质**：注入一个代理对象，真实 Bean 第一次使用时才创建。可打破循环依赖，也可优化启动速度（大 Bean 懒加载）。
-
 1. **Spring 循环依赖解决方案**：setter/字段注入的循环依赖靠**三级缓存**解决：
-
   - 一级缓存：成品 Bean
-
   - 二级缓存：早期暴露的 Bean（未填充属性）
-
   - 三级缓存：ObjectFactory，用于生成 AOP 代理的早期引用
-
 1. **构造器注入失效原因**：构造器执行时 Bean 还没暴露，无法注入循环依赖。解决：字段/ setter 注入，或其中一个加 `@Lazy`。
-
 1. **最佳实践**：推荐构造器注入（不可变、易测试），循环依赖时局部用@Lazy 打破环，而不是全局改用字段注入。
 
 **3️⃣ Key Differences**
@@ -430,7 +390,6 @@ Impressive Answer
 **1️⃣ Common Answer**
 
 重点总结（便于面试记忆）：
-
 - 三者对比
 - Spring 官方推荐构造器注入，理由
 - 不可变性：字段可以声明为 final，保证依赖不会被意外修改
@@ -439,7 +398,6 @@ Impressive Answer
 - 循环依赖暴露：构造器注入会在启动时暴露循环依赖，而不是运行时才发现
 
 **2️⃣ Impressive Answer**
-
 1. **三者对比**：
 
 <table>
@@ -514,17 +472,11 @@ name 属性
 </td>
 </tr>
 </table>
-
 1. **Spring 官方推荐构造器注入**，理由：
-
   - **不可变性**：字段可以声明为 final，保证依赖不会被意外修改
-
   - **完整性**：对象创建时就注入所有依赖，不会出现"半初始化"状态
-
   - **可测试性**：单元测试时直接 new 传参，不依赖 Spring 容器
-
   - **循环依赖暴露**：构造器注入会在启动时暴露循环依赖，而不是运行时才发现
-
 1. **实践建议**：必选依赖用构造器注入，可选依赖用 setter 注入 + `@Autowired(required=false)`；避免字段注入（虽然代码最少，但可测试性最差）。
 
 **3️⃣ Key Differences**
@@ -596,7 +548,6 @@ Impressive Answer
 **1️⃣ Common Answer**
 
 重点总结（便于面试记忆）：
-
 - 策略模式 + Map 自动注入（最推荐）
 - 策略模式 + Map 自动注入
 - 动态切换
@@ -605,7 +556,6 @@ Impressive Answer
 - 配合 @ConditionalOnProperty
 
 **2️⃣ Impressive Answer**
-
 1. **策略模式 + Map 自动注入**（最推荐）：
 
 ```java
@@ -633,11 +583,8 @@ public class LlmRouter {
     }
 }
 ```
-
 1. **动态切换**：路由策略存 Nacos 配置中心，通过 `@RefreshScope` 实现运行时切换默认模型，无需重启。
-
 1. **扩展性设计**：新增模型只需实现 `LlmClient` 接口并注册为 Spring Bean，路由器自动感知，**零修改扩展**（开闭原则）。
-
 1. **配合 @ConditionalOnProperty**：按环境启停，如测试环境不加载 GPT-4 客户端（节省成本），生产环境全量加载。
 
 **3️⃣ Key Differences**
@@ -777,26 +724,18 @@ Flux/Mono 响应流
 **1️⃣ Common Answer**
 
 重点总结（便于面试记忆）：
-
 - 异常处理策略
 - 局部处理：onErrorReturn(默认值)、onErrorResume(恢复流)、onErrorMap(转换异常)
 - 全局处理：实现 WebExceptionHandler 或用@ControllerAdvice + @ExceptionHandler（WebFlux 版本）
 - finally 语义：doFinally(SignalType→回调)，无论成功/失败都执行
 
 **2️⃣ Impressive Answer**
-
 1. **Mono/Flux 本质**：Reactor 的响应式类型，Mono<T> 表示 0/1 个元素（如 Optional），Flux<T> 表示 0~N 个元素（如 List）。惰性执行，订阅后才触发。
-
 1. **异常处理策略**：
-
   - **局部处理**：`onErrorReturn(默认值)`、`onErrorResume(恢复流)`、`onErrorMap(转换异常)`
-
   - **全局处理**：实现 `WebExceptionHandler` 或用`@ControllerAdvice + @ExceptionHandler`（WebFlux 版本）
-
   - **finally 语义**：`doFinally(SignalType→回调)`，无论成功/失败都执行
-
 1. **背压（Backpressure）**：下游控制上游生产速率，避免内存溢出。Reactor 默认策略是 `onNext` 拉动式，Flux 会自动处理。
-
 1. **Agent 场景**：流式输出（SSE）用 `Flux<ServerSentEvent<String>>`；多工具并行调用用 `Flux.mergeSequential()` 保持顺序，`Flux.combineLatest()` 合并结果。
 
 **3️⃣ Key Differences**
@@ -919,7 +858,6 @@ Spring Boot 3 中 WebFlux 和 Virtual Thread 如何选型？
 **1️⃣ Common Answer**
 
 重点总结（便于面试记忆）：
-
 - 正确处理阻塞调用
 - EventLoop 线程模型
 - 非阻塞 I/O + 事件驱动
@@ -928,11 +866,8 @@ Spring Boot 3 中 WebFlux 和 Virtual Thread 如何选型？
 - publishOn vs subscribeOn
 
 **2️⃣ Impressive Answer**
-
 1. **EventLoop 线程模型**：Netty 默认创建 `CPU 核心数` 个 EventLoop 线程，每个线程负责多个 Channel 的 I/O 事件。所有请求共享这几个线程，靠**非阻塞 I/O + 事件驱动**实现高并发。
-
 1. **阻塞的致命影响**：假设 4 核 CPU = 4 个 EventLoop 线程，一个阻塞调用占住 1 个线程 500ms，就意味着 25% 的处理能力被浪费。如果 4 个线程都被阻塞，**整个服务完全停止响应**。
-
 1. **正确处理阻塞调用**：
 
 ```java
@@ -944,7 +879,6 @@ Mono.just(request)
 Mono.fromCallable(() -> jdbcTemplate.query(...))
     .subscribeOn(Schedulers.boundedElastic());  // 切到弹性线程池
 ```
-
 1. **publishOn vs subscribeOn**：`subscribeOn` 影响整个链的订阅线程（从源头切换）；`publishOn` 影响下游操作的执行线程（从当前位置切换）。阻塞调用用 `subscribeOn`，后续处理切回用 `publishOn`。
 
 **3️⃣ Key Differences**
@@ -1016,7 +950,6 @@ Impressive Answer
 **1️⃣ Common Answer**
 
 重点总结（便于面试记忆）：
-
 - Mono.zip 并发合并
 - 关键设计点
 - 独立超时：每个调用设置不同的超时时间（搜索 3s、天气 2s、DB 5s），而非统一超时
@@ -1024,7 +957,6 @@ Impressive Answer
 - 阻塞隔离：DB 查询是阻塞的，用 subscribeOn(Schedulers.boundedElastic()) 隔离到弹性线程池
 
 **2️⃣ Impressive Answer**
-
 1. **Mono.zip 并发合并**：
 
 ```java
@@ -1050,15 +982,10 @@ public Mono<AgentContext> gatherContext(String query) {
             .build());
 }
 ```
-
 1. **关键设计点**：
-
   - **独立超时**：每个调用设置不同的超时时间（搜索 3s、天气 2s、DB 5s），而非统一超时
-
   - **独立降级**：`onErrorResume` 返回空结果而非抛异常，一个失败不影响其他
-
   - **阻塞隔离**：DB 查询是阻塞的，用 `subscribeOn(Schedulers.boundedElastic())` 隔离到弹性线程池
-
 1. **进阶优化**：如果某个 API 非必需（如天气），可以用 `Mono.zipDelayError()` 延迟错误处理，优先返回已完成的结果；配合 `Mono.firstWithSignal()` 实现"谁先返回用谁"的竞速模式。
 
 **3️⃣ Key Differences**

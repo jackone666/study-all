@@ -13,7 +13,6 @@
 **1️⃣ Common Answer**
 
 重点总结（便于面试记忆）：
-
 - 常用阶段与用途
 - 性能优化要点
 - Agent 场景应用
@@ -24,35 +23,20 @@
 **2️⃣ Impressive Answer**
 
 聚合管道是 MongoDB 的**数据处理核心**，类似 Unix 管道，数据流经多个阶段处理：
-
 1. **常用阶段与用途**
-
   - $match：过滤文档，类似 WHERE，应尽早使用减少后续处理量
-
   - avg/$push 等累加器
-
   - $lookup：左外连接，关联其他集合（类似 LEFT JOIN）
-
   - $project：投影字段，控制输出结构，可计算衍生字段
-
   - $unwind：拆解数组字段，一对多展开
-
   - skip/$limit：分页排序，注意内存限制（128MB）
-
 1. **性能优化要点**
-
   - 管道顺序：$match 尽早过滤 → $sort 利用索引 → $group 聚合 → $limit 截断
-
   - 索引利用：group 无法利用
-
   - 使用 $explain() 分析执行计划，关注 totalDocsExamined 指标
-
 1. **Agent 场景应用**
-
   - 会话分析：按用户分组统计对话轮次、Token 消耗
-
   - 知识库检索：match 过滤权限
-
   - 用户行为漏斗：$match 筛选事件 → $sort 按时间 → $group 统计转化率
 
 **3️⃣ Key Differences**
@@ -122,29 +106,17 @@ Impressive Answer
 **难度级别**：⭐⭐（原子操作、push/$inc、upsert、findAndModify 的原子性、写关注 WriteConcern）
 
 MongoDB 的 CRUD 操作分为四类，核心区别在于**原子性**：
-
 1. **基础 CRUD**：`insertOne/insertMany`、`findOne/find`、`updateOne/updateMany`、`deleteOne/deleteMany`
-
 1. **更新操作符**：
-
   - `$set`：设置字段值（不存在则创建）
-
   - `$unset`：删除字段
-
   - `$inc`：数值自增/自减（原子操作，适合计数器）
-
   - `$push/$pull`：数组追加/删除元素
-
   - `$addToSet`：数组去重追加
-
 1. **upsert**：`updateOne({filter}, {$set: {...}}, {upsert: true})`，不存在则插入，存在则更新，原子操作
-
 1. **updateOne vs findAndModify**：
-
   - `updateOne`：只执行更新，返回更新结果（匹配数、修改数），不返回文档内容
-
   - `findAndModify`（即 `findOneAndUpdate`）：原子地查找并更新，**返回更新前或更新后的文档**，适合需要获取更新后值的场景（如分布式 ID 生成、乐观锁）
-
 1. **WriteConcern**：控制写入确认级别，`w:1`（主节点确认）、`w:majority`（多数副本确认，更安全）、`w:0`（不确认，最快）。**Agent 场景**：会话写入用 `w:1`，计费数据用 `w:majority`
 
 ---
@@ -156,7 +128,6 @@ MongoDB 的 CRUD 操作分为四类，核心区别在于**原子性**：
 **1️⃣ Common Answer**
 
 重点总结（便于面试记忆）：
-
 - MongoDB 事务演进
 - 与 MySQL 事务对比
 - 最佳实践
@@ -167,30 +138,18 @@ MongoDB 的 CRUD 操作分为四类，核心区别在于**原子性**：
 **2️⃣ Impressive Answer**
 
 MongoDB 事务是**文档数据库向关系型数据库能力靠拢**的重要演进，需要从实现机制、与 MySQL 对比、使用场景三个层面理解：
-
 1. **MongoDB 事务演进**
-
   - **4.0**：支持副本集内的多文档事务（单分片）
-
   - **4.2**：支持分片集群的分布式事务（跨分片）
-
   - **底层机制**：基于 WiredTiger 的 MVCC（多版本并发控制），通过快照隔离实现事务
-
 1. **与 MySQL 事务对比**
     | 维度 | MongoDB | MySQL || --- | --- | --- || 隔离级别 | 快照隔离（Snapshot Isolation） | RC/RR/Serializable 可配置 || 锁机制 | 文档级乐观锁（MVCC） | 行锁 + 间隙锁（Next-Key Lock） || 性能开销 | 事务性能较差，建议单文档原子操作替代 | 事务性能成熟，优化完善 || 适用场景 | 文档内嵌套数据天然原子，跨集合事务少用 | 关系型数据，事务是核心能力 || 超时控制 | `maxTimeMS` 控制事务超时 | `innodb_lock_wait_timeout` |
-
 1. **最佳实践**
-
   - **优先使用单文档原子操作**：MongoDB 的文档嵌套设计使得大多数操作无需跨文档事务
-
   - **必要时才用多文档事务**：如转账（扣款 + 入账跨集合），性能代价约 3-5 倍
-
   - **事务超时**：设置合理的 `maxTimeMS`（建议 5 秒），避免长事务锁资源
-
 1. **Agent 场景实践**
-
   - **会话 + 消息原子写入**：会话表和消息表分开存储时，用事务保证会话更新和消息插入的原子性
-
   - **知识库文档 + 向量同步**：文档元数据和向量 ID 跨集合写入时，用事务保证一致性
 
 **3️⃣ Key Differences**
@@ -262,7 +221,6 @@ Impressive Answer
 **1️⃣ Common Answer**
 
 重点总结（便于面试记忆）：
-
 - 节点角色
 - Oplog（操作日志）同步机制
 - 选举机制
@@ -273,49 +231,27 @@ Impressive Answer
 **2️⃣ Impressive Answer**
 
 副本集是 MongoDB **高可用的核心机制**，需要从节点角色、数据同步、选举机制三个层面理解：
-
 1. **节点角色**
-
   - **Primary**：唯一接受写入的主节点，处理所有写操作，将变更写入 Oplog
-
   - **Secondary**：从主节点异步复制 Oplog，保持数据同步，可配置为只读节点
-
   - **Arbiter**：仲裁节点，不存储数据，只参与选举投票，用于凑足奇数节点避免平票
-
 1. **Oplog（操作日志）同步机制**
-
   - Oplog 是一个固定大小的 Capped Collection，记录所有写操作（幂等格式）
-
   - Secondary 持续拉取 Primary 的 Oplog 并重放，实现异步复制
-
   - **复制延迟**：可通过 `rs.printReplicationInfo()` 查看 Oplog 窗口和复制延迟
-
 1. **选举机制**
-
   - **触发条件**：Primary 故障或网络分区时触发选举
-
   - **选举算法**：基于 Raft 协议，获得多数票（超过半数节点）的 Secondary 成为新 Primary
-
   - **选举时间**：通常 10-30 秒，期间写入不可用（需应用层重试）
-
   - **Priority 配置**：可设置节点优先级（`priority: 0` 表示不参与选举，适合跨机房备份节点）
-
 1. **读写偏好（Read Preference）**
-
   - `primary`：只读主节点（强一致，默认）
-
   - `primaryPreferred`：优先主节点，主不可用时读从节点
-
   - `secondary`：只读从节点（可能读到旧数据）
-
   - `nearest`：读延迟最低的节点（适合地理分布场景）
-
 1. **Agent 场景实践**
-
   - **会话数据**：写入用 `w:majority` 确保多数副本写入，读取用 `primaryPreferred` 保证一致性
-
   - **知识库查询**：只读统计分析用 `secondary` 读偏好，减轻主节点压力
-
   - **跨机房部署**：主机房 2 个节点 + 备机房 1 个节点 + Arbiter，Priority 配置确保主机房优先选举
 
 **3️⃣ Key Differences**
@@ -389,7 +325,6 @@ Impressive Answer
 **1️⃣ Common Answer**
 
 重点总结（便于面试记忆）：
-
 - 核心索引类型
 - 索引设计原则
 - Agent 场景实践
@@ -400,37 +335,21 @@ Impressive Answer
 **2️⃣ Impressive Answer**
 
 MongoDB 的索引体系设计借鉴了 B-Tree，支持多种索引类型以适应不同场景：
-
 1. **核心索引类型**
-
   - **单字段索引**：最基础的索引，支持升序/降序，默认 `_id` 字段自动创建
-
   - **复合索引**：多个字段组合，遵循**最左前缀原则**，查询时必须包含索引的前缀字段才能命中
-
   - **多键索引**：针对数组字段，为数组中每个元素创建索引项
-
   - **地理空间索引**：2dsphere（球面）、2d（平面），支持地理位置查询和范围查询
-
   - **文本索引**：支持全文搜索，支持多语言，注意每个集合只能有一个文本索引
-
   - **哈希索引**：基于哈希值，支持等值查询，不支持范围查询
-
 1. **索引设计原则**
-
   - **ESR 规则**：Equality（等值）→ Sort（排序）→ Range（范围），按此顺序建索引效率最高
-
   - **选择性原则**：在高选择性字段（基数大）上建索引，如 `userId` 比 `gender` 更适合
-
   - **覆盖索引**：索引包含查询所需的所有字段，避免回表查询，提升性能
-
   - **TTL 索引**：自动过期数据，适合日志、会话等临时数据
-
 1. **Agent 场景实践**
-
   - **会话查询**：复合索引 `{userId: 1, createdAt: -1}` 支持按用户查询并按时间倒序
-
   - **向量检索**：使用 2dsphere 索引存储向量坐标，配合 `$near` 实现相似度搜索
-
   - **知识库检索**：文本索引支持全文搜索，多键索引处理标签数组
 
 **3️⃣ Key Differences**
@@ -502,7 +421,6 @@ Impressive Answer
 **1️⃣ Common Answer**
 
 重点总结（便于面试记忆）：
-
 - 集群架构
 - 数据分布策略
 - 分片键选择原则
@@ -513,39 +431,22 @@ Impressive Answer
 **2️⃣ Impressive Answer**
 
 MongoDB 分片集群是**水平扩展**的核心方案，由三个组件组成：
-
 1. **集群架构**
-
   - **Shard Server**：存储数据的分片节点，每个分片是一个副本集（高可用）
-
   - **Config Server**：存储集群元数据（分片信息、配置），必须是副本集
-
   - **Mongos**：查询路由器，接收应用请求，根据分片键路由到对应分片
-
 1. **数据分布策略**
-
   - **范围分片（Range Sharding）**：按分片键值范围分配，适合范围查询，但可能导致数据倾斜
-
   - **哈希分片（Hash Sharding）**：对分片键哈希后分配，数据均匀分布，不适合范围查询
-
   - **基数分片（Ranged + Tag）**：结合范围和标签，支持按业务规则分配数据
-
 1. **分片键选择原则**
-
   - **基数足够大**：避免热点，如 `userId` 比 `status` 更适合
-
   - **数据分布均匀**：避免某个分片成为热点，不要用递增字段（如时间戳）单独做分片键
-
   - **查询模式匹配**：分片键应包含常用查询条件，避免 Scatter-Gather 查询（全分片扫描）
-
   - **避免频繁变更**：分片键一旦选定很难修改，不要用易变字段
-
 1. **Agent 场景实践**
-
   - **用户数据分片**：`{tenantId: 1, userId: 1}` 复合键，按租户隔离，支持租户内用户查询
-
   - **日志数据分片**：哈希分片 `{logId: "hashed"}` 均匀分布，配合 TTL 索引自动清理
-
   - **向量数据分片**：按 `collectionId` 范围分片，支持按知识库查询，避免跨分片聚合
 
 **3️⃣ Key Differences**
@@ -617,7 +518,6 @@ Impressive Answer
 **1️⃣ Common Answer**
 
 重点总结（便于面试记忆）：
-
 - 核心能力对比
 - 适用场景
 - Agent 场景实践
@@ -628,24 +528,15 @@ Impressive Answer
 **2️⃣ Impressive Answer**
 
 MongoDB 和 ES 的选型需要从**核心能力差异、适用场景、混合架构**三个层面系统分析：
-
 1. **核心能力对比**
     | 维度 | MongoDB | Elasticsearch || --- | --- | --- || 数据模型 | 文档存储（BSON），支持嵌套、数组 | 文档存储（JSON），扁平化更优 || 全文检索 | 基础文本索引，不支持中文分词 | 强大的倒排索引，支持 ik 中文分词 || 聚合分析 | 聚合管道功能完整，但性能一般 | 聚合性能强，适合实时分析 || 事务支持 | 4.0+ 支持多文档事务 | 不支持事务 || 写入性能 | 写入性能好，支持高并发写 | 写入有延迟（refresh 1 秒），批量写更优 || 数据一致性 | 强一致（副本集 w:majority） | 近实时（NRT，1 秒延迟） || 向量检索 | 支持（Atlas Vector Search） | 支持（dense_vector + kNN） |
-
 1. **适用场景**
-
   - **选 MongoDB**：主数据存储（会话、用户、文档元数据）、需要事务、写多读少、数据结构复杂嵌套
-
   - **选 ES**：全文搜索、日志分析、实时聚合看板、混合检索（BM25 + 向量）
-
   - **两者结合**：MongoDB 作为主存储（Source of Truth），ES 作为搜索索引（Search Layer），Canal 同步
-
 1. **Agent 场景实践**
-
   - **知识库架构**：MongoDB 存储文档原文、元数据、权限；ES 存储分块文本 + 向量，负责检索
-
   - **会话管理**：MongoDB 存储会话历史（需要事务保证原子性）；ES 不适合（无事务、NRT 延迟）
-
   - **日志分析**：ES 天然适合日志聚合分析（date_histogram + terms 聚合）
 
 **3️⃣ Key Differences**
@@ -717,7 +608,6 @@ Impressive Answer
 **1️⃣ Common Answer**
 
 重点总结（便于面试记忆）：
-
 - Change Stream 原理
 - 使用方式
 - Agent 场景实践
@@ -728,33 +618,20 @@ Impressive Answer
 **2️⃣ Impressive Answer**
 
 Change Stream 是 MongoDB **实时数据流处理的核心能力**，需要从原理、使用方式、Agent 场景三个层面理解：
-
 1. **Change Stream 原理**
-
   - **底层依赖 Oplog**：Change Stream 本质是对 Oplog 的高级封装，将底层的 Oplog 事件转换为结构化的变更事件
-
   - **事件类型**：`insert`、`update`、`replace`、`delete`、`invalidate`（集合删除/重命名）
-
   - **监听粒度**：可监听单个集合、整个数据库、整个集群（需副本集或分片集群）
-
   - **断点续传**：每个事件包含 `_id`（Resume Token），应用重启后可从上次位置继续消费
-
 1. **使用方式**
     `\``// 监听集合变更const changeStream = db.collection('documents').watch([{ $match: { 'operationType': { $in: ['insert', 'update'] } } }]);changeStream.on('change', (event) => {console.log(event.fullDocument); // 变更后的完整文档});
     `\``
-
   - **Pipeline 过滤**：支持聚合管道过滤，只监听特定条件的变更（如特定租户的文档）
-
   - **fullDocument**：设置 `fullDocument: 'updateLookup'` 可在 update 事件中获取完整文档
-
 1. **Agent 场景实践**
-
   - **知识库实时同步**：监听文档集合变更，触发 ES 索引更新（替代 Canal 方案，无需额外组件）
-
   - **会话状态推送**：监听会话集合，当 Agent 写入新消息时，通过 WebSocket 实时推送给前端
-
   - **向量索引更新**：文档更新时，Change Stream 触发 Embedding 重新计算并更新向量数据库
-
   - **多租户隔离**：使用 Pipeline 过滤 `tenantId`，不同租户的变更事件独立处理
 
 **3️⃣ Key Differences**
@@ -826,7 +703,6 @@ Impressive Answer
 **1️⃣ Common Answer**
 
 重点总结（便于面试记忆）：
-
 - 慢查询定位
 - 索引优化
 - 架构优化
@@ -837,49 +713,27 @@ Impressive Answer
 **2️⃣ Impressive Answer**
 
 MongoDB 性能优化需要从**慢查询定位、索引优化、架构优化**三个层面系统掌握：
-
 1. **慢查询定位**
-
   - **Profiler**：`db.setProfilingLevel(1, {slowms: 100})` 记录超过 100ms 的慢查询，结果存入 `system.profile` 集合
-
   - **explain() 分析**：`db.collection.find({...}).explain('executionStats')`，关键指标：
-
     - `COLLSCAN`：全集合扫描（最差，需加索引）
-
     - `IXSCAN`：索引扫描（理想）
-
     - `totalDocsExamined`：扫描文档数，越接近 `nReturned` 越好
-
     - `executionTimeMillis`：执行时间
-
   - **currentOp**：`db.currentOp({active: true, secs_running: {$gt: 5}})` 查看当前执行超过 5 秒的操作
-
 1. **索引优化**
-
   - **ESR 规则**：Equality → Sort → Range，按此顺序建复合索引效率最高
-
   - **覆盖索引**：查询字段全在索引中，避免回表（`projection` 只返回索引字段）
-
   - **索引选择性**：在高基数字段建索引（如 `userId`），低基数字段（如 `status`）放复合索引后面
-
   - **TTL 索引**：自动清理过期数据，避免手动删除影响性能
-
 1. **架构优化**
-
   - **读写分离**：读偏好设置为 `secondary`，将统计分析查询路由到从节点
-
   - **连接池**：合理配置 `maxPoolSize`（默认 100），避免连接数超过 MongoDB 的 `maxIncomingConnections`
-
   - **文档设计**：避免超大文档（16MB 限制），嵌套 vs 引用根据查询模式选择
-
   - **WiredTiger 缓存**：默认使用 50% 内存作为缓存，确保热数据在内存中，减少磁盘 IO
-
 1. **Agent 场景实践**
-
   - **会话查询优化**：`{userId: 1, createdAt: -1}` 复合索引 + `projection` 只返回需要字段，避免全文档加载
-
   - **知识库检索**：文本索引 + 复合索引组合，`explain()` 验证索引命中，`totalDocsExamined` 控制在合理范围
-
   - **批量写入优化**：使用 `insertMany` + `ordered: false`（无序插入，失败不中断），提升批量写入吞吐量
 
 **3️⃣ Key Differences**
@@ -1048,13 +902,9 @@ MongoDB Atlas Vector Search 与 pgvector 对比
 ##### 基础题：MongoDB 默认存储引擎是什么？有什么特点？
 
 MongoDB 3.2+ 默认存储引擎是 **WiredTiger**，替代了 MMAPv1。主要特点：
-
 1. **文档级锁**：支持并发读写，比 MMAPv1 的全局锁性能大幅提升
-
 1. **压缩算法**：默认使用 Snappy 压缩，数据压缩率约 50%，节省磁盘空间
-
 1. **Checkpoint 机制**：定期将内存脏页刷盘，保证数据持久化
-
 1. **Journaling**：WAL 日志保证数据安全，崩溃恢复
 
 ##### 进阶题：WiredTiger 的 B-Tree 存储结构、MVCC 实现、Checkpoint 机制、压缩算法分别是怎样的？
@@ -1062,7 +912,6 @@ MongoDB 3.2+ 默认存储引擎是 **WiredTiger**，替代了 MMAPv1。主要特
 **1️⃣ Common Answer**
 
 重点总结（便于面试记忆）：
-
 - B-Tree 存储结构
 - MVCC 实现（多版本并发控制）
 - Checkpoint 机制
@@ -1073,47 +922,26 @@ MongoDB 3.2+ 默认存储引擎是 **WiredTiger**，替代了 MMAPv1。主要特
 **2️⃣ Impressive Answer**
 
 WiredTiger 是 MongoDB 的**核心存储引擎**，底层机制包括：
-
 1. **B-Tree 存储结构**
-
   - 索引和数据都存储在 B-Tree 中，每个节点 8KB
-
   - B-Tree 节点在内存中是 Page，磁盘上是 Block
-
   - 内部节点存储键值和子节点指针，叶子节点存储完整文档
-
 1. **MVCC 实现（多版本并发控制）**
-
   - **快照隔离**：每个事务开始时获取快照，读取历史版本数据
-
   - **写时复制**：修改文档时创建新版本，旧版本保留在内存中
-
   - **版本链**：通过事务 ID 追踪文档版本，读取时选择可见版本
-
   - **并发读写**：读操作不阻塞写，写操作不阻塞读
-
 1. **Checkpoint 机制**
-
   - **触发条件**：每 60 秒或 Journal 大小达到 2GB
-
   - **刷盘流程**：将内存脏页写入数据文件 → 清空 Journal → 更新 Checkpoint 记录
-
   - **崩溃恢复**：从最近 Checkpoint + Journal 重放 WAL 日志
-
 1. **压缩算法**
-
   - **Snappy**：默认压缩算法，压缩比约 50%，CPU 开销低
-
   - **Zlib**：可选，压缩比约 70%，但 CPU 开销高
-
   - **压缩粒度**：Page 级别压缩，减少磁盘 I/O
-
 1. **Agent 场景应用**
-
   - 会话数据高频写入：文档级锁 + MVCC 保证并发性能
-
   - 知识库文档存储：压缩算法节省存储成本
-
   - 崩溃恢复保障：Journal + Checkpoint 保证数据不丢失
 
 **3️⃣ Key Differences**
@@ -1181,7 +1009,6 @@ Impressive Answer
 **1️⃣ Common Answer**
 
 重点总结（便于面试记忆）：
-
 - 写入性能好的原因
 - 内存配置影响
 - Agent 场景优化
@@ -1192,33 +1019,19 @@ Impressive Answer
 **2️⃣ Impressive Answer**
 
 MongoDB 写入性能好的**核心原因**和内存配置策略：
-
 1. **写入性能好的原因**
-
   - **文档级锁**：WiredTiger 支持文档级并发写入，锁粒度细
-
   - **Journal 异步刷盘**：默认 `journalCommitIntervalMs=100`，批量刷盘减少 I/O
-
   - **内存缓冲**：写入先到内存，Checkpoint 定期刷盘，减少磁盘随机写
-
   - **压缩算法**：减少磁盘 I/O 量，提升吞吐量
-
 1. **内存配置影响**
-
   - **WiredTiger 缓存**：默认占用 50% 内存，建议 `cacheSizeGB` 设置为物理内存的 40-60%
-
   - **热数据驻留**：确保工作集（Working Set）在内存中，避免磁盘抖动
-
   - **内存不足表现**：Page Fault 频繁 → 查询延迟飙升 → CPU 等待 I/O
-
   - **监控指标**：`wiredTiger.cache.pages read into cache`（读入页数）和 `pages evicted`（驱逐页数）
-
 1. **Agent 场景优化**
-
   - 会话写入：`w:1` + `journal:true` 平衡性能和安全
-
   - 知识库检索：确保索引和热数据在内存中，`cacheSizeGB` 配置充足
-
   - 监控告警：Page Fault 率超过阈值时扩容内存
 
 **3️⃣ Key Differences**
@@ -1383,17 +1196,11 @@ MongoDB Atlas Vector Search 与 pgvector 对比
 ##### 基础题：Oplog 是什么？存在哪里？有什么特点？
 
 Oplog（Operations Log）是 MongoDB 副本集的**操作日志**，用于数据复制：
-
 1. **存储位置**：`local` 数据库的 `oplog.rs` 集合（固定集合，Capped Collection）
-
 1. **特点**：
-
   - 记录所有写操作（增删改）
-
   - 按时间顺序追加写入
-
   - 固定大小，循环覆盖旧数据
-
   - 从节点拉取 Oplog 并重放
 
 ##### 进阶题：Oplog 的幂等性设计是怎样的？固定集合大小如何影响复制？Oplog 窗口与复制延迟有什么关系？
@@ -1401,7 +1208,6 @@ Oplog（Operations Log）是 MongoDB 副本集的**操作日志**，用于数据
 **1️⃣ Common Answer**
 
 重点总结（便于面试记忆）：
-
 - 幂等性设计
 - 固定集合大小
 - Oplog 窗口与复制延迟
@@ -1412,43 +1218,24 @@ Oplog（Operations Log）是 MongoDB 副本集的**操作日志**，用于数据
 **2️⃣ Impressive Answer**
 
 Oplog 是 MongoDB 副本集复制的**核心机制**，设计要点包括：
-
 1. **幂等性设计**
-
   - **操作类型幂等**：`insert`、`update`、`delete` 都包含完整操作信息
-
   - **重放安全**：从节点重放 Oplog 时，重复执行不会产生副作用
-
   - **$inc 操作符**：使用 `$inc: {count: 1}` 而非 `count++`，保证重放一致性
-
   - **Upsert 操作**：`update` 带 `upsert: true`，避免重复插入
-
 1. **固定集合大小**
-
   - **默认大小**：Windows 1GB，Linux/macOS 5% 可用磁盘空间（最小 1GB）
-
   - **影响范围**：决定 Oplog 窗口时间（能保留多长时间的操作历史）
-
   - **配置建议**：高写入场景手动调大，避免 Oplog 覆盖过快
-
   - **查看大小**：`rs.printReplicationInfo()` 查看 Oplog 大小和窗口时间
-
 1. **Oplog 窗口与复制延迟**
-
   - **Oplog 窗口**：Oplog 能保留的时间范围，窗口 = Oplog 大小 / 写入速率
-
   - **复制延迟**：从节点落后主节点的时间，`rs.printSlaveReplicationInfo()` 查看
-
   - **脱离同步**：复制延迟 > Oplog 窗口时，从节点无法找到起始点，需要全量同步
-
   - **风险场景**：批量导入、长时间维护后重启、从节点宕机过久
-
 1. **Agent 场景实践**
-
   - 会话数据高写入：监控复制延迟，Oplog 大小配置充足
-
   - 批量导入操作：先暂停从节点，导入后再恢复，避免脱离同步
-
   - 告警配置：复制延迟超过阈值时告警
 
 **3️⃣ Key Differences**
@@ -1516,7 +1303,6 @@ Impressive Answer
 **1️⃣ Common Answer**
 
 重点总结（便于面试记忆）：
-
 - 排查步骤
 - 处理方案
 - 预防措施
@@ -1527,49 +1313,27 @@ Impressive Answer
 **2️⃣ Impressive Answer**
 
 Oplog 窗口过小导致从节点脱离同步的**排查和处理流程**：
-
 1. **排查步骤**
-
   - **查看复制延迟**：`rs.printSlaveReplicationInfo()`，检查从节点落后时间
-
   - **查看 Oplog 窗口**：`rs.printReplicationInfo()`，检查 Oplog 大小和窗口时间
-
   - **检查从节点状态**：`rs.status()`，查看从节点 `stateStr` 是否为 `RECOVERING`
-
   - **查看日志**：`mongod.log` 搜索 "replSet" 关键字，确认脱离同步原因
-
 1. **处理方案**
-
   - **方案一：全量同步（Initial Sync）**
-
     - 从节点清空数据 → 从主节点拉取完整数据 → 重放 Oplog
-
     - 缺点：耗时长、影响主节点性能、从节点不可用
-
   - **方案二：调整 Oplog 大小**
-
     - 停止主节点 → 以 `--oplogSize` 参数重启 → 从节点自动同步
-
     - 推荐大小：写入量 × 最大容忍延迟时间（如 10GB 可保留 24 小时）
-
   - **方案三：从节点快照恢复**
-
     - 对主节点做快照 → 从节点恢复快照 → 重放 Oplog
-
     - 优点：比全量同步快，适合大集群
-
 1. **预防措施**
-
   - **监控告警**：复制延迟超过 Oplog 窗口的 50% 时告警
-
   - **定期检查**：`rs.printReplicationInfo()` 定期查看 Oplog 使用率
-
   - **容量规划**：根据业务写入量增长，提前规划 Oplog 大小
-
 1. **Agent 场景应用**
-
   - 会话数据高写入：Oplog 大小配置 20GB+，避免批量导入导致脱离同步
-
   - 从节点维护：维护时间不超过 Oplog 窗口，避免全量同步
 
 **3️⃣ Key Differences**
@@ -1724,7 +1488,6 @@ MongoDB 分片集群架构
 **1️⃣ Common Answer**
 
 重点总结（便于面试记忆）：
-
 - Subset Pattern（子集模式）
 - Bucket Pattern（分桶模式）
 - Computed Pattern（计算模式）
@@ -1735,55 +1498,30 @@ MongoDB 分片集群架构
 **2️⃣ Impressive Answer**
 
 MongoDB 有**六大经典文档设计模式**，解决不同场景问题：
-
 1. **Subset Pattern（子集模式）**
-
   - **问题**：大文档嵌套太多子数据，超过 16MB 限制
-
   - **方案**：只嵌入常用子集，其他数据引用存储
-
   - **场景**：商品详情只嵌入前 10 条评论，其他评论单独存储
-
 1. **Bucket Pattern（分桶模式）**
-
   - **问题**：小文档过多，查询和索引开销大
-
   - **方案**：按时间/类别分桶，将多个小文档合并为一个大文档
-
   - **场景**：Agent 会话消息按日期分桶，每天一个文档，包含当天所有消息
-
   - **优势**：减少文档数量、提升查询性能、方便时间范围查询
-
 1. **Computed Pattern（计算模式）**
-
   - **问题**：频繁聚合计算（如求和、计数）性能差
-
   - **方案**：预计算结果并存储，查询时直接读取
-
   - **场景**：会话统计预存消息数、Token 消耗，避免实时聚合
-
 1. **Outlier Pattern（异常值模式）**
-
   - **问题**：大部分数据相似，少数异常值导致文档过大
-
   - **方案**：正常值嵌入，异常值单独存储
-
   - **场景**：用户大部分配置项少，少数用户配置项多，异常配置单独存
-
 1. **Extended Reference Pattern（扩展引用模式）**
-
   - **问题**：引用需要频繁 $lookup，性能差
-
   - **方案**：引用时嵌入常用字段，减少连表
-
   - **场景**：订单引用用户时，嵌入用户名和头像，避免每次查询用户表
-
 1. **Schema Versioning Pattern（模式版本模式）**
-
   - **问题**：文档结构频繁变更，兼容性差
-
   - **方案**：每个文档添加 `schema_version` 字段，根据版本处理
-
   - **场景**：Agent 会话结构升级，旧版本数据保留 `schema_version: 1`，新版本 `schema_version: 2`
 
 **3️⃣ Key Differences**
@@ -1851,7 +1589,6 @@ Impressive Answer
 **1️⃣ Common Answer**
 
 重点总结（便于面试记忆）：
-
 - 文档结构设计
 - 分桶策略
 - 查询优化
@@ -1862,7 +1599,6 @@ Impressive Answer
 **2️⃣ Impressive Answer**
 
 Agent 会话消息用 Bucket Pattern 分桶存储的**设计方案**：
-
 1. **文档结构设计**
     `\``json{"_id": ObjectId("..."),"userId": "user123","sessionId": "session456","bucketDate": "2024-01-15","messages": [{"role": "user", "content": "你好", "timestamp": ISODate("2024-01-15T10:00:00Z")},{"role": "assistant", "content": "你好！", "timestamp": ISODate("2024-01-15T10:00:01Z")}],"messageCount": 2,"createdAt": ISODate("2024-01-15T00:00:00Z")}
 
@@ -2848,21 +2584,13 @@ Agent 写入会话后立即读取的**一致性保证方案**：
 
 *   **优势**：性能好，保证因果顺序
 ````
-
 1. **方案三：读后写缓存**
-
   - **写入后缓存**：写入成功后，将数据缓存到 Redis
-
   - **读取时先查缓存**：优先从缓存读取，缓存未命中再查数据库
-
   - **缺点**：引入缓存复杂度，缓存一致性需要处理
-
 1. **Agent 场景最佳实践**
-
   - 会话写入后立即读取：使用 `ClientSession` + `afterClusterTime`
-
   - 性能要求高：使用读后写缓存
-
   - 数据一致性要求高：使用强一致配置
 
 **3️⃣ Key Differences**
@@ -2996,13 +2724,9 @@ MongoDB 锁机制：从全局锁到文档级锁的演进
 ##### 基础题：MongoDB 驱动的连接池是怎么工作的？
 
 MongoDB 驱动使用**连接池**管理数据库连接：
-
 1. 应用启动时创建一定数量的连接
-
 1. 执行操作时从连接池获取连接
-
 1. 操作完成后将连接归还连接池
-
 1. 连接池自动维护连接健康状态
 
 ##### 进阶题：maxPoolSize/minPoolSize/waitQueueTimeoutMS/serverSelectionTimeoutMS 各参数的含义是什么？连接泄漏如何排查？
@@ -3010,7 +2734,6 @@ MongoDB 驱动使用**连接池**管理数据库连接：
 **1️⃣ Common Answer**
 
 重点总结（便于面试记忆）：
-
 - 核心参数
 - 连接泄漏排查
 - 连接池配置建议
@@ -3021,47 +2744,26 @@ MongoDB 驱动使用**连接池**管理数据库连接：
 **2️⃣ Impressive Answer**
 
 MongoDB 驱动连接池的**核心参数**和连接泄漏排查：
-
 1. **核心参数**
-
   - **maxPoolSize**（默认 100）：最大连接数，超过则等待
-
   - **minPoolSize**（默认 0）：最小连接数，保持连接池中有这么多连接
-
   - **waitQueueTimeoutMS**（默认 0）：等待连接超时时间（毫秒），0 表示无限等待
-
   - **serverSelectionTimeoutMS**（默认 30000）：选择服务器超时时间（毫秒）
-
   - **maxIdleTimeMS**（默认 0）：连接最大空闲时间（毫秒），超过则关闭
-
   - **connectTimeoutMS**（默认 10000）：连接超时时间（毫秒）
-
 1. **连接泄漏排查**
-
   - **监控指标**：`db.serverStatus().connections` 查看当前连接数
-
   - **查看连接来源**：`db.currentOp()` 查看当前操作和客户端信息
-
   - **连接数告警**：当前连接数超过 `maxPoolSize * 0.8` 时告警
-
   - **代码审查**：检查是否正确关闭连接（如使用 try-finally）
-
 1. **连接池配置建议**
-
   - **maxPoolSize**：根据应用并发量设置，一般 50-200
-
   - **minPoolSize**：设置为 `maxPoolSize * 0.5`，避免冷启动
-
   - **waitQueueTimeoutMS**：设置为 5000，避免无限等待
-
   - **maxIdleTimeMS**：设置为 60000，关闭空闲连接
-
 1. **Agent 场景优化**
-
   - 会话高并发：`maxPoolSize: 200`，`minPoolSize: 100`
-
   - 监控告警：连接数超过 160 时告警
-
   - 连接泄漏排查：定期检查 `db.serverStatus().connections`
 
 **3️⃣ Key Differences**
@@ -3129,7 +2831,6 @@ Impressive Answer
 **1️⃣ Common Answer**
 
 重点总结（便于面试记忆）：
-
 - application.yml 配置
 - 配置说明
 - 监控配置
@@ -3140,7 +2841,6 @@ Impressive Answer
 **2️⃣ Impressive Answer**
 
 Spring Boot 集成 MongoDB 的**连接池最佳配置**：
-
 1. **application.yml 配置**
     `\``yamlspring:data:mongodb:uri: mongodb://localhost:27017/agent_dbauto-index-creation: true# 连接池配置min-connections-per-host: 50max-connections-per-host: 200max-connection-idle-time: 60000max-connection-life-time: 120000connection-timeout: 10000socket-timeout: 30000# 服务器选择超时server-selection-timeout: 30000# 等待队列超时wait-queue-timeout: 5000# 心跳频率heartbeat-frequency: 10000# 心跳连接超时heartbeat-connect-timeout: 10000# 心跳 socket 超时heartbeat-socket-timeout: 30000
 
@@ -3462,7 +3162,6 @@ Agent 调用链路指标数据用时序集合存储的**设计方案**：
 ````
 ```
 ````
-
 1. **文档结构设计**
     `\``json{"timestamp": ISODate("2024-01-15T10:00:00Z"),"metadata": {"agentId": "agent123","sessionId": "session456","userId": "user789"},"metrics": {"latency": 123,"tokenCount": 456,"requestCount": 1,"errorCount": 0}}
 
@@ -3516,13 +3215,9 @@ Agent 调用链路指标数据用时序集合存储的**设计方案**：
 ````
     ```
 ````
-
 1. **优势总结**
-
   - **存储优化**：列式压缩节省 60% 存储空间
-
   - **查询优化**：时间范围查询快 8 倍
-
   - **聚合优化**：时间聚合查询快 4 倍
 
 **3️⃣ Key Differences**
@@ -3654,11 +3349,8 @@ MongoDB 监控与可观测性
 ##### 基础题：MongoDB Atlas 支持向量检索吗？用什么索引？
 
 MongoDB Atlas 支持**向量检索**，使用 **HNSW（Hierarchical Navigable Small World）** 索引。
-
 - 支持向量相似度搜索（欧氏距离、余弦相似度、点积）
-
 - 与 MongoDB 文档存储集成，无需额外向量数据库
-
 - 支持 $vectorSearch 聚合阶段进行向量检索
 
 ##### 进阶题：HNSW 索引的原理是什么？ANN 近似最近邻算法如何工作？Atlas Vector Search 与 pgvector 在精度/性能/生态上有什么差异？
@@ -3666,7 +3358,6 @@ MongoDB Atlas 支持**向量检索**，使用 **HNSW（Hierarchical Navigable Sm
 **1️⃣ Common Answer**
 
 重点总结（便于面试记忆）：
-
 - HNSW 索引原理
 - ANN 近似最近邻算法
 - Atlas Vector Search vs pgvector
@@ -3677,55 +3368,30 @@ MongoDB Atlas 支持**向量检索**，使用 **HNSW（Hierarchical Navigable Sm
 **2️⃣ Impressive Answer**
 
 Atlas Vector Search 和 pgvector 是**两种主流向量检索方案**，对比分析：
-
 1. **HNSW 索引原理**
-
   - **分层图结构**：多层图，上层稀疏，下层密集
-
   - **搜索过程**：从顶层开始，逐层向下搜索，快速定位到最近邻
-
   - **优势**：查询速度快，索引构建快，内存占用低
-
 1. **ANN 近似最近邻算法**
-
   - **定义**：近似最近邻搜索，不保证找到绝对最近邻，但速度极快
-
   - **精度权衡**：通过调整 `ef` 参数（搜索宽度）平衡精度和性能
-
   - **适用场景**：大规模向量检索（百万级以上），需要毫秒级响应
-
 1. **Atlas Vector Search vs pgvector**
-
   - **精度对比**：
-
     - Atlas Vector Search：精度 95-98%，可调整 `ef` 参数
-
     - pgvector：精度 90-95%，可调整 `lists` 参数
-
   - **性能对比**：
-
     - Atlas Vector Search：查询速度 10-50ms，适合实时检索
-
     - pgvector：查询速度 50-200ms，适合离线检索
-
   - **生态对比**：
-
     - Atlas Vector Search：MongoDB 原生支持，无需额外组件，与文档存储集成
-
     - pgvector：PostgreSQL 扩展，需要单独安装，与关系型数据库集成
-
   - **成本对比**：
-
     - Atlas Vector Search：MongoDB Atlas 云服务，按使用量付费
-
     - pgvector：开源免费，自建成本低
-
 1. **Agent 场景应用**
-
   - 知识库向量检索：使用 Atlas Vector Search，实时检索要求高
-
   - 用户行为分析：使用 pgvector，离线分析要求高
-
   - 混合方案：热数据用 Atlas，冷数据用 pgvector
 
 **3️⃣ Key Differences**
@@ -3793,7 +3459,6 @@ Impressive Answer
 **1️⃣ Common Answer**
 
 重点总结（便于面试记忆）：
-
 - Atlas Vector Search
 - pgvector
 - Milvus
@@ -3804,75 +3469,40 @@ Impressive Answer
 **2️⃣ Impressive Answer**
 
 Agent 知识库向量检索方案的**选型决策**：
-
 1. **Atlas Vector Search**
-
   - **适用场景**：实时检索、与文档存储集成、中小规模（百万级）
-
   - **优势**：
-
     - MongoDB 原生支持，无需额外组件
-
     - 与文档存储集成，方便管理
-
     - 查询速度快（10-50ms）
-
   - **劣势**：
-
     - 仅支持 MongoDB Atlas 云服务
-
     - 成本较高（按使用量付费）
-
   - **Agent 场景**：适合实时知识库检索，与 Agent 会话数据集成
-
 1. **pgvector**
-
   - **适用场景**：离线分析、与关系型数据库集成、中小规模（百万级）
-
   - **优势**：
-
     - PostgreSQL 扩展，开源免费
-
     - 与关系型数据库集成，方便管理
-
     - 支持复杂查询（SQL）
-
   - **劣势**：
-
     - 查询速度慢（50-200ms）
-
     - 需要单独安装和配置
-
   - **Agent 场景**：适合离线知识库分析，与用户行为数据集成
-
 1. **Milvus**
-
   - **适用场景**：大规模检索（千万级以上）、高性能要求、独立向量数据库
-
   - **优势**：
-
     - 查询速度快（1-10ms）
-
     - 支持大规模向量（十亿级）
-
     - 开源免费
-
   - **劣势**：
-
     - 需要单独部署和管理
-
     - 与文档存储分离，需要额外同步
-
   - **Agent 场景**：适合大规模知识库检索，独立向量数据库
-
 1. **选型建议**
-
   - **实时检索 + 文档集成**：选择 Atlas Vector Search
-
   - **离线分析 + 关系型数据库**：选择 pgvector
-
   - **大规模检索 + 高性能**：选择 Milvus
-
   - **混合方案**：热数据用 Atlas，冷数据用 Milvus
 
 **3️⃣ Key Differences**
@@ -4004,11 +3634,8 @@ MongoDB 文档设计模式：嵌套 vs 引用
 ##### 基础题：多租户数据隔离有哪几种方式？
 
 **多租户数据隔离**三种方式：
-
 1. **独立数据库**：每个租户一个数据库，隔离性最好
-
 1. **共享集合+tenantId**：所有租户共享集合，通过 tenantId 字段隔离
-
 1. **分片键隔离**：使用 tenantId 作为分片键，数据分散到不同分片
 
 ##### 进阶题：独立数据库 vs 共享集合+tenantId vs 分片键隔离，各自的安全性、成本、查询性能如何对比？
@@ -4016,7 +3643,6 @@ MongoDB 文档设计模式：嵌套 vs 引用
 **1️⃣ Common Answer**
 
 重点总结（便于面试记忆）：
-
 - 安全性对比
 - 成本对比
 - 查询性能对比
@@ -4027,73 +3653,39 @@ MongoDB 文档设计模式：嵌套 vs 引用
 **2️⃣ Impressive Answer**
 
 多租户数据隔离方案是**SaaS 架构的核心决策**，多维度对比：
-
 1. **安全性对比**
-
   - **独立数据库**：
-
     - 隔离性：最高，租户之间完全隔离
-
     - 数据泄露风险：最低，租户无法访问其他租户数据
-
   - **共享集合+tenantId**：
-
     - 隔离性：中等，通过 tenantId 字段隔离
-
     - 数据泄露风险：中等，需要应用层保证查询带 tenantId
-
   - **分片键隔离**：
-
     - 隔离性：中等，租户数据分散到不同分片
-
     - 数据泄露风险：中等，需要应用层保证查询带 tenantId
-
 1. **成本对比**
-
   - **独立数据库**：
-
     - 存储成本：高，每个租户独立数据库，存储空间浪费
-
     - 运维成本：高，需要管理大量数据库
-
   - **共享集合+tenantId**：
-
     - 存储成本：低，所有租户共享集合，存储空间利用率高
-
     - 运维成本：低，只需要管理少量集合
-
   - **分片键隔离**：
-
     - 存储成本：中等，租户数据分散，存储空间利用率中等
-
     - 运维成本：中等，需要管理分片集群
-
 1. **查询性能对比**
-
   - **独立数据库**：
-
     - 查询性能：高，每个租户独立数据库，索引小，查询快
-
     - 扩展性：差，每个租户独立数据库，无法水平扩展
-
   - **共享集合+tenantId**：
-
     - 查询性能：低，所有租户共享集合，索引大，查询慢
-
     - 扩展性：好，可以水平扩展
-
   - **分片键隔离**：
-
     - 查询性能：中等，租户数据分散，索引中等，查询速度中等
-
     - 扩展性：好，可以水平扩展
-
 1. **Agent 场景应用**
-
   - 大客户（独立数据库）：安全要求高，查询性能要求高
-
   - 中小客户（共享集合+tenantId）：成本敏感，查询性能要求低
-
   - 混合方案：大客户独立数据库，中小客户共享集合
 
 **3️⃣ Key Differences**
@@ -4161,7 +3753,6 @@ Impressive Answer
 **1️⃣ Common Answer**
 
 重点总结（便于面试记忆）：
-
 - 架构设计
 - 索引设计
 - 查询优化
@@ -4172,71 +3763,38 @@ Impressive Answer
 **2️⃣ Impressive Answer**
 
 SaaS 型 Agent 平台多租户 MongoDB 架构的**设计方案**：
-
 1. **架构设计**
-
   - **租户分类**：
-
     - 大客户（VIP）：独立数据库，安全要求高
-
     - 中小客户（SMB）：共享集合+tenantId，成本敏感
-
   - **数据库设计**：
-
     - 大客户：每个租户一个数据库，如 `tenant_001_db`、`tenant_002_db`
-
     - 中小客户：共享数据库，如 `smb_db`，集合中包含 `tenantId` 字段
-
 1. **索引设计**
-
   - **大客户**：
-
     - 每个租户独立索引，索引小，查询快
-
     - 索引示例：`{userId: 1, createdAt: -1}`
-
   - **中小客户**：
-
     - 共享索引，索引大，查询慢
-
     - 索引示例：`{tenantId: 1, userId: 1, createdAt: -1}`
-
 1. **查询优化**
-
   - **大客户**：
-
     - 查询时指定数据库，如 `db.tenant_001_db.sessions.find({...})`
-
     - 查询性能高，延迟 1-5ms
-
   - **中小客户**：
-
     - 查询时必须带 `tenantId`，如 `db.smb_db.sessions.find({tenantId: "tenant123", ...})`
-
     - 查询性能中等，延迟 5-20ms
-
 1. **数据迁移**
-
   - **中小客户升级为大客户**：
-
     - 导出中小客户数据 → 创建独立数据库 → 导入数据 → 删除原数据
-
   - **大客户降级为中小客户**：
-
     - 导出大客户数据 → 删除独立数据库 → 导入共享数据库
-
 1. **监控告警**
-
   - **大客户**：监控每个租户的数据库性能，独立告警
-
   - **中小客户**：监控共享数据库性能，统一告警
-
 1. **Agent 场景最佳实践**
-
   - 大客户：独立数据库，查询性能高，安全要求高
-
   - 中小客户：共享集合+tenantId，成本低，查询性能中等
-
   - 混合方案：根据租户规模动态调整
 
 **3️⃣ Key Differences**
@@ -4368,15 +3926,10 @@ MongoDB 写关注（WriteConcern）与读关注（ReadConcern）
 ##### 基础题：如何监控 MongoDB 的健康状态？有哪些常用工具？
 
 **MongoDB 监控工具**：
-
 1. **mongostat**：实时监控 MongoDB 状态（QPS、连接数、内存使用等）
-
 1. **mongotop**：监控集合读写时间，定位热点集合
-
 1. **db.serverStatus()**：查看服务器状态（内存、连接、锁等）
-
 1. **db.currentOp()**：查看当前运行的操作
-
 1. **MongoDB Atlas**：云服务自带监控仪表板
 
 ##### 进阶题：mongostat/mongotop 的核心指标是什么？opcounters、connections、wiredTiger cache 分别代表什么？慢查询 Profiler 如何配置？
@@ -4384,7 +3937,6 @@ MongoDB 写关注（WriteConcern）与读关注（ReadConcern）
 **1️⃣ Common Answer**
 
 重点总结（便于面试记忆）：
-
 - mongostat 核心指标
 - mongotop 核心指标
 - db.serverStatus() 核心指标
@@ -4395,75 +3947,42 @@ MongoDB 写关注（WriteConcern）与读关注（ReadConcern）
 **2️⃣ Impressive Answer**
 
 MongoDB 监控的**核心指标**和配置方法：
-
 1. **mongostat 核心指标**
-
   - **insert/query/update/delete**：每秒操作数（QPS）
-
   - **command**：每秒命令数
-
   - **vsize**：虚拟内存使用量
-
   - **res**：物理内存使用量
-
   - **faults**：每秒 Page Fault 数（内存不足时增加）
-
   - **qr|qw**：读写队列长度（队列过长表示性能瓶颈）
-
   - **ar|aw**：活跃读写连接数
-
   - **netIn/netOut**：网络流入/流出量
-
 1. **mongotop 核心指标**
-
   - **total**：集合总读写时间
-
   - **read**：集合读时间
-
   - **write**：集合写时间
-
   - **作用**：定位热点集合，优化索引
-
 1. **db.serverStatus() 核心指标**
-
   - **opcounters**：操作计数器（insert/query/update/delete 总数）
-
   - **connections**：连接数（current/available）
-
   - **wiredTiger.cache**：缓存指标
-
     - `pages read into cache`：读入页数（内存不足时增加）
-
     - `pages evicted`：驱逐页数（内存不足时增加）
-
     - `percentage dirty`：脏页比例（过高时 Checkpoint 频繁）
-
 1. **慢查询 Profiler 配置**
-
   - **级别设置**：
-
     - 0：关闭
-
     - 1：记录慢查询（默认超过 100ms）
-
     - 2：记录所有查询（仅用于调试）
-
   - **配置方式**：
       `\``javascriptdb.setProfilingLevel(1, {slowms: 100})
       `\``
-
   - **查看慢查询**：
       `\``javascriptdb.system.profile.find().sort({ts: -1}).limit(10)
       `\``
-
 1. **Agent 场景监控**
-
   - 会话 QPS 监控：`mongostat` 监控 insert/query QPS
-
   - 热点集合监控：`mongotop` 定位热点集合，优化索引
-
   - 内存监控：`db.serverStatus()` 监控 wiredTiger cache，避免内存不足
-
   - 慢查询监控：`Profiler` 记录慢查询，优化查询
 
 **3️⃣ Key Differences**
@@ -4531,7 +4050,6 @@ Impressive Answer
 **1️⃣ Common Answer**
 
 重点总结（便于面试记忆）：
-
 - 监控架构
 - 监控指标
 - 告警规则
@@ -4542,87 +4060,55 @@ Impressive Answer
 **2️⃣ Impressive Answer**
 
 Agent 平台 MongoDB 监控告警体系的**搭建方案**：
-
 1. **监控架构**
-
   - **数据采集**：MongoDB Exporter 采集指标
-
   - **数据存储**：Prometheus 存储时序数据
-
   - **数据展示**：Grafana 可视化展示
-
   - **告警通知**：Alertmanager 发送告警
-
 1. **监控指标**
-
   - **基础指标**：
-
     - QPS：`mongod_op_counters_total`（insert/query/update/delete）
-
     - 连接数：`mongod_connections_current` / `mongod_connections_available`
-
     - 内存：`mongod_wiredtiger_cache_bytes`（缓存大小）
-
   - **性能指标**：
-
     - 延迟：`mongod_latency_histogram`（操作延迟）
-
     - Page Fault：`mongod_wiredtiger_cache_pages_evicted_total`（驱逐页数）
-
     - 队列长度：`mongod_global_lock_current_queue`（锁队列长度）
-
   - **业务指标**：
-
     - 会话 QPS：按 agentId 分组统计
-
     - 慢查询数：按集合分组统计
-
 1. **告警规则**
-
   - **QPS 告警**：QPS 超过阈值时告警
       `\``yaml
-
     - alert: HighQPSexpr: rate(mongod*op*counters_total[5m]) > 1000for: 5mlabels:severity: warningannotations:summary: "MongoDB QPS 过高"
 
 `\``
 
   - **连接数告警**：连接数超过阈值时告警
       `\``yaml
-
     - alert: HighConnectionsexpr: mongod*connections*current / mongod*connections*available > 0.8for: 5mlabels:severity: warningannotations:summary: "MongoDB 连接数过高"
 
 `\``
 
   - **内存告警**：内存使用率超过阈值时告警
       `\``yaml
-
     - alert: HighMemoryexpr: mongod*wiredtiger*cache*bytes / node*memory*MemTotal*bytes > 0.8for: 5mlabels:severity: warningannotations:summary: "MongoDB 内存使用率过高"
 
 `\``
 
   - **慢查询告警**：慢查询数超过阈值时告警
       `\``yaml
-
     - alert: HighSlowQueryexpr: rate(mongod*slow*queries_total[5m]) > 10for: 5mlabels:severity: warningannotations:summary: "MongoDB 慢查询过多"
 
 `\``
-
 1. **Grafana 仪表板**
-
   - **基础仪表板**：QPS、连接数、内存、延迟
-
   - **业务仪表板**：会话 QPS、慢查询数、热点集合
-
   - **告警仪表板**：告警历史、告警趋势
-
 1. **Agent 场景最佳实践**
-
   - 会话 QPS 监控：按 agentId 分组，定位热点 Agent
-
   - 慢查询监控：按集合分组，优化慢查询
-
   - 内存监控：监控 wiredTiger cache，避免内存不足
-
   - 告警通知：钉钉、邮件、短信多渠道通知
 
 **3️⃣ Key Differences**

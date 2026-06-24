@@ -186,7 +186,7 @@
             }
           }
         ],
-        "currentTab": 6
+        "currentTab": 4
       }
     ],
     "direction": "horizontal",
@@ -210,6 +210,11 @@
   },
   "active": "acdd72415a8b8fe0",
   "lastOpenFiles": [
+    "00-面试准备/02-JAVA语言特性/1、Java基础.md",
+    "00-面试准备/03-大模型应用基础/02 大模型基础/大模型基础.md",
+    "00-面试准备/09-项目/deer-flow/动态上下文.md",
+    "00-面试准备/09-项目/deer-flow/SDD开发.md",
+    "00-面试准备/AI Coding.md",
     "Notion/数据库/MySQL/MySQL-合并.md",
     "Notion/数据库/Redis/Redis-合并.md",
     "Notion/数据库/MySQL/MySQL.md",
@@ -231,11 +236,6 @@
     "Notion/03temp-框架/Spring.md",
     "Notion/03temp-框架/MyBatis.md",
     "00-面试准备/03-大模型应用基础/09 Agent 部署 观测/部署和成本控制.md",
-    "00-面试准备/01-计算机基础/01-操作系统面试知识点.md",
-    "00-面试准备/01-计算机基础/02-计算机网络面试知识点.md",
-    "00-面试准备/02-JAVA语言特性/1、Java基础.md",
-    "00-面试准备/02-JAVA语言特性/2、Java集合.md",
-    "00-面试准备/09-项目/鸿蒙HybridRAG面试准备/01-项目深挖学习文档.md",
     "Pasted image 20260623171831.png",
     "Pasted image 20260623171147.png",
     "Pasted image 20260623143206.png",

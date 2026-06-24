@@ -11,7 +11,6 @@
 Prompt Template 的核心作用是**结构化 Prompt 生成**，实现内容与逻辑分离。
 
 常见变量替换方式：
-
 1. **占位符替换**（最基础）
 
 ```java
@@ -20,7 +19,6 @@ String prompt = "你是一个{role}助手，擅长{skill}";
 String filled = prompt.replace("{role}", "编程")
                      .replace("{skill}", "Java 开发");
 ```
-
 1. **Mustache 模板**（推荐）
 
 ```java
@@ -34,7 +32,6 @@ String filled = prompt.replace("{role}", "编程")
 {{/messages}}
 """
 ```
-
 1. **表达式引擎**（最强大）支持函数调用、算术运算等复杂逻辑，如 Spring Expression Language。
 
 实际项目中建议用**成熟的模板引擎**（Mustache/FreeMarker），避免手写正则替换的边界问题。
@@ -48,20 +45,15 @@ String filled = prompt.replace("{role}", "编程")
 1️⃣ **Common Answer**：
 
 重点总结（便于面试记忆）：
-
 - 静态 vs 动态选择
 - 动态选择策略
 - 静态：人工精选固定示例，适合任务类型单一的场景（如固定格式的 SQL 生成）
 - 动态：根据用户输入实时检索最相关的示例，适合多样化任务
 
 2️⃣ **Impressive Answer**：
-
 1. **静态 vs 动态选择**：
-
   - **静态**：人工精选固定示例，适合任务类型单一的场景（如固定格式的 SQL 生成）
-
   - **动态**：根据用户输入实时检索最相关的示例，适合多样化任务
-
 1. **动态选择策略**：
 
 ```java
@@ -83,9 +75,7 @@ public class DynamicFewShotSelector {
     }
 }
 ```
-
 1. **示例数量的权衡**：示例越多效果越好，但占用 Token 越多。经验值：简单任务 2-3 个，复杂任务 5-8 个；超过 8 个通常边际收益递减。
-
 1. **示例质量 > 数量**：一个高质量的示例（覆盖边界情况）胜过五个普通示例。示例应覆盖**正常路径 + 边界情况 + 错误处理**。
 
 3️⃣ **Key Differences**
@@ -157,14 +147,12 @@ Impressive Answer
 1️⃣ **Common Answer**：
 
 重点总结（便于面试记忆）：
-
 - 三种策略对比
 - 推荐方案：语言感知 + 动态模板
 - 关键原则
 - Agent 场景特殊处理
 
 2️⃣ **Impressive Answer**：
-
 1. **三种策略对比**：
 
 <table>
@@ -225,7 +213,6 @@ GPT-4 等强多语言模型
 </td>
 </tr>
 </table>
-
 1. **推荐方案：语言感知 + 动态模板**：
 
 ```java
@@ -252,9 +239,7 @@ public class MultiLangPromptBuilder {
     }
 }
 ```
-
 1. **关键原则**：System Prompt 用英文（模型理解力最强），输出语言跟随用户；Few-shot 示例尽量用目标语言（减少语言切换的认知负担）。
-
 1. **Agent 场景特殊处理**：工具调用的参数始终用英文（API 兼容性），只有最终回复跟随用户语言。
 
 3️⃣ **Key Differences**

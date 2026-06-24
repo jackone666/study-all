@@ -13,7 +13,6 @@
 **1️⃣ Common Answer**：
 
 重点总结（便于面试记忆）：
-
 - Advisor 的核心优势
 - Advisor 是 SpringAI 的核心拦截机制，它基于 AOP 思想设计，在请求和响应的生命周期中插入自定义逻辑。SpringAI 提供了三种 Advisor：Reque...
 - 用 Advisor 实现 RAG 的核心思路是：在 RequestAdvisor 阶段，通过向量检索获取相关文档，然后将文档注入到 system prompt 中...
@@ -156,7 +155,6 @@ Impressive Answer
 **1️⃣ Common Answer**：
 
 重点总结（便于面试记忆）：
-
 - VectorStore：核心接口，定义了 add、delete、similaritySearch 等操作
 - SearchRequest：检索请求封装，支持 topK、similarityThreshold、filterExpression
 - Document：文档对象，包含 content、metadata、id
@@ -165,13 +163,9 @@ Impressive Answer
 **2️⃣ Impressive Answer**：
 
 SpringAI 的 VectorStore 是一套统一的向量数据库抽象，它屏蔽了不同向量数据库的差异，提供统一的 API。核心接口体系包括：
-
 - **VectorStore**：核心接口，定义了 add、delete、similaritySearch 等操作
-
 - **SearchRequest**：检索请求封装，支持 topK、similarityThreshold、filterExpression
-
 - **Document**：文档对象，包含 content、metadata、id
-
 - **FilterExpression**：元数据过滤表达式，支持 AND、OR、IN 等操作符
 
 以 Milvus 为例的集成代码：
@@ -294,7 +288,6 @@ Impressive Answer
 **1️⃣ Common Answer**：
 
 重点总结（便于面试记忆）：
-
 - SpringAI 实现方式
 - LangChain4J 的 @Tool 实现方式
 - 核心差异对比
@@ -498,7 +491,6 @@ Impressive Answer
 **1️⃣ Common Answer**：
 
 重点总结（便于面试记忆）：
-
 - 模型管理
 - 路由策略
 - 降级机制
@@ -589,13 +581,9 @@ resilience4j:
 ```
 
 **降级策略设计**：
-
 1. **熔断降级**：连续失败达到阈值后熔断，自动切换备用模型
-
 1. **超时降级**：设置合理的超时时间（如 30 秒），超时后切换
-
 1. **成本路由**：根据请求复杂度动态选择模型，简单问题用便宜模型
-
 1. **监控告警**：实时监控各模型的可用性、延迟、成本，及时发现异常
 
 **3️⃣ Key Differences**

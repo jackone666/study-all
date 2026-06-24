@@ -219,7 +219,6 @@ static 关键字主要有以下使用场景：
 - finalize：Object 类的方法，垃圾回收前自动调用，用于清理资源，Java 9 已弃用，不可显式调用。
 
 # 19、Java 创建对象有哪几种方式？ [重要性:A]
-
 1. new 关键字创建（最常用）：`Person person = new Person();`；
 2. 反射机制创建：`Class clazz = Class.forName("Person"); Person person = (Person) clazz.newInstance();`；
 3. clone 拷贝创建：需实现 Cloneable 接口并重写 clone 方法，`Person person2 = (Person) person.clone();`；

@@ -13,7 +13,6 @@
 **1️⃣ Common Answer**
 
 重点总结（便于面试记忆）：
-
 - 职责分层
 - 映射关系
 - 执行流程
@@ -24,29 +23,17 @@
 **2️⃣ Impressive Answer**
 
 三者的关系可以从**职责分层**和**映射关系**两个维度理解：
-
 1. **职责分层**
-
   - **Crew**：编排容器，负责整体流程控制、任务调度、结果聚合
-
   - **Task**：工作单元，有明确的描述、预期输出、所属 Agent
-
   - **Agent**：执行者，有角色设定、目标、工具集、LLM 配置
-
 1. **映射关系**
-
   - 一个 Crew 包含多个 Task（有序或无序列表）
-
   - 一个 Task 只能分配给一个 Agent（一对一）
-
   - 一个 Agent 可以执行多个 Task（一对多）
-
 1. **执行流程**
-
   - Crew 启动后，按 Task 定义的顺序（或并行策略）依次触发
-
   - 每个 Task 执行时，所属 Agent 用自己的工具集和 LLM 完成目标
-
   - Task 的输出作为上下文传递给后续 Task（上下文链）
 
 **3️⃣ Key Differences**
@@ -107,7 +94,6 @@ Impressive Answer
 **1️⃣ Common Answer**
 
 重点总结（便于面试记忆）：
-
 - Sequential（顺序流程）
 - Hierarchical（层级流程）
 - 选型建议
@@ -118,29 +104,17 @@ Impressive Answer
 **2️⃣ Impressive Answer**
 
 两种 Process 的核心区别在**任务调度策略**和**Agent 协作模式**：
-
 1. **Sequential（顺序流程）**
-
   - 任务按定义顺序依次执行，前一个任务的输出自动注入下一个任务的上下文
-
   - 所有 Agent 平级，没有协调者，适合线性工作流（如：调研→写作→审核）
-
   - 优点：简单可控，调试方便；缺点：无法处理动态分支和循环
-
 1. **Hierarchical（层级流程）**
-
   - 有一个 Manager Agent 作为协调者，负责任务分配和结果聚合
-
   - Worker Agent 向 Manager 汇报，Manager 可以动态决定下一步
-
   - 适合复杂场景：任务之间有依赖、需要条件分支、可能迭代返工
-
   - 优点：灵活性高；缺点：Manager 是单点瓶颈，调试复杂
-
 1. **选型建议**
-
   - 流程固定、无分支：选 Sequential
-
   - 需要动态决策、多轮迭代：选 Hierarchical
 
 **3️⃣ Key Differences**
@@ -210,7 +184,6 @@ Impressive Answer
 **1️⃣ Common Answer**
 
 重点总结（便于面试记忆）：
-
 - 任务拆解（4 个 Task）
 - 依赖定义
 - 上下文注入
@@ -221,29 +194,17 @@ Impressive Answer
 **2️⃣ Impressive Answer**
 
 设计思路从**任务拆解、依赖定义、上下文注入**三步展开：
-
 1. **任务拆解（4 个 Task）**
-
   - Task1（市场数据收集）：搜索竞品官网、行业报告、社交媒体，输出原始数据汇总
-
   - Task2（数据清洗与分析）：提取关键指标（价格、功能、用户评价），输出结构化分析表
-
   - Task3（趋势洞察）：基于分析表，识别市场空白和机会点，输出洞察结论
-
   - Task4（报告撰写）：整合以上所有输出，生成完整的 Markdown 报告
-
 1. **依赖定义**
-
   - Task2 依赖 Task1 的输出（context=[task1]）
-
   - Task3 依赖 Task2 的输出（context=[task2]）
-
   - Task4 依赖 Task2 和 Task3 的输出（context=[task2, task3]）
-
 1. **上下文注入**
-
   - CrewAI 中 Task 的 `context` 参数接收 Task 列表，自动将这些 Task 的输出拼接后注入当前任务的 expected_output 描述中
-
   - 注意上下文长度限制，如果前置 Task 输出过长，需要在 Task 描述中明确要求"输出精简摘要"
 
 **3️⃣ Key Differences**
@@ -315,7 +276,6 @@ Impressive Answer
 **1️⃣ Common Answer**
 
 重点总结（便于面试记忆）：
-
 - 短期记忆
 - 长期记忆
 - 实体记忆
@@ -326,35 +286,20 @@ Impressive Answer
 **2️⃣ Impressive Answer**
 
 CrewAI 的 Memory 机制是支持多 Agent 协作和多轮任务执行的核心能力，通过三种类型的记忆实现不同层次的信息持久化和复用。
-
 1. **短期记忆**
-
   - 基于 Token 窗口的上下文记忆，在单次 Crew 执行过程中维护
-
   - 使用 `RAGCallbackHandler` 捕获每个 Task 的输入输出，存储在内存中
-
   - 后续 Task 可通过 `memory.read()` 获取历史上下文，自动注入到 Prompt 中
-
   - 适用于单次会话内的任务依赖，如 Task A 的输出作为 Task B 的输入
-
 1. **长期记忆**
-
   - 基于 Vector Database 的持久化存储（支持 Chroma、Pinecone、Redis Vector）
-
   - 使用 Embedding 模型将 Task 结果向量化存储，支持语义检索
-
   - 通过 `LongTermMemory` 类实现，跨 Crew 执行会话共享历史经验
-
   - 典型应用场景：代码审查 Agent 记住之前发现的模式，市场调研 Agent 积累行业知识
-
 1. **实体记忆**
-
   - 基于 NER（命名实体识别）的结构化记忆，提取关键实体（人名、公司名、技术术语）
-
   - 使用 `EntityMemory` 类维护实体关系图谱，支持实体消歧和关联查询
-
   - 通过 `EntityExtractor` 从对话中提取实体，存储为 JSON 格式
-
   - 实际案例：客服 Agent 记住用户偏好、产品 Agent 维护产品知识图谱
 
 **对多轮任务执行的影响：**
@@ -404,13 +349,9 @@ crew = Crew(
 ```
 
 **关键影响：**
-
 - **上下文传递**：Task 间自动传递历史信息，减少重复输入
-
 - **知识积累**：长期记忆让 Agent 越用越聪明，积累领域知识
-
 - **一致性保证**：实体记忆确保多轮对话中实体指代一致
-
 - **性能权衡**：记忆占用 Token 空间，需设置 `max_token_limit` 控制成本
 
 **3️⃣ Key Differences**
@@ -482,7 +423,6 @@ Impressive Answer
 **1️⃣ Common Answer**
 
 重点总结（便于面试记忆）：
-
 - 自定义 Tool 的实现方式
 - Tool 绑定给特定 Agent
 - Tool 的错误处理机制
@@ -493,7 +433,6 @@ Impressive Answer
 **2️⃣ Impressive Answer**
 
 CrewAI 的 Tool 机制是 Agent 扩展能力的核心，通过自定义 Tool 可以让 Agent 调用外部 API、数据库、本地服务等。Tool 的正确实现和错误处理直接影响 Agent 的稳定性。
-
 1. **自定义 Tool 的实现方式**
 
 CrewAI 提供两种自定义 Tool 的方式：
@@ -550,7 +489,6 @@ def weather_search(location: str) -> str:
     except requests.RequestException as e:
         raise ToolExecutionError(f"天气 API 调用失败：{str(e)}")
 ```
-
 1. **Tool 绑定给特定 Agent**
 
 ```python
@@ -588,7 +526,6 @@ task2 = Task(
     agent=market_researcher  # 可以使用 db_tool 和 weather_tool
 )
 ```
-
 1. **Tool 的错误处理机制**
 
 CrewAI 提供多层错误处理机制：
@@ -651,13 +588,9 @@ except Exception as e:
 ```
 
 **最佳实践：**
-
 - Tool 内部捕获可预期的错误（网络超时��API 限流），返回友好提示
-
 - 抛出 `ToolExecutionError` 让 Agent 感知工具失败
-
 - 设置合理的 `max_execution_time` 和 `max_iter` 避免无限重试
-
 - 使用 `verbose=True` 查看详细日志，便于调试
 
 **3️⃣ Key Differences**
@@ -729,7 +662,6 @@ Impressive Answer
 **1️⃣ Common Answer**
 
 重点总结（便于面试记忆）：
-
 - Agent 角色设计
 - Task 依赖关系设计
 - Crew 配置和执行
@@ -740,7 +672,6 @@ Impressive Answer
 **2️⃣ Impressive Answer**
 
 设计多 Agent 代码审查系统需要考虑 Agent 角色分工、Task 依赖关系、输出格式标准化、错误处理等核心问题。以下是基于 CrewAI 的完整设计方案。
-
 1. **Agent 角色设计**
 
 ```python
@@ -821,7 +752,6 @@ result_summarizer = Agent(
     max_execution_time=20
 )
 ```
-
 1. **Task 依赖关系设计**
 
 使用 Hierarchical Process 实现并行执行和结果汇总：
@@ -909,7 +839,6 @@ summary_task = Task(
     expected_output="Markdown 格式的综合审查报告"
 )
 ```
-
 1. **Crew 配置和执行**
 
 ```python
@@ -963,7 +892,6 @@ try:
 except Exception as e:
     print(f"审查失败：{str(e)}")
 ```
-
 1. **输出格式标准化**
 
 定义统一的 JSON Schema 确保各 Agent 输出格式一致：
@@ -986,17 +914,11 @@ class ReviewResult(BaseModel):
 ```
 
 **关键设计要点：**
-
 - **并行执行**：三个审查 Agent 并行工作，提高效率
-
 - **标准化输出**：统一 JSON Schema，便于汇总处理
-
 - **严重程度分级**：Critical/High/Medium/Low，明确优先级
-
 - **上下文传递**：通过 `context` 参数传递前序 Task 结果
-
 - **错误隔离**：单个 Agent 失败不影响其他 Agent 执行
-
 - **可扩展性**：易于添加新的审查维度（如测试覆盖率 Agent）
 
 **3️⃣ Key Differences**
@@ -1076,7 +998,6 @@ CrewAI 由四层构成：Crew 是最顶层的团队容器，负责把 Agent、Ta
 **1️⃣ Common Answer**
 
 重点总结（便于面试记忆）：
-
 - 首先说两种 Process 模式的核心区别
 - 其次说 CrewAI 的设计本质
 - 最后说与 LangGraph 的抽象层次差异
@@ -1084,11 +1005,8 @@ CrewAI 由四层构成：Crew 是最顶层的团队容器，负责把 Agent、Ta
 **2️⃣ Impressive Answer**
 
 我会从 3 个角度来回答：
-
 1. **首先说两种 Process 模式的核心区别**。Sequential 严格按 Task 列表顺序执行，前一个任务的输出自动作为下一个任务的上下文，适合"数据收集 → 分析 → 报告"这种有明确依赖链的流水线场景，可预测性强。Hierarchical 则由框架自动创建一个 Manager Agent，基于当前状态动态决定调用哪个 Agent 执行哪个 Task，适合任务边界不清晰、需要动态调度的场景，但 Manager 的行为有不确定性。
-
 1. **其次说 CrewAI 的设计本质**。Agent 里的 backstory 字段本质上是通过 System Prompt 让 LLM 进行角色扮演，让同一个底层模型表现出差异化的专业能力；Task 的 `expected_output` 约束了 LLM 的输出格式，减少后续解析的不确定性。理解这两点，才算真正理解 CrewAI 的设计意图。
-
 1. **最后说与 LangGraph 的抽象层次差异**。CrewAI 是声明式、高抽象层，只需描述"有哪些角色、有哪些任务"，内部的 Prompt 构造和循环控制都由框架处理，上手快但灵活性受限。LangGraph 是图式、低抽象层，需要显式定义节点、边和条件路由，开发成本高但可以精确控制状态流转，更适合生产环境的关键业务。选型建议：多专家角色协作的明确任务用 CrewAI，需要精确状态管理和错误恢复的用 LangGraph。
 
 **3️⃣ Key Differences**
@@ -1160,7 +1078,6 @@ Impressive Answer
 **1️⃣ Common Answer**
 
 重点总结（便于面试记忆）：
-
 - Hierarchical 模式不可预测的根本原因是 Manager Agent 的决策完全依赖 LLM 推理，没有硬约束。有几个应对策略
 - 第一，在每个 Agent 的 backstory 和每个 Task 的 description 里明确写清楚"什么条件下由谁处理"，把业务规则注入 Prompt，相当于给 Ma...
 - 第二，为 Manager 单独配置更强的 manager_llm（比如 GPT-4o），它的规划能力决定整个协作质量。
