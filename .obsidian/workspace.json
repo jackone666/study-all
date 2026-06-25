@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "00-面试准备/10-项目/deer-flow/面经补充知识点.md",
+                "file": "Notion/ALL IN AI/how-claude-code-works/docs/07-multi-agent.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "面经补充知识点"
+              "title": "07-multi-agent"
             }
           }
         ]
@@ -156,13 +156,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "00-面试准备/10-项目/deer-flow/面经补充知识点.md",
+                "file": "Notion/ALL IN AI/how-claude-code-works/docs/07-multi-agent.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "面经补充知识点 的大纲"
+              "title": "07-multi-agent 的大纲"
             }
           },
           {
@@ -210,8 +210,13 @@
   },
   "active": "062738b12afe5eda",
   "lastOpenFiles": [
-    "00-面试准备/10-项目/deer-flow/动态上下文.md",
+    "Notion/ALL IN AI/how-claude-code-works/docs/06-hooks-extensibility.md",
+    "Notion/ALL IN AI/how-claude-code-works/docs/03-context-engineering.md",
+    "Notion/ALL IN AI/how-claude-code-works/docs/04-tool-system.md",
+    "Notion/ALL IN AI/how-claude-code-works/docs/02-agent-loop.md",
+    "Notion/ALL IN AI/how-claude-code-works/docs/01-overview.md",
     "00-面试准备/10-项目/deer-flow/面经补充知识点.md",
+    "00-面试准备/10-项目/deer-flow/动态上下文.md",
     "00-面试准备/10-项目/deer-flow/沙箱系统.md",
     "00-面试准备/10-项目/deer-flow/SDD开发.md",
     "00-面试准备/10-项目/deer-flow/测评.md",
@@ -231,11 +236,6 @@
     "00-面试准备/03-大模型应用基础/08 Agent 评测/工程实践与可观测性.md",
     "00-面试准备/03-大模型应用基础/08 Agent 评测/Agent 评估体系.md",
     "00-面试准备/03-大模型应用基础/02 大模型基础/大模型基础.md",
-    "Notion/ALL IN AI/面试/01-Agent智能体架构.md",
-    "00-面试准备/12 Cache & DataBase/面试实战记录/淘天电商二面 ／ Agent 方向 ／ 候选人反馈好难.md",
-    "00-面试准备/12 Cache & DataBase/面试实战记录/东南大学j'j'j'j'j'j'j'j'j'j'j.md",
-    "00-面试准备/03-大模型应用基础/03 Agent 基础/MCP 定义与设计.md",
-    "00-面试准备/03-大模型应用基础/03 Agent 基础/Agent 核心概念.md",
     "00-面试准备/03-大模型应用基础/03 Agent 基础",
     "00-面试准备/03-大模型应用基础/11 RAG & Vector Database",
     "00-面试准备/03-大模型应用基础/05 Agent Tool",
