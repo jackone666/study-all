@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "00-面试准备/10-项目/deer-flow/动态上下文.md",
+                "file": "00-面试准备/10-项目/deer-flow/面经补充知识点.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "动态上下文"
+              "title": "面经补充知识点"
             }
           }
         ]
@@ -156,13 +156,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "00-面试准备/10-项目/deer-flow/动态上下文.md",
+                "file": "00-面试准备/10-项目/deer-flow/面经补充知识点.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "动态上下文 的大纲"
+              "title": "面经补充知识点 的大纲"
             }
           },
           {
@@ -210,10 +210,14 @@
   },
   "active": "062738b12afe5eda",
   "lastOpenFiles": [
+    "00-面试准备/10-项目/deer-flow/动态上下文.md",
+    "00-面试准备/10-项目/deer-flow/面经补充知识点.md",
+    "00-面试准备/10-项目/deer-flow/沙箱系统.md",
+    "00-面试准备/10-项目/deer-flow/SDD开发.md",
     "00-面试准备/10-项目/deer-flow/测评.md",
+    "00-面试准备/10-项目/deer-flow/sdd.md",
     "00-面试准备/04-Cache & DataBase/缓存设计与策略.md",
     "00-面试准备/04-Cache & DataBase/分布式数据库与一致性.md",
-    "00-面试准备/10-项目/deer-flow/动态上下文.md",
     "00-面试准备/00大模型基础/06_提示工程.md",
     "00-面试准备/00大模型基础/05_大模型基础.md",
     "00-面试准备/00大模型基础/04_项目面试与场景题.md",
@@ -232,11 +236,7 @@
     "00-面试准备/12 Cache & DataBase/面试实战记录/东南大学j'j'j'j'j'j'j'j'j'j'j.md",
     "00-面试准备/03-大模型应用基础/03 Agent 基础/MCP 定义与设计.md",
     "00-面试准备/03-大模型应用基础/03 Agent 基础/Agent 核心概念.md",
-    "00-面试准备/03-大模型应用基础/03 Agent 基础/LLM 应用开发.md",
-    "00-面试准备/03-大模型应用基础/03 Agent 基础/A2A 协议.md",
     "00-面试准备/03-大模型应用基础/03 Agent 基础",
-    "00-面试准备/03-大模型应用基础/11 RAG & Vector Database/RAG 实践.md",
-    "00-面试准备/03-大模型应用基础/11 RAG & Vector Database/RAG 技术.md",
     "00-面试准备/03-大模型应用基础/11 RAG & Vector Database",
     "00-面试准备/03-大模型应用基础/05 Agent Tool",
     "00-面试准备/03-大模型应用基础/02 大模型基础",
