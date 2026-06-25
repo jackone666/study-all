@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "00-面试准备/04-Cache & DataBase/缓存设计与策略.md",
+                "file": "00-面试准备/10-项目/deer-flow/动态上下文.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "缓存设计与策略"
+              "title": "动态上下文"
             }
           }
         ]
@@ -156,13 +156,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "00-面试准备/04-Cache & DataBase/缓存设计与策略.md",
+                "file": "00-面试准备/10-项目/deer-flow/动态上下文.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "缓存设计与策略 的大纲"
+              "title": "动态上下文 的大纲"
             }
           },
           {
@@ -210,9 +210,10 @@
   },
   "active": "062738b12afe5eda",
   "lastOpenFiles": [
+    "00-面试准备/10-项目/deer-flow/测评.md",
+    "00-面试准备/04-Cache & DataBase/缓存设计与策略.md",
     "00-面试准备/04-Cache & DataBase/分布式数据库与一致性.md",
     "00-面试准备/10-项目/deer-flow/动态上下文.md",
-    "00-面试准备/10-项目/deer-flow/测评.md",
     "00-面试准备/00大模型基础/06_提示工程.md",
     "00-面试准备/00大模型基础/05_大模型基础.md",
     "00-面试准备/00大模型基础/04_项目面试与场景题.md",
@@ -238,7 +239,6 @@
     "00-面试准备/03-大模型应用基础/11 RAG & Vector Database/RAG 技术.md",
     "00-面试准备/03-大模型应用基础/11 RAG & Vector Database",
     "00-面试准备/03-大模型应用基础/05 Agent Tool",
-    "00-面试准备/03-大模型应用基础/02 大模型基础/推理优化.md",
     "00-面试准备/03-大模型应用基础/02 大模型基础",
     "00-面试准备/03-大模型应用基础/01 语言基础/Python Foundation",
     "00-面试准备/03-大模型应用基础/01 语言基础/Java Foundation",
