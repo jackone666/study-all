@@ -78,7 +78,7 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300.5
+    "width": 282.5
   },
   "right": {
     "id": "69d9816c3c00c3b8",
@@ -186,7 +186,7 @@
             }
           }
         ],
-        "currentTab": 4
+        "currentTab": 6
       }
     ],
     "direction": "horizontal",
@@ -208,7 +208,7 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "062738b12afe5eda",
+  "active": "d36063cf12dcf266",
   "lastOpenFiles": [
     "Notion/ALL IN AI/how-claude-code-works/docs/06-hooks-extensibility.md",
     "Notion/ALL IN AI/how-claude-code-works/docs/03-context-engineering.md",
