@@ -1,8 +1,8 @@
 {
   "userName": "",
   "permissionMode": "yolo",
-  "model": "haiku",
-  "thinkingBudget": "off",
+  "model": "sonnet[1m]",
+  "thinkingBudget": "low",
   "effortLevel": "high",
   "serviceTier": "default",
   "enableAutoTitleGeneration": true,
@@ -32,7 +32,7 @@
       "enableOpus1M": true,
       "enableSonnet1M": true,
       "customModels": "",
-      "lastModel": "haiku",
+      "lastModel": "sonnet[1m]",
       "environmentVariables": "",
       "environmentHash": ""
     },
@@ -109,7 +109,7 @@
   },
   "settingsProvider": "claude",
   "savedProviderModel": {
-    "claude": "haiku",
+    "claude": "sonnet[1m]",
     "opencode": "opencode:deepseek/deepseek-v4-flash",
     "codex": "gpt-5.5"
   },
@@ -122,7 +122,7 @@
     "codex": "default"
   },
   "savedProviderThinkingBudget": {
-    "claude": "off",
+    "claude": "low",
     "opencode": "default",
     "codex": "off"
   },
