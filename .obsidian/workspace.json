@@ -11,14 +11,10 @@
             "id": "062738b12afe5eda",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "00-面试准备/03-大模型应用基础/03 Agent 基础/Agent 核心概念.md",
-                "mode": "source",
-                "source": false
-              },
+              "type": "empty",
+              "state": {},
               "icon": "lucide-file",
-              "title": "Agent 核心概念"
+              "title": "新标签页"
             }
           }
         ]
@@ -156,13 +152,12 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "00-面试准备/03-大模型应用基础/03 Agent 基础/Agent 核心概念.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "Agent 核心概念 的大纲"
+              "title": "大纲"
             }
           },
           {
@@ -186,11 +181,11 @@
             }
           }
         ],
-        "currentTab": 4
+        "currentTab": 5
       }
     ],
     "direction": "horizontal",
-    "width": 244.5
+    "width": 456.5
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -210,15 +205,15 @@
   },
   "active": "062738b12afe5eda",
   "lastOpenFiles": [
+    "00-面试准备/03-大模型应用基础/03 Agent 基础/LLM 应用开发.md",
+    "00-面试准备/03-大模型应用基础/03 Agent 基础/Agent 核心概念.md",
+    "00-面试准备/03-大模型应用基础/03 Agent 基础/MCP 定义与设计.md",
+    "00-面试准备/03-大模型应用基础/03 Agent 基础/A2A 协议.md",
     "00-面试准备/10-项目/deer-flow/自进化 skill 和Reflection Memory.md",
     "Pasted image 20260627114529.png",
     "00-面试准备/10-项目/deer-flow/面经补充知识点.md",
     "00-面试准备/10-项目/deer-flow/动态上下文.md",
     "00-面试准备/10-项目/deer-flow/测评.md",
-    "00-面试准备/03-大模型应用基础/03 Agent 基础/MCP 定义与设计.md",
-    "00-面试准备/03-大模型应用基础/03 Agent 基础/Agent 核心概念.md",
-    "00-面试准备/03-大模型应用基础/03 Agent 基础/LLM 应用开发.md",
-    "00-面试准备/03-大模型应用基础/03 Agent 基础/A2A 协议.md",
     "templates/🟣 总结-idea.md",
     "templates/🟣 灵感思考-idea.md",
     "templates/⚪ 引用原文-quote.md",

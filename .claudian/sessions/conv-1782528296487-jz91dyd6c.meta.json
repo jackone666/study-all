@@ -4,20 +4,20 @@
   "title": "Create Obsidian color templates",
   "titleGenerationStatus": "success",
   "createdAt": 1782528296487,
-  "updatedAt": 1782530134765,
-  "lastResponseAt": 1782530134765,
+  "updatedAt": 1782541596907,
+  "lastResponseAt": 1782541596907,
   "sessionId": "10dc4bc2-3182-4661-9f6c-07ca0915afdb",
   "providerState": {
     "providerSessionId": "10dc4bc2-3182-4661-9f6c-07ca0915afdb"
   },
   "usage": {
     "model": "opus[1m]",
-    "inputTokens": 255,
+    "inputTokens": 359,
     "cacheCreationInputTokens": 0,
-    "cacheReadInputTokens": 50816,
+    "cacheReadInputTokens": 67968,
     "contextWindow": 1000000,
-    "contextTokens": 51071,
-    "percentage": 5,
+    "contextTokens": 68327,
+    "percentage": 7,
     "contextWindowIsAuthoritative": true
   }
 }

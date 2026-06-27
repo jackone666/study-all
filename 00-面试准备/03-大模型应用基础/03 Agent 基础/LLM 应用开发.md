@@ -12,13 +12,6 @@ Temperature 控制输出的随机性，本质是对 softmax 的 logits 做缩放
 
 #### 2、进阶题：Temperature 和 Top-P 的数学本质是什么？在 Agent 工程实践中如何按任务类型选参？
 
-**难度级别**：⭐⭐（softmax 缩放原理、Top-P vs Top-K、任务类型调参策略）
-
-**1️⃣ Common Answer**
-
-Temperature 就是控制随机性的，调高了输出就乱，调低了就稳。Top-P 是另一种方式，只从累积概率到 P 的那些 token 里选。规划任务一般用低 Temperature，比如 0.1 到 0.3；创意任务用高一点，0.7 到 1.0。两个参数配合用也行，单独用也行。
-
-**2️⃣ Impressive Answer**
 
 我会从两个角度来回答：一是数学原理，二是工程选型。
 
