@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "00-面试准备/03-大模型应用基础/02 大模型基础/推理优化.md",
+                "file": "00-面试准备/03-大模型应用基础/03 Agent 基础/Agent 核心概念.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "推理优化"
+              "title": "Agent 核心概念"
             }
           }
         ]
@@ -156,13 +156,13 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "00-面试准备/03-大模型应用基础/02 大模型基础/推理优化.md",
+                "file": "00-面试准备/03-大模型应用基础/03 Agent 基础/Agent 核心概念.md",
                 "followCursor": false,
                 "showSearch": false,
                 "searchQuery": ""
               },
               "icon": "lucide-list",
-              "title": "推理优化 的大纲"
+              "title": "Agent 核心概念 的大纲"
             }
           },
           {
@@ -210,9 +210,11 @@
   },
   "active": "062738b12afe5eda",
   "lastOpenFiles": [
-    "00-面试准备/03-大模型应用基础/02 大模型基础/大模型基础.md",
-    "00-面试准备/03-大模型应用基础/02 大模型基础/推理优化.md",
+    "00-面试准备/03-大模型应用基础/03 Agent 基础/A2A 协议.md",
     "00-面试准备/03-大模型应用基础/02 大模型基础/Prompt 设计.md",
+    "00-面试准备/03-大模型应用基础/02 大模型基础/Doing.md",
+    "00-面试准备/03-大模型应用基础/02 大模型基础/推理优化.md",
+    "00-面试准备/03-大模型应用基础/02 大模型基础/大模型基础.md",
     "00-面试准备/03-大模型应用基础/07 Agent 架构/Multi-Agent 协作.md",
     "Notion/ALL IN AI/how-claude-code-works/docs/07-multi-agent.md",
     "Notion/ALL IN AI/how-claude-code-works/docs/06-hooks-extensibility.md",
@@ -234,8 +236,6 @@
     "00-面试准备/00大模型基础/03_大模型应用工程化.md",
     "00-面试准备/00大模型基础/01_RAG核心链路.md",
     "00-面试准备/03-大模型应用基础/04 Agent Memory/记忆管理.md",
-    "00-面试准备/03-大模型应用基础/05 Agent Tool/工具设计与实现.md",
-    "00-面试准备/00大模型基础/02_Agent核心原理.md",
     "00-面试准备/03-大模型应用基础/03 Agent 基础",
     "00-面试准备/03-大模型应用基础/11 RAG & Vector Database",
     "00-面试准备/03-大模型应用基础/05 Agent Tool",

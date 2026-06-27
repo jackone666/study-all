@@ -41,13 +41,6 @@ String filled = prompt.replace("{role}", "编程")
 
 #### 进阶题：Few-shot Prompt 的示例选择策略有哪些？如何动态选择最相关的示例？
 
-**难度**：⭐⭐⭐（静态示例 vs 动态检索、Embedding 相似度选择、示例多样性、示例数量与效果的关系）
-
-1️⃣ **Common Answer**：
-
-Few-shot 就是在 Prompt 里给几个示例，让模型学习输出格式。示例可以手动挑选，也可以用向量相似度从示例库里检索最相关的。一般 3-5 个示例效果比较好。
-
-2️⃣ **Impressive Answer**：
 
 1. **静态 vs 动态选择**：
 
@@ -81,26 +74,10 @@ public class DynamicFewShotSelector {
 
 2. **示例质量 > 数量**：一个高质量的示例（覆盖边界情况）胜过五个普通示例。示例应覆盖**正常路径 + 边界情况 + 错误处理**。
 
-3️⃣ **Key Differences**
-
-| 维度 | Common Answer | Impressive Answer |
-| --- | --- | --- |
-| 选择策略 | 只说了相似度 | 相似度→MMR 多样性→难度排序 |
-| 代码深度 | 无 | 有完整的动态选择器实现 |
-| 核心洞察 | 3-5 个 | "质量 > 数量"，覆盖边界情况 |
-| 实践经验 | 概念层面 | 有 MMR 算法和经验数据 |
-
 ---
 
 #### 场景题：Agent 需要处理多语言用户输入，Prompt Template 如何设计才能兼顾多语言？
 
-**难度**：⭐⭐⭐（语言检测、模板国际化、System Prompt 语言策略、翻译 vs 原生多语言模型）
-
-1️⃣ **Common Answer**：
-
-可以在 System Prompt 里告诉模型"请用用户的语言回复"。或者检测用户输入的语言，然后加载对应语言的 Prompt 模板。也可以先把用户输入翻译成英文，处理完再翻译回去。
-
-2️⃣ **Impressive Answer**：
 
 1. **三种策略对比**：
 
@@ -140,12 +117,3 @@ public class MultiLangPromptBuilder {
 1. **关键原则**：System Prompt 用英文（模型理解力最强），输出语言跟随用户；Few-shot 示例尽量用目标语言（减少语言切换的认知负担）。
 
 2. **Agent 场景特殊处理**：工具调用的参数始终用英文（API 兼容性），只有最终回复跟随用户语言。
-
-3️⃣ **Key Differences**
-
-| 维度 | Common Answer | Impressive Answer |
-| --- | --- | --- |
-| 方案对比 | 列举但没有选型 | 三种策略对比表格 + 推荐方案 |
-| 代码深度 | 无 | 有完整的多语言 Prompt 构建器 |
-| 核心原则 | 没有总结 | "System 用英文，输出跟用户" |
-| Agent 适配 | 未考虑 | 工具参数英文，回复跟用户语言 |
