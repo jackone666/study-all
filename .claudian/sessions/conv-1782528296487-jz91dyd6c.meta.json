@@ -1,0 +1,23 @@
+{
+  "id": "conv-1782528296487-jz91dyd6c",
+  "providerId": "claude",
+  "title": "Create Obsidian color templates",
+  "titleGenerationStatus": "success",
+  "createdAt": 1782528296487,
+  "updatedAt": 1782528735923,
+  "lastResponseAt": 1782528735923,
+  "sessionId": "10dc4bc2-3182-4661-9f6c-07ca0915afdb",
+  "providerState": {
+    "providerSessionId": "10dc4bc2-3182-4661-9f6c-07ca0915afdb"
+  },
+  "usage": {
+    "model": "sonnet[1m]",
+    "inputTokens": 124,
+    "cacheCreationInputTokens": 0,
+    "cacheReadInputTokens": 49408,
+    "contextWindow": 1000000,
+    "contextTokens": 49532,
+    "percentage": 5,
+    "contextWindowIsAuthoritative": true
+  }
+}

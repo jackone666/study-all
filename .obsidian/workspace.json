@@ -186,11 +186,11 @@
             }
           }
         ],
-        "currentTab": 4
+        "currentTab": 5
       }
     ],
     "direction": "horizontal",
-    "width": 257.5
+    "width": 429.5
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -208,8 +208,16 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "062738b12afe5eda",
+  "active": "b442ec2e166572c8",
   "lastOpenFiles": [
+    "templates/🟣 灵感思考-idea.md",
+    "templates/⚪ 引用原文-quote.md",
+    "templates/🟢 完成正确-success.md",
+    "templates/🟡 注意事项-warning.md",
+    "templates/🔵 补充说明-info.md",
+    "templates/🔴 重点结论-important.md",
+    "templates",
+    "颜色模板参考.md",
     "00-面试准备/03-大模型应用基础/03 Agent 基础/A2A 协议.md",
     "00-面试准备/03-大模型应用基础/02 大模型基础/Prompt 设计.md",
     "00-面试准备/03-大模型应用基础/02 大模型基础/Doing.md",
@@ -229,13 +237,6 @@
     "00-面试准备/10-项目/deer-flow/测评.md",
     "00-面试准备/10-项目/deer-flow/sdd.md",
     "00-面试准备/04-Cache & DataBase/缓存设计与策略.md",
-    "00-面试准备/04-Cache & DataBase/分布式数据库与一致性.md",
-    "00-面试准备/00大模型基础/06_提示工程.md",
-    "00-面试准备/00大模型基础/05_大模型基础.md",
-    "00-面试准备/00大模型基础/04_项目面试与场景题.md",
-    "00-面试准备/00大模型基础/03_大模型应用工程化.md",
-    "00-面试准备/00大模型基础/01_RAG核心链路.md",
-    "00-面试准备/03-大模型应用基础/04 Agent Memory/记忆管理.md",
     "00-面试准备/03-大模型应用基础/03 Agent 基础",
     "00-面试准备/03-大模型应用基础/11 RAG & Vector Database",
     "00-面试准备/03-大模型应用基础/05 Agent Tool",
@@ -245,7 +246,6 @@
     "00-面试准备/03-大模型应用基础/01 语言基础",
     "00-面试准备/07-Distributed systems and consistency",
     "00-面试准备/04-Cache & DataBase",
-    "00-面试准备/03-大模型应用基础/09 Agent 部署 观测",
     "00-面试准备/images/_assets/img_ff4fdb757144cbda.png",
     "00-面试准备/images/_assets/img_fe5756736f32d109.png",
     "00-面试准备/images/_assets/img_fc2059a96b449b83.png",

@@ -1,0 +1,122 @@
+/* ============================================
+   Obsidian 通用颜色模板 — Color Blocks
+   用途：知识管理通用 6 色体系
+   用法：配合 Obsidian 原生 Callout 语法使用
+   ============================================ */
+
+/* ── 🔴 红色：重点结论 / 核心观点 ── */
+.callout[data-callout="important"] {
+  --callout-color: 220, 55, 55;
+  --callout-icon: lucide-alert-triangle;
+}
+
+/* ── 🔵 蓝色：补充说明 / 背景知识 ── */
+.callout[data-callout="info"] {
+  --callout-color: 65, 130, 215;
+  --callout-icon: lucide-info;
+}
+
+/* ── 🟡 琥珀色：注意事项 / 待办提醒 ── */
+.callout[data-callout="warning"] {
+  --callout-color: 230, 155, 40;
+  --callout-icon: lucide-alert-circle;
+}
+
+/* ── 🟢 绿色：已完成 / 正确做法 / 最佳实践 ── */
+.callout[data-callout="success"] {
+  --callout-color: 55, 175, 95;
+  --callout-icon: lucide-check-circle;
+}
+
+/* ── ⚪ 灰色：引用原文 / 外部资料 ── */
+.callout[data-callout="quote"] {
+  --callout-color: 130, 130, 140;
+  --callout-icon: lucide-quote;
+}
+
+/* ── 🟣 紫色：灵感 / 个人思考（自定义 callout）── */
+.callout[data-callout="idea"] {
+  --callout-color: 150, 95, 220;
+  --callout-icon: lucide-lightbulb;
+}
+.callout[data-callout="idea"] .callout-title {
+  /* 确保自定义 callout 的标题正常渲染 */
+}
+
+/* ============================================
+   扩展：自定义行内高亮 & 卡片
+   ============================================ */
+
+/* ── 行内高亮：用 <span class="hl-xxx">文字</span> ── */
+.hl-red,
+.hl-important {
+  background: rgba(220, 55, 55, 0.15);
+  color: rgb(200, 40, 40);
+  padding: 1px 5px;
+  border-radius: 3px;
+  font-weight: 500;
+}
+
+.hl-blue,
+.hl-info {
+  background: rgba(65, 130, 215, 0.12);
+  color: rgb(50, 110, 190);
+  padding: 1px 5px;
+  border-radius: 3px;
+  font-weight: 500;
+}
+
+.hl-yellow,
+.hl-warn {
+  background: rgba(230, 155, 40, 0.15);
+  color: rgb(190, 120, 20);
+  padding: 1px 5px;
+  border-radius: 3px;
+  font-weight: 500;
+}
+
+.hl-green,
+.hl-success {
+  background: rgba(55, 175, 95, 0.12);
+  color: rgb(40, 140, 70);
+  padding: 1px 5px;
+  border-radius: 3px;
+  font-weight: 500;
+}
+
+.hl-purple,
+.hl-idea {
+  background: rgba(150, 95, 220, 0.12);
+  color: rgb(120, 70, 190);
+  padding: 1px 5px;
+  border-radius: 3px;
+  font-weight: 500;
+}
+
+/* ── 渐变卡片：大段内容需要醒目展示时 ── */
+.gradient-card {
+  border-radius: 8px;
+  padding: 16px 20px;
+  margin: 12px 0;
+  color: #fff;
+  font-weight: 500;
+}
+.gradient-red    { background: linear-gradient(135deg, #e05555, #c0392b); }
+.gradient-blue   { background: linear-gradient(135deg, #5b9bd5, #2e6da4); }
+.gradient-green  { background: linear-gradient(135deg, #4caf84, #27794a); }
+.gradient-purple { background: linear-gradient(135deg, #9b6fd4, #6c3fa0); }
+.gradient-amber  { background: linear-gradient(135deg, #e6a23c, #b87a20); }
+
+/* ── 色块方格容器：展示调色盘 ── */
+.color-grid {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 8px 0;
+}
+.color-grid .swatch {
+  width: 48px;
+  height: 48px;
+  border-radius: 6px;
+  display: inline-block;
+}

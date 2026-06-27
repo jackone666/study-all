@@ -1,6 +1,9 @@
 {
   "showRibbon": true,
   "enabledCssSnippets": [
-    "xml-tags"
-  ]
+    "xml-tags",
+    "color-blocks"
+  ],
+  "accentColor": "",
+  "showViewHeader": true
 }
