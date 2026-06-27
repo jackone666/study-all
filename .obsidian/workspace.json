@@ -186,11 +186,11 @@
             }
           }
         ],
-        "currentTab": 5
+        "currentTab": 4
       }
     ],
     "direction": "horizontal",
-    "width": 429.5
+    "width": 244.5
   },
   "left-ribbon": {
     "hiddenItems": {
@@ -208,8 +208,18 @@
       "obsidian-git:Open Git source control": false
     }
   },
-  "active": "b442ec2e166572c8",
+  "active": "062738b12afe5eda",
   "lastOpenFiles": [
+    "00-面试准备/10-项目/deer-flow/自进化 skill 和Reflection Memory.md",
+    "Pasted image 20260627114529.png",
+    "00-面试准备/10-项目/deer-flow/面经补充知识点.md",
+    "00-面试准备/10-项目/deer-flow/动态上下文.md",
+    "00-面试准备/10-项目/deer-flow/测评.md",
+    "00-面试准备/03-大模型应用基础/03 Agent 基础/MCP 定义与设计.md",
+    "00-面试准备/03-大模型应用基础/03 Agent 基础/Agent 核心概念.md",
+    "00-面试准备/03-大模型应用基础/03 Agent 基础/LLM 应用开发.md",
+    "00-面试准备/03-大模型应用基础/03 Agent 基础/A2A 协议.md",
+    "templates/🟣 总结-idea.md",
     "templates/🟣 灵感思考-idea.md",
     "templates/⚪ 引用原文-quote.md",
     "templates/🟢 完成正确-success.md",
@@ -218,7 +228,6 @@
     "templates/🔴 重点结论-important.md",
     "templates",
     "颜色模板参考.md",
-    "00-面试准备/03-大模型应用基础/03 Agent 基础/A2A 协议.md",
     "00-面试准备/03-大模型应用基础/02 大模型基础/Prompt 设计.md",
     "00-面试准备/03-大模型应用基础/02 大模型基础/Doing.md",
     "00-面试准备/03-大模型应用基础/02 大模型基础/推理优化.md",
@@ -228,15 +237,6 @@
     "Notion/ALL IN AI/how-claude-code-works/docs/06-hooks-extensibility.md",
     "Notion/ALL IN AI/how-claude-code-works/docs/03-context-engineering.md",
     "Notion/ALL IN AI/how-claude-code-works/docs/04-tool-system.md",
-    "Notion/ALL IN AI/how-claude-code-works/docs/02-agent-loop.md",
-    "Notion/ALL IN AI/how-claude-code-works/docs/01-overview.md",
-    "00-面试准备/10-项目/deer-flow/面经补充知识点.md",
-    "00-面试准备/10-项目/deer-flow/动态上下文.md",
-    "00-面试准备/10-项目/deer-flow/沙箱系统.md",
-    "00-面试准备/10-项目/deer-flow/SDD开发.md",
-    "00-面试准备/10-项目/deer-flow/测评.md",
-    "00-面试准备/10-项目/deer-flow/sdd.md",
-    "00-面试准备/04-Cache & DataBase/缓存设计与策略.md",
     "00-面试准备/03-大模型应用基础/03 Agent 基础",
     "00-面试准备/03-大模型应用基础/11 RAG & Vector Database",
     "00-面试准备/03-大模型应用基础/05 Agent Tool",
@@ -254,7 +254,6 @@
     "00-面试准备/images/_assets/img_e305eb63659ba724.png",
     "00-面试准备/images/_assets/img_e10ed4dba0215f73.png",
     "00-面试准备/images/_assets/img_ddd4bfcd05cdbd25.jpg",
-    "00-面试准备/images/_assets/img_dc8ea0ccf2bc0d5d.png",
-    "00-面试准备/images/_assets/img_dbaebbeaebdb38df.png"
+    "00-面试准备/images/_assets/img_dc8ea0ccf2bc0d5d.png"
   ]
 }
